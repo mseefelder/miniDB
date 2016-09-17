@@ -1,0 +1,19 @@
+# depslib dependency file v1.0
+1472758854 source:c:\users\aluno_2\documents\teste\main.cpp
+	<iostream>
+	<fstream>
+	<string>
+	<sstream>
+
+1472758854 
+
+1474073329 source:/home/kldev/CodeBlocks/Construção de Banco de Dados/main.cpp
+	<iostream>
+	"loader.h"
+
+1474073342 /home/kldev/CodeBlocks/Construção de Banco de Dados/loader.h
+	<fstream>
+	<vector>
+	<string.h>
+	<typeinfo>
+
