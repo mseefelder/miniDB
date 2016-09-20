@@ -1,5 +1,8 @@
 #ifndef LOADER_H_INCLUDED
 #define LOADER_H_INCLUDED
+
+#define HEADER_SIZE 260
+
 #include <fstream>
 #include <vector>
 #include <string.h>
@@ -60,7 +63,7 @@ void writeRightType(char* buffer, short dataType, ofstream& binFile){
 //inFile -> arquivo de texto de entrada .txt/.csv;
 //outFile -> arquivo binario de saida com registros estruturados;
 //regsize = tamanho do registro
-bool loadFile(string inFile, string outFile, short* regFormat, short attrCount) {
+bool loadFile(string inFile, string outFile, string schema, short* regFormat, short attrCount) {
 
     ifstream stream(inFile);
     ofstream binFile (outFile, ios::out | ios::binary);
@@ -68,10 +71,20 @@ bool loadFile(string inFile, string outFile, short* regFormat, short attrCount) 
     if (stream.fail() || binFile.fail()) return false;
 
     string line;
+    int counter = 0;
+    char schemaChar[256];
+    strncpy(schemaChar, schema.c_str(), 255);
+    schemaChar[255] = '\0';
 
     while(stream.good()) {
 
         getline(stream, line);
+
+        //header in the form:
+        //schema name (256 bytes) | index (4 bytes)
+        binFile.write(schemaChar, sizeof(schemaChar));
+        counter = counter+1;
+        binFile.write((char*)&counter, sizeof(counter));
 
         char token='|';
         char buffer[256];
@@ -104,7 +117,11 @@ void selectAttribute(string inFile, short* regFormat, short regSize, int key, sh
  ifstream binFile (inFile, ios::in | ios::binary);
 
  if (binFile.good()){
-    short regOffset = 0;
+    short regOffset = 0 ;
+
+    regSize += HEADER_SIZE;
+    regOffset += HEADER_SIZE;
+
     for (short i=0;i<attr-1;i++) regOffset+=regFormat[i];
 
     binFile.seekg (regSize*(key-1) + regOffset, binFile.beg);
@@ -135,6 +152,70 @@ void selectAttribute(string inFile, short* regFormat, short regSize, int key, sh
            }
         default: ;
     }
+ }
+ binFile.close();
+}
+
+//faz busca por chave
+void selectKey(string inFile, short* regFormat, short regSize, short key, short numAttr){
+ ifstream binFile (inFile, ios::in | ios::binary);
+
+ if (binFile.good()){
+
+    regSize += HEADER_SIZE;
+
+    //print header
+    cout<< "| ";
+
+    binFile.seekg(regSize*(key-1), binFile.beg);
+    char schema[256];
+    binFile.read (schema, sizeof(schema));
+    cout << schema << " | ";
+    
+    binFile.seekg(regSize*(key-1)+256, binFile.beg);
+    int index;
+    binFile.read ((char*)&index, sizeof(index));
+    cout<< index<< " | ";
+
+    short regOffset = 0;
+    regOffset += HEADER_SIZE;
+
+    for (short i=0;i<numAttr;i++) { 
+        if (i>0){
+            regOffset+=regFormat[i-1];
+        }
+
+        binFile.seekg (regSize*(key-1) + regOffset, binFile.beg);
+        switch(regFormat[i]){
+            case 1: {
+                bool attr1;
+                binFile.read ((char*)&attr1, sizeof(attr1));
+                cout << attr1<< " | ";
+                break;
+               }
+            case 4: {
+                int attr4;
+                binFile.read ((char*)&attr4, sizeof(attr4));
+                cout<< attr4<< " | ";
+                break;
+               }
+            case 32: {
+                char attr32[32];
+                binFile.read (attr32, sizeof(attr32));
+                cout << attr32<< " | ";
+                break;
+               }
+            case 256:{
+                char attr256[256];
+                 binFile.read (attr256, sizeof(attr256));
+                cout << attr256<< " | ";
+                break;
+               }
+            default: ;
+        }
+    }
+    cout<< endl;
+
  }
  binFile.close();
 }
