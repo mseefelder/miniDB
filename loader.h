@@ -63,7 +63,8 @@ void writeRightType(char* buffer, short dataType, ofstream& binFile){
 //inFile -> arquivo de texto de entrada .txt/.csv;
 //outFile -> arquivo binario de saida com registros estruturados;
 //regsize = tamanho do registro
-bool loadFile(string inFile, string outFile, string schema, short* regFormat, short attrCount) {
+vector< pair <string,int> > densePIndex;
+bool loadFile(string inFile, string outFile, string schema, short *regFormat, short attrCount, short attrPIndex, short regSize) {
 
     ifstream stream(inFile);
     ofstream binFile (outFile, ios::out | ios::binary);
@@ -75,6 +76,8 @@ bool loadFile(string inFile, string outFile, string schema, short* regFormat, sh
     char schemaChar[256];
     strncpy(schemaChar, schema.c_str(), 255);
     schemaChar[255] = '\0';
+
+    regSize += HEADER_SIZE;
 
     while(stream.good()) {
 
@@ -95,6 +98,12 @@ bool loadFile(string inFile, string outFile, string schema, short* regFormat, sh
             else if (c == token && (attrN < attrCount)){
                 buffer[i]='\0';
                 writeRightType(buffer,regFormat[attrN],binFile);
+
+                if (attrN == (attrPIndex - 1))
+                    densePIndex.push_back( make_pair( string(buffer), (counter-1)*regSize) );
+
+
+//                cout << string(buffer) << " - " << (counter-1)*regSize << endl;}
 
                 memset(buffer,0,sizeof(buffer));
                 buffer[0]='\0';
@@ -129,7 +138,7 @@ void selectAttribute(string inFile, short* regFormat, short regSize, int key, sh
         case 1: {
             bool attr1;
             binFile.read ((char*)&attr1, sizeof(attr1));
-            cout << attr1 << " " << typeid(attr1).name() << " " << sizeof(attr1) << endl;;
+            cout << attr1 << " " << typeid(attr1).name() << " " << sizeof(attr1) << endl;
             break;
            }
         case 4: {
@@ -157,7 +166,7 @@ void selectAttribute(string inFile, short* regFormat, short regSize, int key, sh
 }
 
 //faz busca por chave
-void selectKey(string inFile, short* regFormat, short regSize, short key, short numAttr){
+void selectKey(string inFile, short* regFormat, short regSize, int key, short numAttr){
  ifstream binFile (inFile, ios::in | ios::binary);
 
  if (binFile.good()){
@@ -171,7 +180,7 @@ void selectKey(string inFile, short* regFormat, short regSize, short key, short 
     char schema[256];
     binFile.read (schema, sizeof(schema));
     cout << schema << " | ";
-    
+
     binFile.seekg(regSize*(key-1)+256, binFile.beg);
     int index;
     binFile.read ((char*)&index, sizeof(index));
@@ -180,12 +189,81 @@ void selectKey(string inFile, short* regFormat, short regSize, short key, short 
     short regOffset = 0;
     regOffset += HEADER_SIZE;
 
-    for (short i=0;i<numAttr;i++) { 
+    for (short i=0;i<numAttr;i++) {
         if (i>0){
             regOffset+=regFormat[i-1];
         }
 
         binFile.seekg (regSize*(key-1) + regOffset, binFile.beg);
+        switch(regFormat[i]){
+            case 1: {
+                bool attr1;
+                binFile.read ((char*)&attr1, sizeof(attr1));
+                cout << attr1<< " | ";
+                break;
+               }
+            case 4: {
+                int attr4;
+                binFile.read ((char*)&attr4, sizeof(attr4));
+                cout<< attr4<< " | ";
+                break;
+               }
+            case 32: {
+                char attr32[32];
+                binFile.read (attr32, sizeof(attr32));
+                cout << attr32<< " | ";
+                break;
+               }
+            case 256:{
+                char attr256[256];
+                 binFile.read (attr256, sizeof(attr256));
+                cout << attr256<< " | ";
+                break;
+               }
+            default: ;
+        }
+    }
+    cout<< endl;
+
+ }
+ binFile.close();
+}
+
+//faz busca por chave
+void selectKeyByDenseIndex(string inFile, short* regFormat, short regSize, string key, short numAttr){
+ ifstream binFile (inFile, ios::in | ios::binary);
+
+ if (binFile.good()){
+    int i=0;
+
+    for(i = 0; i < densePIndex.size(); i++){
+       if (densePIndex[i].first == key) {cout << densePIndex[i].first << " - " << densePIndex[i].second; break;}
+    }
+
+    regSize += HEADER_SIZE;
+
+    //print header
+    cout << "| ";
+
+    binFile.seekg(densePIndex[i].second, binFile.beg);
+    char schema[256];
+    binFile.read (schema, sizeof(schema));
+    cout << schema << " | ";
+
+    binFile.seekg(densePIndex[i].second+256, binFile.beg);
+    int index;
+    binFile.read ((char*)&index, sizeof(index));
+    cout<< index<< " | ";
+
+    short regOffset = 0;
+    regOffset += HEADER_SIZE;
+
+    for (short i=0;i<numAttr;i++) {
+        if (i>0){
+            regOffset+=regFormat[i-1];
+        }
+
+        binFile.seekg (densePIndex[i].second + regOffset, binFile.beg);
         switch(regFormat[i]){
             case 1: {
                 bool attr1;
