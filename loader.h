@@ -102,9 +102,6 @@ bool loadFile(string inFile, string outFile, string schema, short *regFormat, sh
                 if (attrN == (attrPIndex - 1))
                     densePIndex.push_back( make_pair( string(buffer), (counter-1)*regSize) );
 
-
-//                cout << string(buffer) << " - " << (counter-1)*regSize << endl;}
-
                 memset(buffer,0,sizeof(buffer));
                 buffer[0]='\0';
                 i = 0; attrN++;
@@ -234,10 +231,25 @@ void selectKeyByDenseIndex(string inFile, short* regFormat, short regSize, strin
  ifstream binFile (inFile, ios::in | ios::binary);
 
  if (binFile.good()){
-    int i=0;
 
-    for(i = 0; i < densePIndex.size(); i++){
-       if (densePIndex[i].first == key) {cout << densePIndex[i].first << " - " << densePIndex[i].second; break;}
+    int baseoffset = 0;
+    bool found = false;
+
+    for(int di = 0; di < densePIndex.size(); di++){
+        if (densePIndex[di].first.compare(key) == 0) {
+            cout << "Index: " << densePIndex[di].first 
+                << " -> File offset: " << densePIndex[di].second
+                << endl; 
+            baseoffset = densePIndex[di].second;
+            found = true;
+            break;
+        }
+    }
+
+    if (!found)
+    {
+        cout<<"Key not found!"<<endl;
+        return;
     }
 
     regSize += HEADER_SIZE;
@@ -245,12 +257,12 @@ void selectKeyByDenseIndex(string inFile, short* regFormat, short regSize, strin
     //print header
     cout << "| ";
 
-    binFile.seekg(densePIndex[i].second, binFile.beg);
+    binFile.seekg(baseoffset, binFile.beg);
     char schema[256];
     binFile.read (schema, sizeof(schema));
     cout << schema << " | ";
 
-    binFile.seekg(densePIndex[i].second+256, binFile.beg);
+    binFile.seekg(baseoffset+256, binFile.beg);
     int index;
     binFile.read ((char*)&index, sizeof(index));
     cout<< index<< " | ";
@@ -258,13 +270,13 @@ void selectKeyByDenseIndex(string inFile, short* regFormat, short regSize, strin
     short regOffset = 0;
     regOffset += HEADER_SIZE;
 
-    for (short i=0;i<numAttr;i++) {
-        if (i>0){
-            regOffset+=regFormat[i-1];
+    for (short j=0;j<numAttr;j++) {
+        if (j>0){
+            regOffset+=regFormat[j-1];
         }
 
-        binFile.seekg (densePIndex[i].second + regOffset, binFile.beg);
-        switch(regFormat[i]){
+        binFile.seekg (baseoffset + regOffset, binFile.beg);
+        switch(regFormat[j]){
             case 1: {
                 bool attr1;
                 binFile.read ((char*)&attr1, sizeof(attr1));
