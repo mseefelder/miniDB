@@ -7,6 +7,7 @@ using namespace std;
 int main()
 {
    short regFormat[3] = {4, 256, 32};
+   schemaName.clear();
    string schemaName = "IES";
    short regSize = 292;
    loadFile("CSVs_de_Teste/lista_ies.csv","IES.bin", schemaName, regFormat, 3, 1,regSize);

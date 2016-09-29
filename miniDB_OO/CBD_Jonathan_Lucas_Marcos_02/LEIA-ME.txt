@@ -1,0 +1,9 @@
+Caro professor,
+
+Nesse arquivo seguem dos diretórios zipados e um arquivo de texto.
+
+O arquivo de texto contém os tempos obtidos com a execução do código disponível no arquivo zipado CBD_Jonathan_Luca_Marcos_02_funciona.zip e são referentes aos tempos de busca sequancial e com índice denso.
+
+Já o arquivo zipado CBD_Jonathan_Luca_Marcos_02_segfault.zip contém nossa tentativa de utilizar uma implementção de árvore B+ para estruturar nossa busca, o que resultou em Falha de Segmentação. Ainda estamos tentando resolver esse problema.
+
+Muito obrigado pela compreensão.
