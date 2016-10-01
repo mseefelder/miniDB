@@ -41,12 +41,16 @@
 		<Unit filename="include/Header.h" />
 		<Unit filename="include/Index.h" />
 		<Unit filename="include/Relation.h" />
+		<Unit filename="include/bpt.h" />
+		<Unit filename="include/predefined.h" />
 		<Unit filename="src/BinFileHandler.cpp" />
 		<Unit filename="src/BplusIndex.cpp" />
 		<Unit filename="src/BplusTree.cpp" />
 		<Unit filename="src/DenseIndex.cpp" />
 		<Unit filename="src/Index.cpp" />
 		<Unit filename="src/Relation.cpp" />
+		<Unit filename="src/bplustree.config" />
+		<Unit filename="src/bpt.cc" />
 		<Unit filename="src/main.cpp" />
 		<Extensions>
 			<code_completion />

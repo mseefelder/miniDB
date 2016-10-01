@@ -2,10 +2,9 @@
 
 #include <iostream>
 #include <typeinfo>
-#include <string>
+#include <string.h>
 #include <cstdlib>
 #include <cstring>
-
 
 using namespace std;
 

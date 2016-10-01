@@ -1,6 +1,6 @@
 #include "DenseIndex.h"
 #include <vector>
-//#include <iostream>
+#include <iostream>
 // Constructors/Destructors
 //
 
@@ -77,9 +77,9 @@ pair<unsigned int,bool> DenseIndex::getTuple (int K){ //http://www.cplusplus.com
     else return make_pair(0,false);
 }
 
-//void DenseIndex::printIndex(){
-//    for(auto i: index) cout << i.first << " - " << i.second << endl;
-//}
+void DenseIndex::printIndex(){
+    for(auto i: index) cout << i.first << " - " << i.second << endl;
+}
 
 // Accessor methods
 //

@@ -4,6 +4,7 @@
 #include <chrono>
 
 #include "Relation.h"
+#include "bpt.h"
 
 using namespace std;
 
@@ -13,9 +14,24 @@ int main()
     string relationName = "IES";
     Relation IES(relationName, tF);
     IES.load("CSVs_de_Teste/lista_ies.csv",'|');
+    cout << IES.getNumTuples() << endl;
+
+
+    // DENSE INDEX CREATION
+
     /*DEBUG*/ //cout << IES.getName() << " " << IES.getNumAttr() << " " << IES.getTupleSize() <<  " " << IES.getNumTuples() << IES.getTupleFormat() << endl;
     DenseIndex dPKEY(IES.getBinFilename(), IES.getNumTuples(), 1, IES.getTupleSize()); //for while, DenseIndex works only for the 1st attribute, considering it as a INT4
     dPKEY.build();  //dPKEY.printIndex();
+   // dPKEY.printIndex();
+    // B+ TREE CREATION
+    // Initialize the BPlusTree module
+        cout << "Teste 1" << endl;
+    //Node::initialize();
+    // Create a new tree
+        cout << "Teste 2" << endl;
+    //bRoot = new Node();
+    //cout << "Teste 3" << endl;
+    //buildTree(IES.getBinFilename(), IES.getNumTuples(), IES.getTupleSize());
 
     //Almost half are keys known to be present on csvFile
     vector<int> randomKeys = {1988, 1305, 1518, 1817, 1119, 1753, 1329, 1154, 1159, 1895, 1633, 1627, 1593, 1013, 1191, 1560,
@@ -26,10 +42,10 @@ int main()
         1852, 1557, 1425, 1286, 1640, 1237, 1577, 1263};
 
     short TestCase=0, hits=0, miss=0;
-    //cin >> TestCase;
 
-    {  //1st test case: Direct Access //One select
 
+    //1st test case: Direct Access //One select
+    {
         cout << "Selecao de chave unica: \n\n" << endl;
         auto begin = chrono::high_resolution_clock::now();
 
@@ -43,10 +59,10 @@ int main()
         cout << "A operacao durou: " << chrono::duration_cast<chrono::milliseconds>(end-begin).count() << " ms" << endl;
 
 
+        hits = 0;
+        miss = 0;
     }
-
-    {  //1st test case: Direct Access //Batch select
-
+    {
         cout << "Selecao de conjunto aleatorio de chaves: \n\n" << endl;
 
         auto begin = chrono::high_resolution_clock::now();
@@ -61,11 +77,11 @@ int main()
         cout << "\n\nNumero de chaves encontradas: " << hits << endl;
         cout << "Numero de chaves nao encontradas: " << miss << endl;
         cout << "A operacao durou: " << chrono::duration_cast<chrono::milliseconds>(end-begin).count() << " ms" << endl;
-
-
     }
+    {
+        hits = 0;
+        miss = 0;
 
-    { //1st test case: Direct Access //In-Range select
 
         cout << "Selecao de intervalo (faixa 4000 - 4100) de chaves: \n\n" << endl;
         auto begin = chrono::high_resolution_clock::now();
@@ -80,11 +96,11 @@ int main()
         cout << "\n\nNumero de chaves encontradas: " << hits << endl;
         cout << "Numero de chaves nao encontradas: " << miss << endl;
         cout << "A operacao durou: " << chrono::duration_cast<chrono::milliseconds>(end-begin).count() << " ms" << endl;
-
-
     }
+    {
+        hits = 0;
+        miss = 0;
 
-    { //2nd test case: Access by Primary Key trough Dense Index //One select
 
         cout << "Selecao de chave unica por Indice Denso: \n\n" << endl;
         auto begin = chrono::high_resolution_clock::now();
@@ -101,10 +117,11 @@ int main()
         cout << "\n\nNumero de chaves encontradas: " << hits << endl;
         cout << "Numero de chaves nao encontradas: " << miss << endl;
         cout << "A operacao durou: " << chrono::duration_cast<chrono::milliseconds>(end-begin).count() << " ms" << endl;
-
     }
+    {
+        hits = 0;
+        miss = 0;
 
-    { //2nd test case: Access by Primary Key trough Dense Index //Batch select
 
         cout << "Selecao de conjunto aleatorio de chaves por Indice Denso: \n\n" << endl;
         auto begin = chrono::high_resolution_clock::now();
@@ -122,11 +139,11 @@ int main()
         cout << "\n\nNumero de chaves encontradas: " << hits << endl;
         cout << "Numero de chaves nao encontradas: " << miss << endl;
         cout << "A operacao durou: " << chrono::duration_cast<chrono::milliseconds>(end-begin).count() << " ms" << endl;
-
-
     }
+    {
+        hits = 0;
+        miss = 0;
 
-    { //2nd test case: Access by Primary Key trough Dense Index ///In-Range select
 
         cout << "Selecao de intervalo (faixa 4000 - 4100) de chaves: \n\n" << endl;
         auto begin = chrono::high_resolution_clock::now();
@@ -136,15 +153,74 @@ int main()
             for (auto tA: ts.first)
                 IES.printTuple(tA);
         hits = ts.first.size();
+        miss = (4100-4000) - hits;
 
         auto end = chrono::high_resolution_clock::now();
 
         cout << "\n\nNumero de chaves encontradas: " << hits << endl;
         cout << "Numero de chaves nao encontradas: " << miss << endl;
         cout << "A operacao durou: " << chrono::duration_cast<chrono::milliseconds>(end-begin).count() << " ms" << endl;
-
-
     }
+    /*
+    {
+
+        hits = 0;
+        miss = 0;
+
+
+
+        cout << "Selecao de chave unica por Arvore B+: \n\n" << endl;
+        auto begin = chrono::high_resolution_clock::now();
+
+        unsigned int loc = pointQuery(bRoot, 586);
+
+        auto end = chrono::high_resolution_clock::now();
+
+        cout << "\n\nEndereço da chave encontrada: " << loc << endl;
+        cout << "A operacao durou: " << chrono::duration_cast<chrono::milliseconds>(end-begin).count() << " ms" << endl;
+    }
+    {
+        hits = 0;
+        miss = 0;
+
+        cout << "Selecao de conjunto aleatorio de chaves por Arvore B+: \n\n" << endl;
+        auto begin = chrono::high_resolution_clock::now();
+
+        for (auto & it : randomKeys) {
+
+            unsigned int hit = pointQuery(bRoot, it);
+
+            if (hit == 0) miss++;
+
+            else hits++;
+
+        }
+
+        auto end = chrono::high_resolution_clock::now();
+
+        cout << "\n\nNumero de chaves encontradas: " << hits << endl;
+        cout << "Numero de chaves nao encontradas: " << miss << endl;
+        cout << "A operacao durou: " << chrono::duration_cast<chrono::milliseconds>(end-begin).count() << " ms" << endl;
+    }
+    {
+        hits = 0;
+        miss = 0;
+
+
+        cout << "Selecao de intervalo (faixa 4000 - 4100) de chaves: \n\n" << endl;
+        auto begin = chrono::high_resolution_clock::now();
+
+        vector<unsigned int> loc = windowQuery(bRoot, 4000,4100);
+
+        auto end = chrono::high_resolution_clock::now();
+
+        cout << "\n\nNumero de chaves encontradas: " << loc.size() << endl;
+        cout << "A operacao durou: " << chrono::duration_cast<chrono::milliseconds>(end-begin).count() << " ms" << endl;
+    }
+    */
+        hits = 0;
+        miss = 0;
+
 
     return 0;
 }

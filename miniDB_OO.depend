@@ -2,14 +2,20 @@
 1474690862 source:/home/kldev/git/miniDB_OO/BplusIndex.cpp
 	"BplusIndex.h"
 
+1474844954 x.h"
+
 1474692034 /home/kldev/git/miniDB_OO/BplusIndex.h
 	"Index.h"
 	<string>
 	"BplusTree.h"
 
+1474690862 .h"
+
 1474692013 /home/kldev/git/miniDB_OO/Index.h
 	<string>
 	<vector>
+
+1474787718 
 
 1474690862 /home/kldev/git/miniDB_OO/BplusTree.h
 	<string>
@@ -31,6 +37,8 @@
 	<iostream>
 	<vector>
 	"Relation.h"
+
+1475003476 h"
 
 1474732362 /home/kldev/git/miniDB_OO/Relation.h
 	<string.h>
@@ -108,56 +116,56 @@
 1474839923 /home/kldev/git/miniDB_OO/include/Header.h
 	<ctime>
 
-1474754376 source:/home/mseefelder/workspace/CBD/miniDB/miniDB_OO/src/BinFileHandler.cpp
+1474754376 source:/home/mseefelder/workspace/CBD/miniDB_OO/src/BinFileHandler.cpp
 	"BinFileHandler.h"
 	<iostream>
 	<typeinfo>
 	<string.h>
 
-1474754376 /home/mseefelder/workspace/CBD/miniDB/miniDB_OO/include/BinFileHandler.h
+1474754376 /home/mseefelder/workspace/CBD/miniDB_OO/include/BinFileHandler.h
 	<fstream>
 	<Header.h>
 
-1474839922 /home/mseefelder/workspace/CBD/miniDB/miniDB_OO/include/Header.h
+1474839922 /home/mseefelder/workspace/CBD/miniDB_OO/include/Header.h
 	<ctime>
 
-1474844954 source:/home/mseefelder/workspace/CBD/miniDB/miniDB_OO/src/BplusIndex.cpp
+1474844954 source:/home/mseefelder/workspace/CBD/miniDB_OO/src/BplusIndex.cpp
 	"BplusIndex.h"
 
-1474844948 /home/mseefelder/workspace/CBD/miniDB/miniDB_OO/include/BplusIndex.h
+1474844948 /home/mseefelder/workspace/CBD/miniDB_OO/include/BplusIndex.h
 	"Index.h"
 	<string>
 	"BplusTree.h"
 
-1474844948 /home/mseefelder/workspace/CBD/miniDB/miniDB_OO/include/Index.h
+1474844948 /home/mseefelder/workspace/CBD/miniDB_OO/include/Index.h
 	<string>
 	<vector>
 
-1474767678 /home/mseefelder/workspace/CBD/miniDB/miniDB_OO/include/BplusTree.h
+1474767678 /home/mseefelder/workspace/CBD/miniDB_OO/include/BplusTree.h
 	<string>
 
-1474690862 source:/home/mseefelder/workspace/CBD/miniDB/miniDB_OO/src/BplusTree.cpp
+1474690862 source:/home/mseefelder/workspace/CBD/miniDB_OO/src/BplusTree.cpp
 	"BplusTree.h"
 
-1474850696 source:/home/mseefelder/workspace/CBD/miniDB/miniDB_OO/src/DenseIndex.cpp
+1474850696 source:/home/mseefelder/workspace/CBD/miniDB_OO/src/DenseIndex.cpp
 	"DenseIndex.h"
 	<vector>
 
-1474844948 /home/mseefelder/workspace/CBD/miniDB/miniDB_OO/include/DenseIndex.h
+1474844948 /home/mseefelder/workspace/CBD/miniDB_OO/include/DenseIndex.h
 	"Index.h"
 	"BinFileHandler.h"
 	<algorithm>
 	<string>
 
-1474768408 source:/home/mseefelder/workspace/CBD/miniDB/miniDB_OO/src/Index.cpp
+1474768408 source:/home/mseefelder/workspace/CBD/miniDB_OO/src/Index.cpp
 	"Index.h"
 
-1474787718 source:/home/mseefelder/workspace/CBD/miniDB/miniDB_OO/src/Relation.cpp
+1474787718 source:/home/mseefelder/workspace/CBD/miniDB_OO/src/Relation.cpp
 	"Relation.h"
 	<fstream>
 	<typeinfo>
 
-1474839922 /home/mseefelder/workspace/CBD/miniDB/miniDB_OO/include/Relation.h
+1474839922 /home/mseefelder/workspace/CBD/miniDB_OO/include/Relation.h
 	<string.h>
 	<string>
 	<vector>
@@ -167,58 +175,85 @@
 	"BplusIndex.h"
 	<iostream>
 
-1474754376 source:f:\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02_funciona\minidb_oo\src\binfilehandler.cpp
-	"BinFileHandler.h"
-	<iostream>
-	<typeinfo>
-	<string.h>
-
-1474754376 f:\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02_funciona\minidb_oo\include\binfilehandler.h
-	<fstream>
-	<Header.h>
-
-1474839922 f:\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02_funciona\minidb_oo\include\header.h
-	<ctime>
-
-1474844954 source:f:\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02_funciona\minidb_oo\src\bplusindex.cpp
-	"BplusIndex.h"
-
-1474844948 f:\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02_funciona\minidb_oo\include\bplusindex.h
-	"Index.h"
-	<string>
-	"BplusTree.h"
-
-1474844948 f:\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02_funciona\minidb_oo\include\index.h
-	<string>
-	<vector>
-
-1474767678 f:\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02_funciona\minidb_oo\include\bplustree.h
-	<string>
-
-1474690862 source:f:\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02_funciona\minidb_oo\src\bplustree.cpp
-	"BplusTree.h"
-
-1474850696 source:f:\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02_funciona\minidb_oo\src\denseindex.cpp
-	"DenseIndex.h"
-	<vector>
-
-1474844948 f:\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02_funciona\minidb_oo\include\denseindex.h
-	"Index.h"
-	"BinFileHandler.h"
-	<algorithm>
-	<string>
-
-1474768408 source:f:\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02_funciona\minidb_oo\src\index.cpp
-	"Index.h"
-
-1474948556 source:f:\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02_funciona\minidb_oo\src\main.cpp
+1474947872 source:/home/mseefelder/workspace/CBD/miniDB_OO/src/main.cpp
 	<iostream>
 	<vector>
 	<string>
 	<chrono>
 	"Relation.h"
+	"bpt.h"
 
-1474839922 f:\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02_funciona\minidb_oo\include\relation.h
+1474947328 /home/mseefelder/workspace/CBD/miniDB_OO/include/bpt.h
+	<chrono>
+	<iostream>
+	<math.h>
+	<fstream>
+	<string>
+	<cstring>
+	<stdlib.h>
+	<queue>
+	<vector>
+	<limits>
+	<algorithm>
+
+1474947328 >
+
+1475001220 source:f:\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02_segfault\minidb_oo\src\binfilehandler.cpp
+	"BinFileHandler.h"
+	<iostream>
+	<typeinfo>
+	<string.h>
+	<cstdlib>
+	<cstring>
+
+1474754376 f:\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02_segfault\minidb_oo\include\binfilehandler.h
+	<fstream>
+	<Header.h>
+
+1474839922 f:\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02_segfault\minidb_oo\include\header.h
+	<ctime>
+
+1474844954 source:f:\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02_segfault\minidb_oo\src\bplusindex.cpp
+	"BplusIndex.h"
+
+1474844948 f:\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02_segfault\minidb_oo\include\bplusindex.h
+	"Index.h"
+	<string>
+	"BplusTree.h"
+
+1474844948 f:\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02_segfault\minidb_oo\include\index.h
+	<string>
+	<vector>
+
+1474767678 f:\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02_segfault\minidb_oo\include\bplustree.h
+	<string>
+
+1474690862 source:f:\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02_segfault\minidb_oo\src\bplustree.cpp
+	"BplusTree.h"
+
+1475002496 source:f:\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02_segfault\minidb_oo\src\denseindex.cpp
+	"DenseIndex.h"
+	<vector>
+	<iostream>
+
+1474844948 f:\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02_segfault\minidb_oo\include\denseindex.h
+	"Index.h"
+	"BinFileHandler.h"
+	<algorithm>
+	<string>
+
+1474768408 source:f:\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02_segfault\minidb_oo\src\index.cpp
+	"Index.h"
+
+1475003476 source:f:\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02_segfault\minidb_oo\src\main.cpp
+	<iostream>
+	<vector>
+	<string>
+	<chrono>
+	"Relation.h"
+	"bpt.h"
+
+1474839922 f:\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02_segfault\minidb_oo\include\relation.h
 	<string.h>
 	<string>
 	<vector>
@@ -228,8 +263,171 @@
 	"BplusIndex.h"
 	<iostream>
 
-1474787718 source:f:\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02_funciona\minidb_oo\src\relation.cpp
+1475004718 f:\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02_segfault\minidb_oo\include\bpt.h
+	<chrono>
+	<iostream>
+	<math.h>
+	<fstream>
+	<string>
+	<cstring>
+	<stdlib.h>
+	<queue>
+	<vector>
+	<limits>
+	<algorithm>
+	<sstream>
+
+1474787718 source:f:\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02\cbd_jonathan_lucas_marcos_02_segfault\minidb_oo\src\relation.cpp
 	"Relation.h"
 	<fstream>
 	<typeinfo>
+
+1475336227 source:/home/mseefelder/workspace/CBD/1miniDB/src/BinFileHandler.cpp
+	"BinFileHandler.h"
+	<iostream>
+	<typeinfo>
+	<string.h>
+	<cstdlib>
+	<cstring>
+
+1475336227 /home/mseefelder/workspace/CBD/1miniDB/include/BinFileHandler.h
+	<fstream>
+	<Header.h>
+
+1475336227 /home/mseefelder/workspace/CBD/1miniDB/include/Header.h
+	<ctime>
+
+1475336227 source:/home/mseefelder/workspace/CBD/1miniDB/src/BplusIndex.cpp
+	"BplusIndex.h"
+
+1475336227 /home/mseefelder/workspace/CBD/1miniDB/include/BplusIndex.h
+	"Index.h"
+	<string>
+	"BplusTree.h"
+
+1475336227 /home/mseefelder/workspace/CBD/1miniDB/include/Index.h
+	<string>
+	<vector>
+
+1475336227 /home/mseefelder/workspace/CBD/1miniDB/include/BplusTree.h
+	<string>
+
+1475336227 source:/home/mseefelder/workspace/CBD/1miniDB/src/BplusTree.cpp
+	"BplusTree.h"
+
+1475336227 source:/home/mseefelder/workspace/CBD/1miniDB/src/DenseIndex.cpp
+	"DenseIndex.h"
+	<vector>
+	<iostream>
+
+1475336227 /home/mseefelder/workspace/CBD/1miniDB/include/DenseIndex.h
+	"Index.h"
+	"BinFileHandler.h"
+	<algorithm>
+	<string>
+
+1475336227 source:/home/mseefelder/workspace/CBD/1miniDB/src/Index.cpp
+	"Index.h"
+
+1475336227 source:/home/mseefelder/workspace/CBD/1miniDB/src/Relation.cpp
+	"Relation.h"
+	<fstream>
+	<typeinfo>
+
+1475336227 /home/mseefelder/workspace/CBD/1miniDB/include/Relation.h
+	<string.h>
+	<string>
+	<vector>
+	"Header.h"
+	"BinFileHandler.h"
+	"DenseIndex.h"
+	"BplusIndex.h"
+	<iostream>
+
+1475336227 source:/home/mseefelder/workspace/CBD/0miniDB/src/BinFileHandler.cpp
+	"BinFileHandler.h"
+	<iostream>
+	<typeinfo>
+	<string.h>
+	<cstdlib>
+	<cstring>
+
+1475336227 /home/mseefelder/workspace/CBD/0miniDB/include/BinFileHandler.h
+	<fstream>
+	<Header.h>
+
+1475336227 /home/mseefelder/workspace/CBD/0miniDB/include/Header.h
+	<ctime>
+
+1475336227 source:/home/mseefelder/workspace/CBD/0miniDB/src/BplusTree.cpp
+	"BplusTree.h"
+
+1475329321 /home/mseefelder/workspace/CBD/0miniDB/include/BplusTree.h
+	<string>
+
+1475336227 source:/home/mseefelder/workspace/CBD/0miniDB/src/DenseIndex.cpp
+	"DenseIndex.h"
+	<vector>
+	<iostream>
+
+1475336227 /home/mseefelder/workspace/CBD/0miniDB/include/DenseIndex.h
+	"Index.h"
+	"BinFileHandler.h"
+	<algorithm>
+	<string>
+
+1475336227 /home/mseefelder/workspace/CBD/0miniDB/include/Index.h
+	<string>
+	<vector>
+
+1475336227 source:/home/mseefelder/workspace/CBD/0miniDB/src/Index.cpp
+	"Index.h"
+
+1475336612 source:/home/mseefelder/workspace/CBD/0miniDB/src/main.cpp
+	<iostream>
+	<vector>
+	<string>
+	<chrono>
+	"Relation.h"
+	"bpt.h"
+
+1475336227 /home/mseefelder/workspace/CBD/0miniDB/include/Relation.h
+	<string.h>
+	<string>
+	<vector>
+	"Header.h"
+	"BinFileHandler.h"
+	"DenseIndex.h"
+	"BplusIndex.h"
+	<iostream>
+
+1475337401 /home/mseefelder/workspace/CBD/0miniDB/include/BplusIndex.h
+	"Index.h"
+	"BinFileHandler.h"
+	<string>
+	"bpt.h"
+
+1475335536 /home/mseefelder/workspace/CBD/0miniDB/include/bpt.h
+	<stddef.h>
+	<stdio.h>
+	<stdlib.h>
+	<assert.h>
+	"predefined.h"
+
+1475335786 /home/mseefelder/workspace/CBD/0miniDB/include/predefined.h
+	<string.h>
+
+1475336227 source:/home/mseefelder/workspace/CBD/0miniDB/src/Relation.cpp
+	"Relation.h"
+	<fstream>
+	<typeinfo>
+
+1475337604 source:/home/mseefelder/workspace/CBD/0miniDB/src/BplusIndex.cpp
+	"BplusIndex.h"
+
+1475332818 source:/home/mseefelder/workspace/CBD/0miniDB/src/bpt.cc
+	"bpt.h"
+	<stdlib.h>
+	<list>
+	<algorithm>
 

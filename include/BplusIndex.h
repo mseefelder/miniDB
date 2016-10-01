@@ -2,9 +2,10 @@
 #ifndef BPLUSINDEX_H
 #define BPLUSINDEX_H
 #include "Index.h"
+#include "BinFileHandler.h"
 
 #include <string>
-#include "BplusTree.h"
+#include "bpt.h"
 
 /**
   * class BplusIndex
@@ -22,7 +23,7 @@ public:
   /**
    * Empty Constructor
    */
-  BplusIndex ();
+  BplusIndex (string relName, unsigned int numT, unsigned short attrK, unsigned short tSize);
 
   /**
    * Empty Destructor
@@ -73,7 +74,7 @@ private:
   // Private attributes
   //
 
-  BplusTree index;
+  bpt::bplus_tree *index;
 public:
 
 
@@ -93,15 +94,15 @@ public:
    * Set the value of index
    * @param new_var the new value of index
    */
-  void setIndex (BplusTree new_var)   {
-      index = new_var;
+  void setIndex (bpt::bplus_tree new_var)   {
+      index = &new_var;
   }
 
   /**
    * Get the value of index
    * @return the value of index
    */
-  BplusTree getIndex ()   {
+  bpt::bplus_tree* getIndex ()   {
     return index;
   }
 private:
