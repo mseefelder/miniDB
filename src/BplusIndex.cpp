@@ -39,6 +39,35 @@ bool BplusIndex::build(){
 }
 
 pair<vector<unsigned int>,bool>  BplusIndex::getRangeTuple (int a, int b){
+    if (b < a) {
+        int temp = a;
+        a = b;
+        b = temp;
+    }
+
+    b = b - 1; //exclude last index
+
+    int diff = b-a;
+    bpt::key_t left = bpt::key_t((to_string(a)).c_str());
+    bpt::key_t right = bpt::key_t((to_string(b)).c_str());
+    unsigned int *values = new unsigned int[diff];
+    
+    int amount = index->search_range(&left, right, values, diff);
+
+    pair<vector<unsigned int>,bool> result;
+    result.second = false;
+    if (amount <= 0) {
+        result.first.push_back(0);
+        delete [] values;
+        return result;
+    }
+    result.second = true;
+    for (int i = 0; i < amount; ++i) {
+        result.first.push_back(values[i]);
+    }
+
+    delete [] values;
+    return result;
 }
 
 vector<pair<unsigned int,bool>> BplusIndex::getBatchTuple (vector<int> Ks){

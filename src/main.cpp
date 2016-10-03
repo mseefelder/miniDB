@@ -211,7 +211,6 @@ int main()
         cout << "Numero de chaves nao encontradas: " << miss << endl;
         cout << "A operacao durou: " << chrono::duration_cast<chrono::milliseconds>(end-begin).count() << " ms" << endl;
     }
-    /*
     {
         hits = 0;
         miss = 0;
@@ -220,13 +219,20 @@ int main()
         cout << "Selecao de intervalo (faixa 4000 - 4100) de chaves: \n\n" << endl;
         auto begin = chrono::high_resolution_clock::now();
 
-        vector<unsigned int> loc = windowQuery(bRoot, 4000,4100);
+        auto ts = bpi.getRangeTuple(4000,4100);
+        if (ts.second)
+            for (auto tA: ts.first)
+                IES.printTuple(tA);
+        hits = ts.first.size();
+        miss = (4100-4000) - hits;
 
         auto end = chrono::high_resolution_clock::now();
 
-        cout << "\n\nNumero de chaves encontradas: " << loc.size() << endl;
+        cout << "\n\nNumero de chaves encontradas: " << hits << endl;
+        cout << "Numero de chaves nao encontradas: " << miss << endl;
         cout << "A operacao durou: " << chrono::duration_cast<chrono::milliseconds>(end-begin).count() << " ms" << endl;
     }
+    /*
     */
         hits = 0;
         miss = 0;
