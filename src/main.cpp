@@ -33,6 +33,12 @@ int main()
     //cout << "Teste 3" << endl;
     //buildTree(IES.getBinFilename(), IES.getNumTuples(), IES.getTupleSize());
 
+    cout << "Instanciando BplusIndex" << endl;
+    BplusIndex bpi(IES.getBinFilename(), IES.getNumTuples(), 1, IES.getTupleSize());
+    cout << "Construindo BplusIndex" << endl;
+    bpi.build();
+    cout << "BplusIndex construido!" << endl;
+
     //Almost half are keys known to be present on csvFile
     vector<int> randomKeys = {1988, 1305, 1518, 1817, 1119, 1753, 1329, 1154, 1159, 1895, 1633, 1627, 1593, 1013, 1191, 1560,
         1791, 1740, 1619, 1406, 1516, 1704, 1438, 1989, 1709, 1762, 1352, 1713, 1881, 1603, 1959, 1937, 1930, 1111, 1545,
@@ -161,39 +167,42 @@ int main()
         cout << "Numero de chaves nao encontradas: " << miss << endl;
         cout << "A operacao durou: " << chrono::duration_cast<chrono::milliseconds>(end-begin).count() << " ms" << endl;
     }
-    /*
     {
 
-        hits = 0;
+       hits = 0;
         miss = 0;
 
 
-
-        cout << "Selecao de chave unica por Arvore B+: \n\n" << endl;
+        cout << "Selecao de chave unica por Árvore B+: \n\n" << endl;
         auto begin = chrono::high_resolution_clock::now();
 
-        unsigned int loc = pointQuery(bRoot, 586);
+        auto t = bpi.getTuple(586);
+        if(t.second) {
+            hits++;
+            IES.printTuple(t.first);
+        }
+        else miss++;
 
         auto end = chrono::high_resolution_clock::now();
 
-        cout << "\n\nEndereço da chave encontrada: " << loc << endl;
+        cout << "\n\nNumero de chaves encontradas: " << hits << endl;
+        cout << "Numero de chaves nao encontradas: " << miss << endl;
         cout << "A operacao durou: " << chrono::duration_cast<chrono::milliseconds>(end-begin).count() << " ms" << endl;
     }
     {
         hits = 0;
         miss = 0;
 
-        cout << "Selecao de conjunto aleatorio de chaves por Arvore B+: \n\n" << endl;
+
+        cout << "Selecao de conjunto aleatorio de chaves por Indice Denso: \n\n" << endl;
         auto begin = chrono::high_resolution_clock::now();
 
-        for (auto & it : randomKeys) {
-
-            unsigned int hit = pointQuery(bRoot, it);
-
-            if (hit == 0) miss++;
-
-            else hits++;
-
+        for (auto t: bpi.getBatchTuple(randomKeys)){
+            if (t.second){
+                hits++;
+                IES.printTuple(t.first);
+            }
+            else miss++;
         }
 
         auto end = chrono::high_resolution_clock::now();
@@ -202,6 +211,7 @@ int main()
         cout << "Numero de chaves nao encontradas: " << miss << endl;
         cout << "A operacao durou: " << chrono::duration_cast<chrono::milliseconds>(end-begin).count() << " ms" << endl;
     }
+    /*
     {
         hits = 0;
         miss = 0;
