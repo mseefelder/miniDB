@@ -5,6 +5,7 @@
 
 #include "Relation.h"
 #include "bpt.h"
+#include "HashIndex.h"
 
 using namespace std;
 
@@ -39,6 +40,13 @@ int main()
     bpi.build();
     cout << "BplusIndex construido!" << endl;
 
+    cout << "Instanciando HashIndex" << endl;
+    HashIndex hPKEY(IES.getBinFilename(), IES.getNumTuples(), 1, IES.getTupleSize());
+    cout << "Construindo HashIndex" << endl;
+    hPKEY.build();
+    cout << "HashIndex construido!" << endl;
+    hPKEY.printIndex();
+
     //Almost half are keys known to be present on csvFile
     vector<int> randomKeys = {1988, 1305, 1518, 1817, 1119, 1753, 1329, 1154, 1159, 1895, 1633, 1627, 1593, 1013, 1191, 1560,
         1791, 1740, 1619, 1406, 1516, 1704, 1438, 1989, 1709, 1762, 1352, 1713, 1881, 1603, 1959, 1937, 1930, 1111, 1545,
@@ -62,7 +70,7 @@ int main()
 
         cout << "\n\nNumero de chaves encontradas: " << hits << endl;
         cout << "Numero de chaves nao encontradas: " << miss << endl;
-        cout << "A operacao durou: " << chrono::duration_cast<chrono::milliseconds>(end-begin).count() << " ms" << endl;
+        cout << "A operacao durou: " << chrono::duration_cast<chrono::nanoseconds>(end-begin).count() << " ns" << endl;
 
 
         hits = 0;
@@ -82,7 +90,7 @@ int main()
 
         cout << "\n\nNumero de chaves encontradas: " << hits << endl;
         cout << "Numero de chaves nao encontradas: " << miss << endl;
-        cout << "A operacao durou: " << chrono::duration_cast<chrono::milliseconds>(end-begin).count() << " ms" << endl;
+        cout << "A operacao durou: " << chrono::duration_cast<chrono::nanoseconds>(end-begin).count() << " ns" << endl;
     }
     {
         hits = 0;
@@ -101,7 +109,7 @@ int main()
 
         cout << "\n\nNumero de chaves encontradas: " << hits << endl;
         cout << "Numero de chaves nao encontradas: " << miss << endl;
-        cout << "A operacao durou: " << chrono::duration_cast<chrono::milliseconds>(end-begin).count() << " ms" << endl;
+        cout << "A operacao durou: " << chrono::duration_cast<chrono::nanoseconds>(end-begin).count() << " ns" << endl;
     }
     {
         hits = 0;
@@ -122,7 +130,7 @@ int main()
 
         cout << "\n\nNumero de chaves encontradas: " << hits << endl;
         cout << "Numero de chaves nao encontradas: " << miss << endl;
-        cout << "A operacao durou: " << chrono::duration_cast<chrono::milliseconds>(end-begin).count() << " ms" << endl;
+        cout << "A operacao durou: " << chrono::duration_cast<chrono::nanoseconds>(end-begin).count() << " ns" << endl;
     }
     {
         hits = 0;
@@ -144,7 +152,7 @@ int main()
 
         cout << "\n\nNumero de chaves encontradas: " << hits << endl;
         cout << "Numero de chaves nao encontradas: " << miss << endl;
-        cout << "A operacao durou: " << chrono::duration_cast<chrono::milliseconds>(end-begin).count() << " ms" << endl;
+        cout << "A operacao durou: " << chrono::duration_cast<chrono::nanoseconds>(end-begin).count() << " ns" << endl;
     }
     {
         hits = 0;
@@ -165,7 +173,7 @@ int main()
 
         cout << "\n\nNumero de chaves encontradas: " << hits << endl;
         cout << "Numero de chaves nao encontradas: " << miss << endl;
-        cout << "A operacao durou: " << chrono::duration_cast<chrono::milliseconds>(end-begin).count() << " ms" << endl;
+        cout << "A operacao durou: " << chrono::duration_cast<chrono::nanoseconds>(end-begin).count() << " ns" << endl;
     }
     {
 
@@ -187,14 +195,14 @@ int main()
 
         cout << "\n\nNumero de chaves encontradas: " << hits << endl;
         cout << "Numero de chaves nao encontradas: " << miss << endl;
-        cout << "A operacao durou: " << chrono::duration_cast<chrono::milliseconds>(end-begin).count() << " ms" << endl;
+        cout << "A operacao durou: " << chrono::duration_cast<chrono::nanoseconds>(end-begin).count() << " ns" << endl;
     }
     {
         hits = 0;
         miss = 0;
 
 
-        cout << "Selecao de conjunto aleatorio de chaves por Indice Denso: \n\n" << endl;
+        cout << "Selecao de conjunto aleatorio de chaves por Árvore B+: \n\n" << endl;
         auto begin = chrono::high_resolution_clock::now();
 
         for (auto t: bpi.getBatchTuple(randomKeys)){
@@ -209,14 +217,14 @@ int main()
 
         cout << "\n\nNumero de chaves encontradas: " << hits << endl;
         cout << "Numero de chaves nao encontradas: " << miss << endl;
-        cout << "A operacao durou: " << chrono::duration_cast<chrono::milliseconds>(end-begin).count() << " ms" << endl;
+        cout << "A operacao durou: " << chrono::duration_cast<chrono::nanoseconds>(end-begin).count() << " ns" << endl;
     }
     {
         hits = 0;
         miss = 0;
 
 
-        cout << "Selecao de intervalo (faixa 4000 - 4100) de chaves: \n\n" << endl;
+        cout << "Selecao de intervalo (faixa 4000 - 4100) de chaves por Árvore B+: \n\n" << endl;
         auto begin = chrono::high_resolution_clock::now();
 
         auto ts = bpi.getRangeTuple(4000,4100);
@@ -230,7 +238,72 @@ int main()
 
         cout << "\n\nNumero de chaves encontradas: " << hits << endl;
         cout << "Numero de chaves nao encontradas: " << miss << endl;
-        cout << "A operacao durou: " << chrono::duration_cast<chrono::milliseconds>(end-begin).count() << " ms" << endl;
+        cout << "A operacao durou: " << chrono::duration_cast<chrono::nanoseconds>(end-begin).count() << " ns" << endl;
+    }
+    {
+
+        hits = 0;
+        miss = 0;
+
+
+        cout << "Selecao de chave unica por Indice Hash: \n\n" << endl;
+        auto begin = chrono::high_resolution_clock::now();
+
+        auto t = hPKEY.getTuple(586);
+        if(t.second) {
+            hits++;
+            IES.printTuple(t.first);
+        }
+        else miss++;
+
+        auto end = chrono::high_resolution_clock::now();
+
+        cout << "\n\nNumero de chaves encontradas: " << hits << endl;
+        cout << "Numero de chaves nao encontradas: " << miss << endl;
+        cout << "A operacao durou: " << chrono::duration_cast<chrono::nanoseconds>(end-begin).count() << " ns" << endl;
+    }
+    {
+        hits = 0;
+        miss = 0;
+
+
+        cout << "Selecao de conjunto aleatorio de chaves por Indice Hash: \n\n" << endl;
+        auto begin = chrono::high_resolution_clock::now();
+
+        for (auto t: hPKEY.getBatchTuple(randomKeys)){
+            if (t.second){
+                hits++;
+                IES.printTuple(t.first);
+            }
+            else miss++;
+        }
+
+        auto end = chrono::high_resolution_clock::now();
+
+        cout << "\n\nNumero de chaves encontradas: " << hits << endl;
+        cout << "Numero de chaves nao encontradas: " << miss << endl;
+        cout << "A operacao durou: " << chrono::duration_cast<chrono::nanoseconds>(end-begin).count() << " ns" << endl;
+    }
+    {
+        hits = 0;
+        miss = 0;
+
+
+        cout << "Selecao de intervalo (faixa 4000 - 4100) de chaves por Indice Hash: \n\n" << endl;
+        auto begin = chrono::high_resolution_clock::now();
+
+        auto ts = hPKEY.getRangeTuple(4000,4100);
+        if (ts.second)
+            for (auto tA: ts.first)
+                IES.printTuple(tA);
+        hits = ts.first.size();
+        miss = (4100-4000) - hits;
+
+        auto end = chrono::high_resolution_clock::now();
+
+        cout << "\n\nNumero de chaves encontradas: " << hits << endl;
+        cout << "Numero de chaves nao encontradas: " << miss << endl;
+        cout << "A operacao durou: " << chrono::duration_cast<chrono::nanoseconds>(end-begin).count() << " ns" << endl;
     }
     /*
     */
