@@ -4,7 +4,6 @@
 #include "Index.h"
 #include "BinFileHandler.h"
 
-#include <string>
 #include "bpt.h"
 
 /**
@@ -32,6 +31,10 @@ public:
 
   //Override
   virtual bool build ();
+
+  virtual bool load();
+
+  virtual bool writeOnDisk();
 
   virtual pair<vector<unsigned int>,bool>  getRangeTuple (int a, int b);
 

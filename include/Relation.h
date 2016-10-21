@@ -60,7 +60,7 @@ public:
    */
   bool load (string csvFilename, char delimiter);
 
-  bool open (string csvFile, char delimiter);
+  bool open ();
 
 
   /**

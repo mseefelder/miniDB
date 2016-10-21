@@ -1,15 +1,15 @@
 #include "DenseIndex.h"
-#include <vector>
-#include <iostream>
+
 // Constructors/Destructors
 //
 
-DenseIndex::DenseIndex (string relName, unsigned int numT, unsigned short attrK, unsigned short tSize) {
-    initAttributes();
+DenseIndex::DenseIndex (string relName, unsigned int numT, unsigned short attrK, unsigned short tSize)
+ {
     relBinFilename = relName;
     attrKey = attrK;
     tupleSize = tSize;
     numTuples = numT;
+    initAttributes();
 }
 
 DenseIndex::~DenseIndex () { }
@@ -34,6 +34,35 @@ bool DenseIndex::build(){
     }
     relFile.close();
     sort(index.begin(), index.end()); //sorting index, by the first element and then, by the second. This is the behavior of DenseIndex, diff address that refs same key are grouped in index;
+    isBuilt = true;
+    return writeOnDisk();
+}
+
+bool DenseIndex::writeOnDisk(){ /*REF http://stackoverflow.com/questions/37676381/saving-vectorint-to-file */
+    if (isBuilt) {
+        ofstream indexFile(binFilename, ios::out | ios::trunc | ios::binary);
+        for (auto key : index)
+            indexFile.write(reinterpret_cast<const char *>(&key), sizeof(pair<int,unsigned int>));
+        if (indexFile.good())
+            return true;
+    }
+    return false;
+}
+
+bool DenseIndex::load(){ /* REF http://stackoverflow.com/questions/37676381/saving-vectorint-to-file */
+    if (!isBuilt) {
+        ifstream indexFile(binFilename, ios::in | ios::binary);
+        if (!indexFile.good()) return false;
+        while (indexFile) {
+            pair<int,unsigned int> key;
+            indexFile.read(reinterpret_cast<char *>(&key), sizeof(pair<int,unsigned int>));
+            if (indexFile.eof()) break;
+            index.push_back(key);
+        }
+        isOpened = true;
+        return true;
+    }
+    else return false;
 }
 
 pair<vector<unsigned int>,bool> DenseIndex::getRangeTuple (int Ki, int Kf){
@@ -89,5 +118,11 @@ void DenseIndex::printIndex(){
 //
 
 void DenseIndex::initAttributes () {
+    isBuilt = false;
+    isOpened = false;
+    stringstream filename;
+    filename << "dI_" << attrKey << "_"<< relBinFilename;
+    binFilename = filename.str();
+
 }
 

@@ -38,6 +38,7 @@
 		<Unit filename="include/BplusIndex.h" />
 		<Unit filename="include/BplusTree.h" />
 		<Unit filename="include/DenseIndex.h" />
+		<Unit filename="include/HashIndex.h" />
 		<Unit filename="include/Header.h" />
 		<Unit filename="include/Index.h" />
 		<Unit filename="include/Relation.h" />
@@ -47,6 +48,7 @@
 		<Unit filename="src/BplusIndex.cpp" />
 		<Unit filename="src/BplusTree.cpp" />
 		<Unit filename="src/DenseIndex.cpp" />
+		<Unit filename="src/HashIndex.cpp" />
 		<Unit filename="src/Index.cpp" />
 		<Unit filename="src/Relation.cpp" />
 		<Unit filename="src/bplustree.config" />

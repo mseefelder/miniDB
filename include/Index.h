@@ -2,7 +2,9 @@
 #define INDEX_H
 
 #include <string>
+#include <sstream>
 #include <vector>
+#include <iostream>
 
 using namespace std;
 
@@ -44,6 +46,10 @@ public:
 
   virtual bool build () = 0;
 
+  virtual bool writeOnDisk() = 0;
+
+  virtual bool load() = 0;
+
     /**
    * Empty Destructor
    */
@@ -58,7 +64,10 @@ protected:
     // Relative filesystem path of the binary file that contains the tuple data of this relation.
     string binFilename;
     unsigned short attrKey;
-    bool isLoaded;
+    unsigned short attrFormat;
+  bool isBuilt;
+  bool isOpened;
+
 public:
 
 

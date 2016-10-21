@@ -5,7 +5,6 @@
 #include "BinFileHandler.h"
 
 #include <unordered_map>
-#include <string>
 
 /**
   * class HashIndex
@@ -38,6 +37,10 @@ public:
 
   //Override
   virtual bool build ();
+
+  virtual bool writeOnDisk();
+
+  virtual bool load();
 
   virtual pair<vector<unsigned int>,bool>  getRangeTuple (int a, int b);
 

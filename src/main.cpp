@@ -14,38 +14,43 @@ int main()
     vector<short> tF {INT4, CHAR256, CHAR32};
     string relationName = "IES";
     Relation IES(relationName, tF);
-    IES.load("CSVs_de_Teste/lista_ies.csv",'|');
-    cout << IES.getNumTuples() << endl;
+    if(!IES.open()){
+        cout << "Carregando dados para base binaria..." << endl;
+        if(IES.load("CSVs_de_Teste/lista_ies.csv",'|')) cout << "Carregamento de dados efetuado com sucesso!" << endl;
+        else { cout << "Falha no carregamento da base de dados." << endl; return 1; }
+    }
+    else cout << "Base de dados binaria pre-existente no disco foi encontrada. O carregamento e desnecessario." << endl;
 
 
     // DENSE INDEX CREATION
-
     /*DEBUG*/ //cout << IES.getName() << " " << IES.getNumAttr() << " " << IES.getTupleSize() <<  " " << IES.getNumTuples() << IES.getTupleFormat() << endl;
-    DenseIndex dPKEY(IES.getBinFilename(), IES.getNumTuples(), 1, IES.getTupleSize()); //for while, DenseIndex works only for the 1st attribute, considering it as a INT4
-    dPKEY.build();  //dPKEY.printIndex();
-   // dPKEY.printIndex();
-    // B+ TREE CREATION
-    // Initialize the BPlusTree module
-        cout << "Teste 1" << endl;
-    //Node::initialize();
-    // Create a new tree
-        cout << "Teste 2" << endl;
-    //bRoot = new Node();
-    //cout << "Teste 3" << endl;
-    //buildTree(IES.getBinFilename(), IES.getNumTuples(), IES.getTupleSize());
 
+    cout << "Instanciando DenseIndex" << endl;
+    DenseIndex dPKEY(IES.getBinFilename(), IES.getNumTuples(), 1, IES.getTupleSize()); //for while, DenseIndex works only for the 1st attribute, considering it as a INT4
+    if (!dPKEY.load()) {
+        cout << "Construindo DenseIndex" << endl;
+        if(dPKEY.build()) "DenseIndex construido e gravado em disco com sucesso";
+        else "Falha na construcao ou gravacao do DenseIndex";
+    }
+    else cout << "DenseIndex pre-existente no disco foi encontrado e carregado em memoria." << endl; // dPKEY.printIndex();
+
+    cout << "Instanciando HashIndex" << endl;
+    HashIndex hPKEY(IES.getBinFilename(), IES.getNumTuples(), 1, IES.getTupleSize());
+    if (!hPKEY.load()) {
+        if(hPKEY.build()) "HashIndex construido e gravado em disco com sucesso";
+        else "Falha na construcao ou gravacao do HashIndex";
+    }
+    else cout << "HashIndex pre-existente no disco foi encontrado e carregado em memoria." << endl; // hPKEY.printIndex();
+
+
+    // B+ TREE CREATION
     cout << "Instanciando BplusIndex" << endl;
     BplusIndex bpi(IES.getBinFilename(), IES.getNumTuples(), 1, IES.getTupleSize());
     cout << "Construindo BplusIndex" << endl;
     bpi.build();
     cout << "BplusIndex construido!" << endl;
 
-    cout << "Instanciando HashIndex" << endl;
-    HashIndex hPKEY(IES.getBinFilename(), IES.getNumTuples(), 1, IES.getTupleSize());
-    cout << "Construindo HashIndex" << endl;
-    hPKEY.build();
-    cout << "HashIndex construido!" << endl;
-    hPKEY.printIndex();
+
 
     //Almost half are keys known to be present on csvFile
     vector<int> randomKeys = {1988, 1305, 1518, 1817, 1119, 1753, 1329, 1154, 1159, 1895, 1633, 1627, 1593, 1013, 1191, 1560,
@@ -60,7 +65,7 @@ int main()
 
     //1st test case: Direct Access //One select
     {
-        cout << "Selecao de chave unica: \n\n" << endl;
+        cout << "\n\nSelecao de chave unica (sem indice, arquivo nao ordenado por chave primaria): \n\n" << endl;
         auto begin = chrono::high_resolution_clock::now();
 
         if (IES.selAttr(586,0)) hits++; //when attrN = 0 in calling selAttr, ALL the attributes of the tuple are selected;
@@ -77,7 +82,7 @@ int main()
         miss = 0;
     }
     {
-        cout << "Selecao de conjunto aleatorio de chaves: \n\n" << endl;
+        cout << "\n\nSelecao de conjunto aleatorio de chaves (sem indice, arquivo nao ordenado por chave primaria): \n\n" << endl;
 
         auto begin = chrono::high_resolution_clock::now();
 
@@ -97,7 +102,7 @@ int main()
         miss = 0;
 
 
-        cout << "Selecao de intervalo (faixa 4000 - 4100) de chaves: \n\n" << endl;
+        cout << "\n\nSelecao de intervalo (faixa 4000 - 4100) de chaves (sem indice, arquivo nao ordenado por chave primaria): \n\n" << endl;
         auto begin = chrono::high_resolution_clock::now();
 
         for (int K = 4000; K < 4100; K++){
@@ -116,7 +121,7 @@ int main()
         miss = 0;
 
 
-        cout << "Selecao de chave unica por Indice Denso: \n\n" << endl;
+        cout << "\n\nSelecao de chave unica por Indice Denso (arquivo nao ordenado por chave primaria): \n\n" << endl;
         auto begin = chrono::high_resolution_clock::now();
 
         auto t = dPKEY.getTuple(586);
@@ -137,7 +142,7 @@ int main()
         miss = 0;
 
 
-        cout << "Selecao de conjunto aleatorio de chaves por Indice Denso: \n\n" << endl;
+        cout << "\n\nSelecao de conjunto aleatorio de chaves por Indice Denso (arquivo nao ordenado por chave primaria): \n\n" << endl;
         auto begin = chrono::high_resolution_clock::now();
 
         for (auto t: dPKEY.getBatchTuple(randomKeys)){
@@ -159,7 +164,7 @@ int main()
         miss = 0;
 
 
-        cout << "Selecao de intervalo (faixa 4000 - 4100) de chaves: \n\n" << endl;
+        cout << "\n\nSelecao de intervalo (faixa 4000 - 4100) de chaves por Indice Denso (arquivo nao ordenado por chave primaria): \n\n" << endl;
         auto begin = chrono::high_resolution_clock::now();
 
         auto ts = dPKEY.getRangeTuple(4000,4100);
@@ -181,7 +186,7 @@ int main()
         miss = 0;
 
 
-        cout << "Selecao de chave unica por Árvore B+: \n\n" << endl;
+        cout << "\n\nSelecao de chave unica por Árvore B+ (arquivo nao ordenado por chave primaria): \n\n" << endl;
         auto begin = chrono::high_resolution_clock::now();
 
         auto t = bpi.getTuple(586);
@@ -202,7 +207,7 @@ int main()
         miss = 0;
 
 
-        cout << "Selecao de conjunto aleatorio de chaves por Árvore B+: \n\n" << endl;
+        cout << "\n\nSelecao de conjunto aleatorio de chaves por Árvore B+ (arquivo nao ordenado por chave primaria): \n\n" << endl;
         auto begin = chrono::high_resolution_clock::now();
 
         for (auto t: bpi.getBatchTuple(randomKeys)){
@@ -224,7 +229,7 @@ int main()
         miss = 0;
 
 
-        cout << "Selecao de intervalo (faixa 4000 - 4100) de chaves por Árvore B+: \n\n" << endl;
+        cout << "\n\nSelecao de intervalo (faixa 4000 - 4100) de chaves por Árvore B+ (arquivo nao ordenado por chave primaria): \n\n" << endl;
         auto begin = chrono::high_resolution_clock::now();
 
         auto ts = bpi.getRangeTuple(4000,4100);
@@ -246,7 +251,7 @@ int main()
         miss = 0;
 
 
-        cout << "Selecao de chave unica por Indice Hash: \n\n" << endl;
+        cout << "\n\nSelecao de chave unica por Indice Hash (arquivo nao ordenado por chave primaria): \n\n" << endl;
         auto begin = chrono::high_resolution_clock::now();
 
         auto t = hPKEY.getTuple(586);
@@ -267,7 +272,7 @@ int main()
         miss = 0;
 
 
-        cout << "Selecao de conjunto aleatorio de chaves por Indice Hash: \n\n" << endl;
+        cout << "\n\nSelecao de conjunto aleatorio de chaves por Indice Hash (arquivo nao ordenado por chave primaria): \n\n" << endl;
         auto begin = chrono::high_resolution_clock::now();
 
         for (auto t: hPKEY.getBatchTuple(randomKeys)){
@@ -289,7 +294,7 @@ int main()
         miss = 0;
 
 
-        cout << "Selecao de intervalo (faixa 4000 - 4100) de chaves por Indice Hash: \n\n" << endl;
+        cout << "\n\nSelecao de intervalo (faixa 4000 - 4100) de chaves por Indice Hash (arquivo nao ordenado por chave primaria): \n\n" << endl;
         auto begin = chrono::high_resolution_clock::now();
 
         auto ts = hPKEY.getRangeTuple(4000,4100);

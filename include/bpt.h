@@ -64,7 +64,7 @@ struct leaf_node_t {
     record_t children[BP_ORDER];
 };
 
-/* the encapulated B+ tree */
+/* the encapsulated B+ tree */
 class bplus_tree {
 public:
     bplus_tree(const char *path, bool force_empty = false);

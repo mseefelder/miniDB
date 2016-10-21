@@ -1,15 +1,14 @@
 #include "HashIndex.h"
-#include <vector>
-#include <iostream>
+
 // Constructors/Destructors
 //
 
 HashIndex::HashIndex (string relName, unsigned int numT, unsigned short attrK, unsigned short tSize) {
-    initAttributes();
     relBinFilename = relName;
     attrKey = attrK;
     tupleSize = tSize;
     numTuples = numT;
+    initAttributes();
 }
 
 HashIndex::~HashIndex () { }
@@ -33,6 +32,35 @@ bool HashIndex::build(){
         i++;
     }
     relFile.close();
+    isBuilt = true;
+    writeOnDisk();
+}
+
+
+bool HashIndex::writeOnDisk(){
+    if (isBuilt) {
+        ofstream indexFile(binFilename, ios::out | ios::trunc | ios::binary);
+        for (auto key : index)
+            indexFile.write(reinterpret_cast<const char *>(&key), sizeof(pair<int,unsigned int>));
+        return true;
+    }
+    else return false;
+}
+
+bool HashIndex::load(){
+    if (!isBuilt) {
+        ifstream indexFile(binFilename, ios::in | ios::binary);
+        if (!indexFile.good()) return false;
+        while (indexFile) {
+            pair<int,unsigned int> key;
+            indexFile.read(reinterpret_cast<char *>(&key), sizeof(pair<int,unsigned int>));
+            if (indexFile.eof()) break;
+            index.insert(key);
+        }
+        isOpened = true;
+        return true;
+    }
+    else return false;
 }
 
 pair<vector<unsigned int>,bool> HashIndex::getRangeTuple (int Ki, int Kf){
@@ -79,5 +107,11 @@ void HashIndex::printIndex(){
 //
 
 void HashIndex::initAttributes () {
+    isBuilt = false;
+    isOpened = false;
+    stringstream filename;
+    filename << "hI_" << attrKey << "_"<< relBinFilename;
+    binFilename = filename.str();
+
 }
 

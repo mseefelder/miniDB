@@ -18,10 +18,6 @@ class BinFileHandler
             isOpen = new_var;
         }
 
-        bool isOpened (){
-            return isOpen;
-        }
-
     public:
         ifstream input;
         ofstream output;
@@ -31,6 +27,9 @@ class BinFileHandler
         void writeHeader(header &tupleHeader);
         void writeStrongType(string &buffer, unsigned short dataType);
 
+        bool isOpened (){
+            return isOpen;
+        }
     protected:
 
 };

@@ -12,11 +12,11 @@ BinFileHandler::BinFileHandler (string binFilename, bool readOnly) {
     initAttributes();
     if (readOnly) {
         input.open(binFilename, ifstream::in | ifstream::binary);
-        setOpened(input.is_open());
+        setOpened(input.good());
     }
     else { //write only
         output.open(binFilename, ofstream::out | ofstream::binary);
-        setOpened(output.is_open());
+        setOpened(output.good());
     }
 }
 

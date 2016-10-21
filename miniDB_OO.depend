@@ -530,3 +530,97 @@
 	"bpt.h"
 	"HashIndex.h"
 
+1477031437 source:/home/kldev/git/miniDB/src/BinFileHandler.cpp
+	"BinFileHandler.h"
+	<iostream>
+	<typeinfo>
+	<string.h>
+	<cstdlib>
+	<cstring>
+
+1477031436 /home/kldev/git/miniDB/include/BinFileHandler.h
+	<fstream>
+	<Header.h>
+
+1477004118 /home/kldev/git/miniDB/include/Header.h
+	<ctime>
+
+1477029316 source:/home/kldev/git/miniDB/src/BplusIndex.cpp
+	"BplusIndex.h"
+
+1477028734 /home/kldev/git/miniDB/include/BplusIndex.h
+	"Index.h"
+	"BinFileHandler.h"
+	"bpt.h"
+
+1477028734 /home/kldev/git/miniDB/include/Index.h
+	<string>
+	<sstream>
+	<vector>
+	<iostream>
+
+1477029232 /home/kldev/git/miniDB/include/bpt.h
+	<stddef.h>
+	<stdio.h>
+	<stdlib.h>
+	<assert.h>
+	"predefined.h"
+
+1477004118 /home/kldev/git/miniDB/include/predefined.h
+	<string.h>
+
+1477004118 source:/home/kldev/git/miniDB/src/BplusTree.cpp
+	"BplusTree.h"
+
+1477004118 /home/kldev/git/miniDB/include/BplusTree.h
+	<string>
+
+1477004118 source:/home/kldev/git/miniDB/src/bpt.cc
+	"bpt.h"
+	<stdlib.h>
+	<list>
+	<algorithm>
+
+1477028735 source:/home/kldev/git/miniDB/src/DenseIndex.cpp
+	"DenseIndex.h"
+
+1477028734 /home/kldev/git/miniDB/include/DenseIndex.h
+	"Index.h"
+	"BinFileHandler.h"
+	<algorithm>
+
+1477004118 source:/home/kldev/git/miniDB/src/Index.cpp
+	"Index.h"
+
+1477031436 source:/home/kldev/git/miniDB/src/main.cpp
+	<iostream>
+	<vector>
+	<string>
+	<chrono>
+	"Relation.h"
+	"bpt.h"
+	"HashIndex.h"
+
+1477031437 /home/kldev/git/miniDB/include/Relation.h
+	<string.h>
+	<string>
+	<vector>
+	"Header.h"
+	"BinFileHandler.h"
+	"DenseIndex.h"
+	"BplusIndex.h"
+	<iostream>
+
+1477028735 /home/kldev/git/miniDB/include/HashIndex.h
+	"Index.h"
+	"BinFileHandler.h"
+	<unordered_map>
+
+1477031728 source:/home/kldev/git/miniDB/src/Relation.cpp
+	"Relation.h"
+	<fstream>
+	<typeinfo>
+
+1477028734 source:/home/kldev/git/miniDB/src/HashIndex.cpp
+	"HashIndex.h"
+

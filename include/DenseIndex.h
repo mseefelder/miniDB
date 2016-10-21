@@ -3,9 +3,9 @@
 #define DENSEINDEX_H
 #include "Index.h"
 #include "BinFileHandler.h"
+
 #include <algorithm>    // std::sort
 
-#include <string>
 
 /**
   * class DenseIndex
@@ -18,7 +18,6 @@ class DenseIndex : public Index
 private:
 
   vector< pair<int,unsigned int> > index;
-
 
 public:
 
@@ -38,6 +37,10 @@ public:
 
   //Override
   virtual bool build ();
+
+  virtual bool load();
+
+  virtual bool writeOnDisk();
 
   virtual pair<vector<unsigned int>,bool>  getRangeTuple (int a, int b);
 

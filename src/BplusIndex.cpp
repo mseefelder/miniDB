@@ -35,7 +35,13 @@ bool BplusIndex::build(){
         i++;
     }
     relFile.close();
+}
 
+
+bool BplusIndex::writeOnDisk(){
+}
+
+bool BplusIndex::load(){
 }
 
 pair<vector<unsigned int>,bool>  BplusIndex::getRangeTuple (int a, int b){
@@ -51,7 +57,7 @@ pair<vector<unsigned int>,bool>  BplusIndex::getRangeTuple (int a, int b){
     bpt::key_t left = bpt::key_t((to_string(a)).c_str());
     bpt::key_t right = bpt::key_t((to_string(b)).c_str());
     unsigned int *values = new unsigned int[diff];
-    
+
     int amount = index->search_range(&left, right, values, diff);
 
     pair<vector<unsigned int>,bool> result;
@@ -97,7 +103,12 @@ pair<unsigned int,bool> BplusIndex::getTuple (int K){
 //
 
 void BplusIndex::initAttributes () {
-	index = new bpt::bplus_tree((relBinFilename+".bpt").c_str(), true);
+	isBuilt = false;
+    isOpened = false;
+    stringstream filename;
+    filename << "bpI_" << attrKey << "_"<< relBinFilename;
+    binFilename = filename.str();
+    index = new bpt::bplus_tree(binFilename.c_str(), true);
 }
 
 

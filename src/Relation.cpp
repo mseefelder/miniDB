@@ -68,6 +68,15 @@ bool Relation::load (string csvFilename, char delimiter)  {
    setNumTuples(lineCounter);
 }
 
+bool Relation::open(){
+    BinFileHandler binFile(binFilename, true);
+    if (!binFile.isOpened()) return false;
+    binFile.input.seekg (0, binFile.input.end);
+    setNumTuples(binFile.input.tellg() / tupleSize);
+    binFile.close();
+    return true;
+}
+
 
 bool Relation::selAttr (int K, unsigned short attrN){
     BinFileHandler binFile(binFilename, true);
