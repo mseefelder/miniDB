@@ -28,13 +28,14 @@ bool BplusIndex::build(){
         int tKey;
         relFile.input.read((char*)&tKey, sizeof(tKey));
 
-        unsigned int tupleBegByte = relFile.input.tellg()-(INT4+HEADER_SIZE);
+        unsigned int tupleBegByte = static_cast<unsigned int>(relFile.input.tellg())-(INT4+HEADER_SIZE);
 
         //index->insert(bpt::key_t((char*)&tKey), tupleBegByte);
         index->insert((to_string(tKey)).c_str(), tupleBegByte);
         i++;
     }
     relFile.close();
+    return true;
 }
 
 

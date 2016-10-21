@@ -16,7 +16,7 @@ int main()
     Relation IES(relationName, tF);
     if(!IES.open()){
         cout << "Carregando dados para base binaria..." << endl;
-        if(IES.load("CSVs_de_Teste/lista_ies.csv",'|')) cout << "Carregamento de dados efetuado com sucesso!" << endl;
+        if(IES.load("../csv/lista_ies.csv",'|')) cout << "Carregamento de dados efetuado com sucesso!" << endl;
         else { cout << "Falha no carregamento da base de dados." << endl; return 1; }
     }
     else cout << "Base de dados binaria pre-existente no disco foi encontrada. O carregamento e desnecessario." << endl;
@@ -37,8 +37,8 @@ int main()
     cout << "Instanciando HashIndex" << endl;
     HashIndex hPKEY(IES.getBinFilename(), IES.getNumTuples(), 1, IES.getTupleSize());
     if (!hPKEY.load()) {
-        if(hPKEY.build()) "HashIndex construido e gravado em disco com sucesso";
-        else "Falha na construcao ou gravacao do HashIndex";
+        if(hPKEY.build()) cout << "HashIndex construido e gravado em disco com sucesso";
+        else cout << "Falha na construcao ou gravacao do HashIndex";
     }
     else cout << "HashIndex pre-existente no disco foi encontrado e carregado em memoria." << endl; // hPKEY.printIndex();
 
@@ -61,7 +61,6 @@ int main()
         1852, 1557, 1425, 1286, 1640, 1237, 1577, 1263};
 
     short TestCase=0, hits=0, miss=0;
-
 
     //1st test case: Direct Access //One select
     {
@@ -86,7 +85,7 @@ int main()
 
         auto begin = chrono::high_resolution_clock::now();
 
-        for (short i = 0; i < randomKeys.size(); i++) {
+        for (unsigned short i = 0; i < randomKeys.size(); i++) {
                 if (IES.selAttr(randomKeys[i],0)) hits++; //when attrN = 0 in calling selAttr, ALL the attributes of the tuple are selected;
                 else miss++;
         }

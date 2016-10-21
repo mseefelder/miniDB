@@ -86,7 +86,7 @@ bool Relation::selAttr (int K, unsigned short attrN){
         int tKey;
         binFile.input.read((char*)&tKey, sizeof(tKey));
         if (tKey == K) {  //registro com chave K encontrado
-            int tupleBegByte = binFile.input.tellg()-(INT4+HEADER_SIZE);
+            int tupleBegByte = static_cast<int>(binFile.input.tellg())-(INT4+HEADER_SIZE);
             if (attrN == 0)
                 printTuple(tupleBegByte);
             else

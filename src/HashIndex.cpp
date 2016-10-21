@@ -27,7 +27,7 @@ bool HashIndex::build(){
         relFile.input.seekg(i*tupleSize + HEADER_SIZE, relFile.input.beg); //PT_BR: percorrendo a tabela, saltando registro a registro direto para o 1° atributo (considerado um inteiro que guarda chave primária K)
         int tKey;
         relFile.input.read((char*)&tKey, sizeof(tKey));
-        unsigned int tupleBegByte = relFile.input.tellg()-(INT4+HEADER_SIZE);
+        unsigned int tupleBegByte = static_cast<unsigned int>(relFile.input.tellg())-(INT4+HEADER_SIZE);
         index.emplace(tKey, tupleBegByte);
         i++;
     }

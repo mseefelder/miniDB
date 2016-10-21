@@ -1,4 +1,4 @@
-ifndef LinkedList_h
+#ifndef LinkedList_h
 #define LinkedList_h
 
 #include <iostream>
