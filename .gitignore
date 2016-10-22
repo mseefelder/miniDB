@@ -1,5 +1,5 @@
 
-# Created by https://www.gitignore.io/api/osx,linux,windows,visualstudiocode,textmate,vim,emacs,codeblocks
+# Created by https://www.gitignore.io/api/osx,linux,windows,visualstudiocode,textmate,vim,emacs,codeblocks,c++
 
 ### OSX ###
 *.DS_Store
@@ -143,3 +143,38 @@ obj/
 
 
 
+
+
+### C++ ###
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
