@@ -1,5 +1,5 @@
 
-# Created by https://www.gitignore.io/api/osx,linux,windows,visualstudiocode,textmate,vim,emacs,codeblocks,c++
+# Created by https://www.gitignore.io/api/osx,linux,windows,visualstudiocode,textmate,vim,emacs,codeblocks,c++,c
 
 ### OSX ###
 *.DS_Store
@@ -178,3 +178,42 @@ obj/
 *.exe
 *.out
 *.app
+
+
+### C ###
+# Prerequisites
+
+# Object files
+*.ko
+*.elf
+
+# Linker output
+*.ilk
+*.map
+*.exp
+
+# Precompiled Headers
+
+# Libraries
+
+# Shared objects (inc. Windows DLLs)
+*.so.*
+
+# Executables
+*.i*86
+*.x86_64
+*.hex
+
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# Kernel Module Compile Results
+*.mod*
+*.cmd
+modules.order
+Module.symvers
+Mkfile.old
+dkms.conf
