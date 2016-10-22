@@ -20,8 +20,6 @@ private:
 	//Stores database indexes, that can be searched for using their names
 	std::map<std::string, Index> indexes;
 
-	//Stores tupleFormats, that can be searched for using their names
-	std::map<std::string, Index> tupleFormats;
 
 
 public:

@@ -48,12 +48,14 @@ bool DataBase::createIndex(std::string relationName, int indexTypeId){
 		        if(dPKEY.build()) {
 
 		        	std::cout <<"DenseIndex construido e gravado em disco com sucesso" std::endl;
-		        	indexes.insert(std::pair<std::string, Index>(relationName, dPKEY));	
+		        	indexes.insert(std::pair<std::string, Index>(relationName, dPKEY));
+		        	return true;
 
 		        } 
 		        else "Falha na construcao ou gravacao do DenseIndex";
 		    }
 		    else std::cout << "DenseIndex pre-existente no disco foi encontrado e carregado em memoria." << std::endl; // dPKEY.printIndex();
+		    return false;
 
 			break;
 
@@ -67,7 +69,8 @@ bool DataBase::createIndex(std::string relationName, int indexTypeId){
 		    std::cout << "Construindo BplusIndex" << std::endl;
 		    bpi.build();
 		    std::cout << "BplusIndex construido!" << std::endl;
-		    indexes.insert(std::pair<std::string, Index>(relationName, bpi));	
+		    indexes.insert(std::pair<std::string, Index>(relationName, bpi));
+		    return true;	
 
 			break;
 
@@ -84,12 +87,14 @@ bool DataBase::createIndex(std::string relationName, int indexTypeId){
 
 		        	std::cout << "HashIndex construido e gravado em disco com sucesso" << std::endl;
 		        	indexes.insert(std::pair<std::string, Index>(relationName, hPKEY));	
+		        	return true;
 
 		        }
 		        else "Falha na construcao ou gravacao do HashIndex";
+		        return false;
 		    }
 		    else std::cout << "HashIndex pre-existente no disco foi encontrado e carregado em memoria." << std::endl; // hPKEY.printIndex();
-
+		    return false;
 
 			break;
 
@@ -109,7 +114,7 @@ bool DataBase::createIndex(std::string relationName, int indexTypeId){
 
 //does a search in the database, and can use two tables for joins
 //fields can be supplied through a string array (variable size)
-bool DataBase::select(std::string firstRelation, std::string* fields, std::string desiredField, int condition_value, int join_id = 0, std::string secondRelation = NULL){
+bool DataBase::select(std::string firstRelation, int key, int join_id = 0, std::string secondRelation = NULL){
 
 	//SELECT fields FROM firstRelation ([WHATEVER] JOIN) secondRelation
 	//WHERE 
