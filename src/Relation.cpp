@@ -82,7 +82,10 @@ bool Relation::selAttr (int K, unsigned short attrN){
     BinFileHandler binFile(binFilename, true);
     unsigned int i = 0;
     while (i < numTuples){
-        binFile.input.seekg(i*tupleSize + HEADER_SIZE, binFile.input.beg); //PT_BR: percorrendo a tabela, saltando registro a registro direto para o 1° atributo (considerado um inteiro que guarda chave primária K)
+        //PT_BR: percorrendo a tabela, saltando registro a registro direto para 
+        //o 1° atributo (considerado um inteiro que guarda chave primária K)
+        binFile.input.seekg(i*tupleSize + HEADER_SIZE, binFile.input.beg);
+
         int tKey;
         binFile.input.read((char*)&tKey, sizeof(tKey));
         if (tKey == K) {  //registro com chave K encontrado
