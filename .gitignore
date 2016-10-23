@@ -1,7 +1,10 @@
-### Binary files created by our code ###
+### Binary files created by our project ###
 *.bin
 
-# Created by https://www.gitignore.io/api/osx,linux,windows,visualstudiocode,textmate,vim,emacs,codeblocks,c++,c
+### Directories ignored by our project ###
+build/
+
+# Created by https://www.gitignore.io/api/osx,linux,windows,visualstudiocode,textmate,vim,emacs,codeblocks,c++,c,cmake
 
 ### OSX ###
 *.DS_Store
@@ -143,10 +146,6 @@ flycheck_*.el
 bin/
 obj/
 
-
-
-
-
 ### C++ ###
 # Prerequisites
 *.d
@@ -219,3 +218,13 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+
+### CMake ###
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Makefile
+cmake_install.cmake
+install_manifest.txt
+CTestTestfile.cmake
