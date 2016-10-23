@@ -1,35 +1,36 @@
 cmake_minimum_required(VERSION 2.8.12)
 project(miniDB C CXX)
 
-set(SRC_DIR "${PROJECT_SOURCE_DIR}/src")
+set(INCLUDE_DIR "${PROJECT_SOURCE_DIR}/src/include")
+set(SRC_DIR "${PROJECT_SOURCE_DIR}/src/src")
 
 add_definitions("
 	-std=c++11
 	-Wall
 	-Wextra
-	-Wno-unused-parameter
 	-Wno-return-type
+	-Wno-unused-parameter
 ")
 
 include_directories(
-	"${SRC_DIR}"
+	"${INCLUDE_DIR}"
 )
 
 set(
 	PROJECT_HEADERS
-	"${SRC_DIR}/BinFileHandler.h"
-	"${SRC_DIR}/BplusIndex.h"
-	"${SRC_DIR}/BplusTree.h"
-	"${SRC_DIR}/DenseIndex.h"
-	"${SRC_DIR}/HashIndex.h"
-	"${SRC_DIR}/HashTable.h"
-	"${SRC_DIR}/Header.h"
-	"${SRC_DIR}/Index.h"
-	"${SRC_DIR}/Join.h"
-	"${SRC_DIR}/LinkedList.h"
-	"${SRC_DIR}/Relation.h"
-	"${SRC_DIR}/bpt.h"
-	"${SRC_DIR}/predefined.h"
+	"${INCLUDE_DIR}/BinFileHandler.h"
+	"${INCLUDE_DIR}/BplusIndex.h"
+	"${INCLUDE_DIR}/BplusTree.h"
+	"${INCLUDE_DIR}/DenseIndex.h"
+	"${INCLUDE_DIR}/HashIndex.h"
+	"${INCLUDE_DIR}/HashTable.h"
+	"${INCLUDE_DIR}/Header.h"
+	"${INCLUDE_DIR}/Index.h"
+	"${INCLUDE_DIR}/Join.h"
+	"${INCLUDE_DIR}/LinkedList.h"
+	"${INCLUDE_DIR}/Relation.h"
+	"${INCLUDE_DIR}/bpt.h"
+	"${INCLUDE_DIR}/predefined.h"
 )
 
 set(PROJECT_SOURCES
@@ -50,12 +51,12 @@ add_executable(
 	main-join
 	${PROJECT_HEADERS}
 	${PROJECT_SOURCES}
-	${SRC_DIR}/main-join.cpp
+	"${SRC_DIR}/main-join.cpp"
 )
 
 add_executable(
 	main-query
 	${PROJECT_HEADERS}
 	${PROJECT_SOURCES}
-	${SRC_DIR}/main-query.cpp
+	"${SRC_DIR}/main-query.cpp"
 )

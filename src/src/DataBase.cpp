@@ -1,8 +1,13 @@
+#include "DataBase.h"
+
 #include <string>
 #include <vector>
-#include "Relation.h"
 #include <map>
+#include <iostream>
+#include "HashIndex.h"
+#include "Relation.h"
 
+using namespace std;
 
 //Creates a table in the database and stores it in the "tables" map
 //Table creation through "csvFile" (relative path to csv file)
