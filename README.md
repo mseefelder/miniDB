@@ -4,6 +4,16 @@
 
 # Instructions
 
+To build all executables:
+
     mkdir build && cd build
     cmake ..
     make
+
+# Tests
+
+To run all tests:
+
+    mkdir build && cd build
+    cmake -DTEST=ON ..
+    make test

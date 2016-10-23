@@ -4,6 +4,8 @@ project(miniDB C CXX)
 set(INCLUDE_DIR "${PROJECT_SOURCE_DIR}/src/include")
 set(SRC_DIR "${PROJECT_SOURCE_DIR}/src/src")
 
+option(TEST "Build all tests." OFF)
+
 add_definitions("
 	-std=c++11
 	-Wall
@@ -60,3 +62,28 @@ add_executable(
 	${PROJECT_SOURCES}
 	"${SRC_DIR}/main-query.cpp"
 )
+
+if(TEST)
+	enable_testing()
+	
+	set(TEST_DIR "${PROJECT_SOURCE_DIR}/test")
+	set(VENDOR_DIR "${PROJECT_SOURCE_DIR}/vendor")
+	
+	# Set-up Google Test
+	add_subdirectory(${VENDOR_DIR}/googletest)
+	include_directories("${gtest_SOURCE_DIR}/include")
+	
+	add_executable(
+		runUnitTests
+		"${TEST_DIR}/hello.cpp"
+	)
+	
+	target_link_libraries(
+		runUnitTests
+		gtest
+		gtest_main
+	)
+	
+	# Integrate with ctest (`make test`)
+	add_test(NAME runUnitTests COMMAND runUnitTests)
+endif()
