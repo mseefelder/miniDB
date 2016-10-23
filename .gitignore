@@ -1,6 +1,9 @@
 
 # Created by https://www.gitignore.io/api/osx,linux,windows,visualstudiocode,textmate,vim,emacs,codeblocks,c++,c
 
+### Binry files created by our code ###
+*.bin
+
 ### OSX ###
 *.DS_Store
 .AppleDouble

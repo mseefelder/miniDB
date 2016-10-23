@@ -21,7 +21,9 @@ DenseIndex::~DenseIndex () { }
 bool DenseIndex::build(){
     BinFileHandler relFile(relBinFilename, true);
 
-    if (numTuples == 0) return false;
+    if (numTuples == 0) {
+        return false;
+    }
 
     unsigned int i = 0;
     while (i < numTuples){
