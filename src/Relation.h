@@ -189,7 +189,9 @@ private: // methods
   * relation.
   * @param new_var the new value of binFilename
   */
-  void setBinFilename(string new_var) { binFilename = new_var + ".bin"; }
+  void setBinFilename(string new_var) { 
+    binFilename = new_var + ".bin";
+  }
 };
 
 #endif // RELATION_H

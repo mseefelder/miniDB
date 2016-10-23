@@ -1,10 +1,14 @@
 CXXFLAGS = -I. -Wall -Wextra -Wno-unused-parameter -Wno-return-type -O2 -g -std=c++11
-EXECUTABLE=minidb
+EXECUTABLE_QUERY=minidb-query
+EXECUTABLE_JOIN=minidb-join
 OBJECTS=LinkedList.o BinFileHandler.o DenseIndex.o BplusIndex.o HashIndex.o Relation.o Index.o bpt.o Join.o
 
-all: $(EXECUTABLE)
+all: $(EXECUTABLE_QUERY) $(EXECUTABLE_JOIN)
 
-$(EXECUTABLE): main.cpp $(OBJECTS)
+$(EXECUTABLE_QUERY): main-query.cpp $(OBJECTS)
+	$(CXX) $(CXXFLAGS) $^ -o $@
+
+$(EXECUTABLE_JOIN): main-join.cpp $(OBJECTS)
 	$(CXX) $(CXXFLAGS) $^ -o $@
 
 LinkedList.o: LinkedList.cpp LinkedList.h
@@ -35,6 +39,6 @@ Join.o: Join.cpp Join.h
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
-	$(RM) $(EXECUTABLE) *.o
+	$(RM) $(EXECUTABLE_QUERY) $(EXECUTABLE_JOIN) *.o
 
 .PHONY: clean all

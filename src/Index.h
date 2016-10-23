@@ -83,6 +83,12 @@ public:
   string getBinFilename() { return binFilename; }
 
   /**
+   * Get the value of relBinFilename
+   * @return the value of relBinFilename
+   */
+  string getRelBinFilename() { return relBinFilename; }
+
+  /**
  * Get the value of numTuple
  * @return the value of numTuple
  */
