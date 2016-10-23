@@ -1,11 +1,11 @@
 #include "Join.h"
 
 #define BLOCK_SIZE 4096
-d::pair<unsigned, unsigned>
+std::pair<unsigned, unsigned>
 bruteForceJoin(DenseIndex *leftEntity, DenseIndex *rightEntity,
                BinFileHandler leftHandler, BinFileHandler rightHandler,
-               BinFileHandler outHandler, const Relation lRelation,
-               const Relation rRelation, unsigned rPosition) {
+               BinFileHandler outHandler, Relation lRelation,
+               Relation rRelation, unsigned rPosition) {
 
 	unsigned seek = 0, blocks = 0;
 
@@ -40,10 +40,10 @@ bruteForceJoin(DenseIndex *leftEntity, DenseIndex *rightEntity,
 }
 
 std::pair<unsigned, unsigned>
-bruteForceJoin (DenseIndex *leftEntity, DenseIndex *rightEntity,
+mergeSortJoin (DenseIndex *leftEntity, DenseIndex *rightEntity,
 				BinFileHandler leftHandler, BinFileHandler rightHandler,
-				BinFileHandler outHandler, const Relation lRelation,
-				const Relation rRelation, unsigned rPosition) {
+				BinFileHandler outHandler, Relation lRelation,
+				Relation rRelation, unsigned rPosition) {
 
 	unsigned seek = 0, blocks = 0;
 	unsigned i = 0, j = 0;
@@ -53,10 +53,10 @@ bruteForceJoin (DenseIndex *leftEntity, DenseIndex *rightEntity,
 
 	while (i < leftEntity -> index.size() && j < rightEntity -> index.size()) {
 
-		if (leftEntity->index[i].first < rightEntity->index[j].first;) ++i;
+		if (leftEntity->index[i].first < rightEntity->index[j].first) ++i;
 
 		else 
-			j += leftEntity->index[i].first > rightEntity->index[j].first
+			j += leftEntity->index[i].first > rightEntity->index[j].first;
 
 		// find all matching entries
 		while (j < rightEntity -> index.size() && 
@@ -65,8 +65,8 @@ bruteForceJoin (DenseIndex *leftEntity, DenseIndex *rightEntity,
 			string buffer;
 
 			// move binfile stream to element
-			leftHandler.input.seekg(lElement.second, leftHandler.input.beg);
-			rightHandler.input.seekg(rElement.second, rightHandler.input.beg);
+			leftHandler.input.seekg(leftEntity->index[i].second, leftHandler.input.beg);
+			rightHandler.input.seekg(rightEntity->index[j].second, rightHandler.input.beg);
 			seek += 2;
 
 			// create joined tuple
