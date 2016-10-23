@@ -49,7 +49,7 @@ int main()
     }
     else cout << "DenseIndex pre-existente no disco foi encontrado e carregado em memoria." << endl; // denseNome.printIndex();
 
-    //pair<unsigned, unsigned> bFJoin = bruteForceJoin(&denseCidade, &denseNome, BinFileHandler(denseCidade.getRelBinFilename(), true), BinFileHandler(denseNome.getRelBinFilename(),true), BinFileHandler("bfjoin.bin",false), Cidade, Nome);
+    //pair<unsigned, unsigned> bFJoin = bruteForceJoin(&denseCidade, &denseNome, BinFileHandler(denseCidade.getRelBinFilename(), true), BinFileHandler(denseNome.getRelBinFilename(),true), BinFileHandler("bfjoin.bin",false), Cidade, Nome, 0);
 
     //cout<<bFJoin<<endl;
 
