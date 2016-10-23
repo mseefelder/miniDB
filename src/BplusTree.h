@@ -2,7 +2,6 @@
 #ifndef BPLUSTREE_H
 #define BPLUSTREE_H
 
-
 #include <string>
 
 /**
@@ -10,23 +9,20 @@
   *
   */
 
-class BplusTree
-{
+class BplusTree {
 public:
-
   // Constructors/Destructors
   //
-
 
   /**
    * Empty Constructor
    */
-  BplusTree ();
+  BplusTree();
 
   /**
    * Empty Destructor
    */
-  virtual ~BplusTree ();
+  virtual ~BplusTree();
 
   // Static Public attributes
   //
@@ -34,17 +30,13 @@ public:
   // Public attributes
   //
 
-
   // Public attribute accessor methods
   //
 
-
   // Public attribute accessor methods
   //
-
 
 protected:
-
   // Static Protected attributes
   //
 
@@ -52,24 +44,16 @@ protected:
   //
 
 public:
-
-
   // Protected attribute accessor methods
   //
 
 protected:
-
 public:
-
-
   // Protected attribute accessor methods
   //
 
 protected:
-
-
 private:
-
   // Static Private attributes
   //
 
@@ -77,23 +61,15 @@ private:
   //
 
 public:
-
-
   // Private attribute accessor methods
   //
 
 private:
-
 public:
-
-
   // Private attribute accessor methods
   //
 
 private:
-
-
-
 };
 
 #endif // BPLUSTREE_H
