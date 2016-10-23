@@ -15,12 +15,13 @@
 class DenseIndex : public Index
 {
 
-private:
+//private:
 
-  vector< pair<int,unsigned int> > index;
+ 
 
 public:
 
+  vector< pair<int,unsigned int> > index;
   // Constructors/Destructors
   //
 
