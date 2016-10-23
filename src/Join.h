@@ -9,8 +9,14 @@
 std::pair<unsigned, unsigned>
 bruteForceJoin(DenseIndex *leftEntity, DenseIndex *rightEntity,
                BinFileHandler leftHandler, BinFileHandler rightHandler,
-               BinFileHandler outHandler, Relation lRelation,
-               Relation rRelation, unsigned rPosition);
+               BinFileHandler outHandler, const Relation lRelation,
+               const Relation rRelation, unsigned rPosition);
+
+std::pair<unsigned, unsigned>
+bruteForceJoin (DenseIndex *leftEntity, DenseIndex *rightEntity,
+				BinFileHandler leftHandler, BinFileHandler rightHandler,
+				BinFileHandler outHandler, const Relation lRelation,
+				const Relation rRelation, unsigned rPosition)
 
 unsigned computeTime(const std::pair<unsigned, unsigned> values);
 
