@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.12)
-project(miniDB C CXX)
+project(MINIDB C CXX)
 
 set(INCLUDE_DIR "${PROJECT_SOURCE_DIR}/src/include")
 set(SRC_DIR "${PROJECT_SOURCE_DIR}/src/src")
@@ -49,18 +49,23 @@ set(PROJECT_SOURCES
 	"${SRC_DIR}/bpt.cc"
 )
 
-add_executable(
-	main-join
+add_library(
+	MINIDB_LIBRARY
+	OBJECT
 	${PROJECT_HEADERS}
 	${PROJECT_SOURCES}
+)
+
+add_executable(
+	main-join
 	"${SRC_DIR}/main-join.cpp"
+	$<TARGET_OBJECTS:MINIDB_LIBRARY>
 )
 
 add_executable(
 	main-query
-	${PROJECT_HEADERS}
-	${PROJECT_SOURCES}
 	"${SRC_DIR}/main-query.cpp"
+	$<TARGET_OBJECTS:MINIDB_LIBRARY>
 )
 
 if(TEST)
@@ -72,18 +77,19 @@ if(TEST)
 	# Set-up Google Test
 	add_subdirectory(${VENDOR_DIR}/googletest)
 	include_directories("${gtest_SOURCE_DIR}/include")
+	set(GTEST_LIBRARIES gtest gtest_main)
 	
 	add_executable(
-		runUnitTests
-		"${TEST_DIR}/hello.cpp"
+		TestHashTable
+		"${TEST_DIR}/TestHashTable.cpp"
+		$<TARGET_OBJECTS:MINIDB_LIBRARY>
 	)
 	
 	target_link_libraries(
-		runUnitTests
-		gtest
-		gtest_main
+		TestHashTable
+		${GTEST_LIBRARIES}
 	)
 	
 	# Integrate with ctest (`make test`)
-	add_test(NAME runUnitTests COMMAND runUnitTests)
+	add_test(NAME TestHashTable COMMAND TestHashTable)
 endif()

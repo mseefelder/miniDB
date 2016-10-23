@@ -16,4 +16,5 @@ To run all tests:
 
     mkdir build && cd build
     cmake -DTEST=ON ..
+    make
     make test

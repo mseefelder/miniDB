@@ -8,6 +8,8 @@ using namespace std;
 // List items are keys with pointers to the next item.
 //*****************************************************************
 struct Item {
+  Item() {}
+  Item(int key, bool data, Item* next) : key(key), data(data), next(next){}
   int key;
   bool data = false;
   Item *next;
