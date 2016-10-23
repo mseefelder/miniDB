@@ -6,9 +6,9 @@
 #include <utility>
 /* A join receive two relations and returns the joined relation of both.*/
 
-std::pair<unsigned, unsigned> bruteForceJoin (DenseIndex *leftEntity, DenseIndex *rightEntity
-											  const binFileHandler leftHandler, const binFileHandler rightHandler,
-											  binFileHandler outHandler,
+std::pair<unsigned, unsigned> bruteForceJoin (DenseIndex *leftEntity, DenseIndex *rightEntity,
+											  BinFileHandler leftHandler, BinFileHandler rightHandler,
+											  BinFileHandler outHandler,
 											  Relation lRelation, Relation rRelation,
 											  unsigned rPosition);
 

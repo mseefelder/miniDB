@@ -175,7 +175,7 @@ void Relation::initAttributes () {
 
 //-----------------------------------------------------------------------------
 
-string Relation::readRegistry (binFileHandler binFile, bool ignore, unsigned att) {
+string Relation::readRegistry (BinFileHandler & binFile, bool ignore, unsigned att) {
 
     string buffer;
 
@@ -209,14 +209,14 @@ string Relation::readRegistry (binFileHandler binFile, bool ignore, unsigned att
     return buffer;
 }
 
-void Relation::writeRegistry (binFileHandler binFile, string buffer) {
+void Relation::writeRegistry (BinFileHandler & binFile, string buffer) {
 
-    binFileHandler.output.write(buffer.c_str(), buffer.size());
+    binFile.output.write(buffer.c_str(), buffer.size());
 }
 
 vector<short> Relation::excludeColumn(size_t i) {
     auto tuple = tupleFormat;
-    erase(tuple.begin() + i);
+    tuple.erase(tuple.begin() + i);
     return tuple;
 }
 

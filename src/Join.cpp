@@ -1,12 +1,12 @@
 #include "Join.h"
 
-std::pair<unsigned, unsigned> bruteForceJoin (DenseIndex *leftEntity, DenseIndex *rightEntity
-											  const binFileHandler leftHandler, const binFileHandler rightHandler,
-											  binFileHandler outHandler,
+std::pair<unsigned, unsigned> bruteForceJoin (DenseIndex *leftEntity, DenseIndex *rightEntity,
+											  BinFileHandler leftHandler, BinFileHandler rightHandler,
+											  BinFileHandler outHandler,
 											  Relation lRelation, Relation rRelation,
 											  unsigned rPosition) {
 
-	unsigned seek, blocks = 0;
+	unsigned seek = 0, blocks = 0;
 
 
 	const unsigned bytes = lRelation.getTupleSize() + rRelation.getTupleSize() - rRelation.getAttSize(rPosition);
@@ -36,7 +36,7 @@ std::pair<unsigned, unsigned> bruteForceJoin (DenseIndex *leftEntity, DenseIndex
 
 	return std::make_pair(seek, blocks);
 }
-
+		
 unsigned computeTime (const std::pair<unsigned, unsigned> values) {
 
 	return 10 * values.first + values.second;

@@ -29,8 +29,8 @@ int main()
     DenseIndex dPKEY(IES.getBinFilename(), IES.getNumTuples(), 1, IES.getTupleSize()); //for while, DenseIndex works only for the 1st attribute, considering it as a INT4
     if (!dPKEY.load()) {
         cout << "Construindo DenseIndex" << endl;
-        if(dPKEY.build()) "DenseIndex construido e gravado em disco com sucesso";
-        else "Falha na construcao ou gravacao do DenseIndex";
+        if(dPKEY.build()) cout << "DenseIndex construido e gravado em disco com sucesso";
+        else cout << "Falha na construcao ou gravacao do DenseIndex";
     }
     else cout << "DenseIndex pre-existente no disco foi encontrado e carregado em memoria." << endl; // dPKEY.printIndex();
 

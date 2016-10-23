@@ -4,6 +4,7 @@
 #include <string.h>
 #include <string>
 #include <vector>
+#include <algorithm>
 #include "Header.h"
 #include "BinFileHandler.h"
 #include "DenseIndex.h"
@@ -134,6 +135,15 @@ public:
 
   void printAttr(unsigned int tupleBegByte, unsigned short attrN);
 
+  void initAttributes () ;
+
+  string readRegistry (BinFileHandler & binFile, bool ignore = false, unsigned att = 0);
+
+  void writeRegistry (BinFileHandler & binFile, string buffer);
+
+  vector<short> excludeColumn(size_t i);
+
+  unsigned getAttSize(unsigned position);
 
 private:  //methods
 
@@ -201,9 +211,6 @@ private:  //methods
   void setBinFilename (string new_var)   {
       binFilename = new_var+".bin";
   }
-
-
-  void initAttributes () ;
 
 };
 

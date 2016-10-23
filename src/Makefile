@@ -1,6 +1,6 @@
 CXXFLAGS = -I. -Wall -Wextra -Wno-unused-parameter -Wno-return-type -O2 -g -std=c++11
 EXECUTABLE=minidb
-OBJECTS=LinkedList.o BinFileHandler.o DenseIndex.o BplusIndex.o HashIndex.o Relation.o Index.o bpt.o
+OBJECTS=LinkedList.o BinFileHandler.o DenseIndex.o BplusIndex.o HashIndex.o Relation.o Index.o bpt.o Join.o
 
 all: $(EXECUTABLE)
 
@@ -29,6 +29,9 @@ Index.o: Index.cpp Index.h
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 bpt.o: bpt.cc bpt.h
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+Join.o: Join.cpp Join.h
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
