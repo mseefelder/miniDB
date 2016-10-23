@@ -77,7 +77,6 @@ bool Relation::open(){
     return true;
 }
 
-
 bool Relation::selAttr (int K, unsigned short attrN){
     BinFileHandler binFile(binFilename, true);
     unsigned int i = 0;
@@ -174,3 +173,69 @@ void Relation::initAttributes () {
     setNumAttr(0);
     setNumTuples(0);
 }
+
+
+
+//-----------------------------------------------------------------------------
+
+string Relation::readRegistry (BinFileHandler & binFile, bool ignore, unsigned att) {
+
+    string buffer;
+
+    binFile.input.seekg(HEADER_SIZE, binFile.input.cur); 
+    for (unsigned i = 0; i < numAttr; i++){
+
+        if(ignore && i == att)
+            continue;
+
+        switch(tupleFormat[i]){
+            case INT4: {
+                char attr4[4];
+                binFile.input.read (attr4, sizeof(attr4));
+                buffer += attr4;
+                break;
+            }
+            case CHAR32: {
+                char attr32[32];
+                binFile.input.read (attr32, sizeof(attr32));
+                buffer += attr32;
+                break;
+            }
+            case CHAR256:{
+                char attr256[256];
+                binFile.input.read (attr256, sizeof(attr256));
+                buffer += attr256;
+                break;
+            }
+        }
+    }
+    return buffer;
+}
+
+void Relation::writeRegistry (BinFileHandler & binFile, string buffer) {
+
+    binFile.output.write(buffer.c_str(), buffer.size());
+}
+
+vector<short> Relation::excludeColumn(size_t i) {
+    auto tuple = tupleFormat;
+    tuple.erase(tuple.begin() + i);
+    return tuple;
+}
+
+unsigned Relation::getAttSize(unsigned position) {
+
+    switch(tupleFormat[position]){
+        case INT4:
+            return 4;
+
+        case CHAR32:
+            return 32;
+
+        case CHAR256: 
+        default:
+            return 256;
+    }
+}
+
+//-----------------------------------------------------------------------------
