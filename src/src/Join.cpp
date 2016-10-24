@@ -1,5 +1,6 @@
 #include "Join.h"
 #include <unordered_map> 
+#include <iostream>
 
 #define BLOCK_SIZE 4096
 std::pair<unsigned, unsigned>
@@ -14,6 +15,7 @@ bruteForceJoin(DenseIndex *leftEntity, DenseIndex *rightEntity,
 	const unsigned bytes = lRelation.getTupleSize() + 
 		rRelation.getTupleSize() - rRelation.getAttSize(rPosition);
 
+	int k = 0;
 	for (const auto & lElement: leftEntity -> index) {
 		for (const auto & rElement: rightEntity -> index) {
 
@@ -35,10 +37,12 @@ bruteForceJoin(DenseIndex *leftEntity, DenseIndex *rightEntity,
 				// write output to disk
 				outHandler.output.write(buffer.c_str(), buffer.size());
 			}
+			++k;
 		}
-	}
 
-	return std::make_pair(seek, blocks / BLOCK_SIZE);
+	}
+	std::cout << k << std::endl;
+ 	return std::make_pair(seek, blocks / BLOCK_SIZE);
 }
 
 std::pair<unsigned, unsigned>
@@ -53,12 +57,16 @@ mergeSortJoin (DenseIndex *leftEntity, DenseIndex *rightEntity,
 	const unsigned bytes = lRelation.getTupleSize() + 
 		rRelation.getTupleSize() - rRelation.getAttSize(rPosition);
 
+	int k = 0;
+
 	while (i < leftEntity -> index.size() && j < rightEntity -> index.size()) {
 
-		if (leftEntity->index[i].first < rightEntity->index[j].first) ++i;
+		if (leftEntity->index[i].first < rightEntity->index[j].first) {++i; ++k;}
 
-		else 
+		else {
 			j += leftEntity->index[i].first > rightEntity->index[j].first;
+			++k;
+		}
 
 		// find all matching entries
 		while (j < rightEntity -> index.size() && 
@@ -75,16 +83,16 @@ mergeSortJoin (DenseIndex *leftEntity, DenseIndex *rightEntity,
 			buffer += lRelation.readRegistry(leftHandler);
 			buffer += rRelation.readRegistry(rightHandler, true, rPosition);
 			buffer += '\n';			
-			
 			blocks += bytes;
 
 			// write output to disk
 			outHandler.output.write(buffer.c_str(), buffer.size());
 
 			++j;
+			++k;
 		}
 	}
-
+	std::cout << k << std::endl;
 	return std::make_pair(seek, blocks / BLOCK_SIZE);
 }
 
@@ -106,37 +114,33 @@ hashJoin (DenseIndex *leftEntity, DenseIndex *rightEntity,
 	for (const auto & lElement : leftEntity -> index)
 		table.insert(std::pair<int, unsigned> (lElement.first, lElement.second));
 
+	Relation outRelation ("outRelation", lRelation.getTupleFormat(), 
+		                  rRelation.getTupleFormat(), rPosition);
+
 	// probing phase
 	for (const auto & rElement : rightEntity -> index) {
 
 		size_t bucketIndex = std::hash<int>{} (rElement.first);
-		string buffer;
+		std::string buffer;
 
-		// avoid seg faults
-		if (bucketIndex < table.size()) {
+		for (auto localIt = table.begin(bucketIndex); 
+			localIt != table.end(bucketIndex); ++localIt) {
 
-			for (auto localIt = table.begin(bucketIndex); 
-				localIt != table.end(bucketIndex); ++localIt) {
+			// just a testing snippet to make sure the hash function is the same
+			if ((*localIt).first != rElement.first)
+				std::cout << "Erro: mismatched hash functions!!!" << std::endl;
 
-				// just a testing snippet to make sure the hash function is the same
-				if ((*localIt).second != rElement.second) 
-					std::cout << "Erro: mismatched hash functions!!!" << std::endl;
+			// move binfile stream to element
+			leftHandler.input.seekg((*localIt).second, leftHandler.input.beg);
+			rightHandler.input.seekg(rElement.second, rightHandler.input.beg);
+			seek += 2;
 
-				// move binfile stream to element
-				leftHandler.input.seekg((*localIt).second, leftHandler.input.beg);
-				rightHandler.input.seekg(rElement.second, rightHandler.input.beg);
-				seek += 2;
+			// create joined tuple
+			buffer += lRelation.readRegistry(leftHandler);
+			buffer += rRelation.readRegistry(rightHandler, true, rPosition);
 
-				// create joined tuple
-				buffer += lRelation.readRegistry(leftHandler);
-				buffer += rRelation.readRegistry(rightHandler, true, rPosition);
-				buffer += '\n';
-								
-				blocks += bytes;
-			}
+			blocks += bytes;
 		}
-
-		// write output to disk
 		outHandler.output.write(buffer.c_str(), buffer.size());
 	}
 

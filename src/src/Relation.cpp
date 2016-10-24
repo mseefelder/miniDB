@@ -175,6 +175,23 @@ void Relation::initAttributes () {
 
 //-----------------------------------------------------------------------------
 
+Relation::Relation (string schemaName, std::vector<short> lFormat, 
+                    std::vector<short> rFormat, int rPosition) {
+    initAttributes();
+    setName(schemaName);
+
+    setTupleFormat(lFormat);
+    for (unsigned i = 0; i < rFormat.size(); ++i) {
+        if (i != rPosition) tupleFormat.push_back(rFormat[i]);
+    }
+
+    setNumAttr(tupleFormat.size());
+    unsigned short sizeBytes = 0;
+    for(auto i: tupleFormat) sizeBytes += i;
+    setTupleSize(sizeBytes);
+}
+
+
 string Relation::readRegistry (BinFileHandler & binFile, bool ignore, unsigned att) {
 
     string buffer;
@@ -187,7 +204,7 @@ string Relation::readRegistry (BinFileHandler & binFile, bool ignore, unsigned a
                 int attr4;
                 binFile.input.read ((char*)&attr4, sizeof(attr4));
                 if (!(ignore && i == att))
-					buffer += to_string(attr4);
+					buffer += attr4;
                 break;
             }
             case CHAR32: {
@@ -210,9 +227,18 @@ string Relation::readRegistry (BinFileHandler & binFile, bool ignore, unsigned a
     return buffer;
 }
 
-void Relation::writeRegistry (BinFileHandler & binFile, string buffer) {
+void Relation::writeRegistry (BinFileHandler & binFile, std::string buffer) {
 
-    binFile.output.write(buffer.c_str(), buffer.size());
+    unsigned i = 0;
+
+    for (const auto &c: buffer) 
+        std::cout << c << std::endl;
+    for (const auto &t : tupleFormat) {
+        std::string sub (buffer.substr(i,t));
+        std::cout << sub << std::endl;
+        binFile.writeStrongType(sub, t);
+        i += t;
+    }
 }
 
 vector<short> Relation::excludeColumn(size_t i) {

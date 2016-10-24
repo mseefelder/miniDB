@@ -44,6 +44,9 @@ public:
 
   Relation(string schemaName, vector<short> tupleFormat);
 
+  Relation (string schemaName, std::vector<short> lFormat, 
+            std::vector<short> rFormat, int rPosition);
+
   /**
    * Empty Destructor
    */
@@ -103,9 +106,9 @@ public:
    * @return the value of tupleFormat
    */
   vector<short> getTupleFormat() {
-    for (auto i : tupleFormat) {
-      cout << i << endl;
-    }
+    // for (auto i : tupleFormat) {
+    //   cout << i << endl;
+    // }
     return tupleFormat;
   }
 
