@@ -20,15 +20,15 @@ bruteForceJoin(DenseIndex *leftEntity, DenseIndex *rightEntity,
 
 std::pair<unsigned, unsigned>
 mergeSortJoin (DenseIndex *leftEntity, DenseIndex *rightEntity,
-				BinFileHandler leftHandler, BinFileHandler rightHandler,
-				BinFileHandler outHandler, Relation lRelation,
-				Relation rRelation, unsigned rPosition);
+               BinFileHandler& leftHandler, BinFileHandler& rightHandler,
+               BinFileHandler& outHandler, Relation& lRelation,
+               Relation& rRelation, unsigned rPosition);
 
 std::pair<unsigned, unsigned>
 hashJoin (DenseIndex *leftEntity, DenseIndex *rightEntity,
-		  BinFileHandler leftHandler, BinFileHandler rightHandler,
-		  BinFileHandler outHandler, Relation lRelation,
-		  Relation rRelation, unsigned rPosition);
+               BinFileHandler& leftHandler, BinFileHandler& rightHandler,
+               BinFileHandler& outHandler, Relation& lRelation,
+               Relation& rRelation, unsigned rPosition);
 
 unsigned computeTime(const std::pair<unsigned, unsigned> values);
 

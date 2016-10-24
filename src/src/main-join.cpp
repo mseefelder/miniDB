@@ -56,8 +56,8 @@ BinFileHandler bfh4 ("msJoin.bin",false);
 BinFileHandler bfh5 ("hsJoin.bin",false);
 
     pair<unsigned, unsigned> bFJoin = bruteForceJoin(&denseCidade, &denseNome, bfh1, bfh2, bfh3, Cidade, Nome, 0);
-    //pair<unsigned, unsigned> msJoin = mergeSortJoin(&denseCidade, &denseNome, bfh1, bfh2, bfh4, Cidade, Nome, 0);
-    //pair<unsigned, unsigned> hsJoin = hashJoin(&denseCidade, &denseNome, bfh1, bfh2, bfh5, Cidade, Nome, 0);
+    pair<unsigned, unsigned> msJoin = mergeSortJoin(&denseCidade, &denseNome, bfh1, bfh2, bfh4, Cidade, Nome, 0);
+    pair<unsigned, unsigned> hsJoin = hashJoin(&denseCidade, &denseNome, bfh1, bfh2, bfh5, Cidade, Nome, 0);
 
     //cout<<bFJoin<<endl;
 
