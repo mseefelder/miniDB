@@ -4,9 +4,9 @@
 #define BLOCK_SIZE 4096
 std::pair<unsigned, unsigned>
 bruteForceJoin(DenseIndex *leftEntity, DenseIndex *rightEntity,
-               BinFileHandler leftHandler, BinFileHandler rightHandler,
-               BinFileHandler outHandler, Relation lRelation,
-               Relation rRelation, unsigned rPosition) {
+               BinFileHandler& leftHandler, BinFileHandler& rightHandler,
+               BinFileHandler& outHandler, Relation& lRelation,
+               Relation& rRelation, unsigned rPosition) {
 
 	unsigned seek = 0, blocks = 0;
 
@@ -18,7 +18,6 @@ bruteForceJoin(DenseIndex *leftEntity, DenseIndex *rightEntity,
 		for (const auto & rElement: rightEntity -> index) {
 
 			if (lElement.first == rElement.first) {
-
 				string buffer;
 
 				// move binfile stream to element
@@ -29,6 +28,8 @@ bruteForceJoin(DenseIndex *leftEntity, DenseIndex *rightEntity,
 				// create joined tuple
 				buffer += lRelation.readRegistry(leftHandler);
 				buffer += rRelation.readRegistry(rightHandler, true, rPosition);
+				buffer += '\n';
+				
 				blocks += bytes;
 
 				// write output to disk
@@ -42,9 +43,9 @@ bruteForceJoin(DenseIndex *leftEntity, DenseIndex *rightEntity,
 
 std::pair<unsigned, unsigned>
 mergeSortJoin (DenseIndex *leftEntity, DenseIndex *rightEntity,
-				BinFileHandler leftHandler, BinFileHandler rightHandler,
-				BinFileHandler outHandler, Relation lRelation,
-				Relation rRelation, unsigned rPosition) {
+               BinFileHandler& leftHandler, BinFileHandler& rightHandler,
+               BinFileHandler& outHandler, Relation& lRelation,
+               Relation& rRelation, unsigned rPosition) {
 
 	unsigned seek = 0, blocks = 0;
 	unsigned i = 0, j = 0;
@@ -73,6 +74,8 @@ mergeSortJoin (DenseIndex *leftEntity, DenseIndex *rightEntity,
 			// create joined tuple
 			buffer += lRelation.readRegistry(leftHandler);
 			buffer += rRelation.readRegistry(rightHandler, true, rPosition);
+			buffer += '\n';			
+			
 			blocks += bytes;
 
 			// write output to disk
@@ -88,9 +91,9 @@ mergeSortJoin (DenseIndex *leftEntity, DenseIndex *rightEntity,
 
 std::pair<unsigned, unsigned>
 hashJoin (DenseIndex *leftEntity, DenseIndex *rightEntity,
-		  BinFileHandler leftHandler, BinFileHandler rightHandler,
-		  BinFileHandler outHandler, Relation lRelation,
-		  Relation rRelation, unsigned rPosition) {
+               BinFileHandler& leftHandler, BinFileHandler& rightHandler,
+               BinFileHandler& outHandler, Relation& lRelation,
+               Relation& rRelation, unsigned rPosition) {
 
 	unsigned seek = 0, blocks = 0;
 
@@ -127,6 +130,8 @@ hashJoin (DenseIndex *leftEntity, DenseIndex *rightEntity,
 				// create joined tuple
 				buffer += lRelation.readRegistry(leftHandler);
 				buffer += rRelation.readRegistry(rightHandler, true, rPosition);
+				buffer += '\n';
+								
 				blocks += bytes;
 			}
 		}

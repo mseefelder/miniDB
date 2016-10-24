@@ -14,9 +14,9 @@
 
 std::pair<unsigned, unsigned>
 bruteForceJoin(DenseIndex *leftEntity, DenseIndex *rightEntity,
-               BinFileHandler leftHandler, BinFileHandler rightHandler,
-               BinFileHandler outHandler, Relation lRelation,
-               Relation rRelation, unsigned rPosition);
+               BinFileHandler& leftHandler, BinFileHandler& rightHandler,
+               BinFileHandler& outHandler, Relation& lRelation,
+               Relation& rRelation, unsigned rPosition);
 
 std::pair<unsigned, unsigned>
 mergeSortJoin (DenseIndex *leftEntity, DenseIndex *rightEntity,

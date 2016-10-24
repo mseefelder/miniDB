@@ -11,7 +11,7 @@ using namespace std;
 
 int main()
 {
-    vector<short> tF {INT4, CHAR256, CHAR32};
+    vector<short> tF {INT4, CHAR32};
     string relationName = "IES";
     Relation IES(relationName, tF);
     if(!IES.open()){

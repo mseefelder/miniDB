@@ -12,7 +12,7 @@ using namespace std;
 
 int main()
 {
-    vector<short> tF {INT4, CHAR256, CHAR32};
+    vector<short> tF {INT4, CHAR32};
     string relationNameCidade = "Cidade";
     Relation Cidade(relationNameCidade, tF);
     if(!Cidade.open()){
@@ -49,7 +49,15 @@ int main()
     }
     else cout << "DenseIndex pre-existente no disco foi encontrado e carregado em memoria." << endl; // denseNome.printIndex();
 
-    //pair<unsigned, unsigned> bFJoin = bruteForceJoin(&denseCidade, &denseNome, BinFileHandler(denseCidade.getRelBinFilename(), true), BinFileHandler(denseNome.getRelBinFilename(),true), BinFileHandler("bfjoin.bin",false), Cidade, Nome, 0);
+BinFileHandler bfh1 (denseCidade.getRelBinFilename(), true);
+BinFileHandler bfh2 (denseNome.getRelBinFilename(), true);
+BinFileHandler bfh3 ("bfJoin.bin",false);
+BinFileHandler bfh4 ("msJoin.bin",false);
+BinFileHandler bfh5 ("hsJoin.bin",false);
+
+    pair<unsigned, unsigned> bFJoin = bruteForceJoin(&denseCidade, &denseNome, bfh1, bfh2, bfh3, Cidade, Nome, 0);
+    pair<unsigned, unsigned> msJoin = bruteForceJoin(&denseCidade, &denseNome, bfh1, bfh2, bfh4, Cidade, Nome, 0);
+    pair<unsigned, unsigned> hsJoin = bruteForceJoin(&denseCidade, &denseNome, bfh1, bfh2, bfh5, Cidade, Nome, 0);
 
     //cout<<bFJoin<<endl;
 

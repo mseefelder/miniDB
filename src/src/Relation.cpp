@@ -23,9 +23,6 @@ Relation::~Relation () { }
 //
 
 bool Relation::load (string csvFilename, char delimiter)  {
-   // header tupleHeader;
-    //tupleHeader.relName = &name[0];
-
     ifstream csvFile(csvFilename);
 
     BinFileHandler binFile(binFilename, false);
@@ -185,29 +182,30 @@ string Relation::readRegistry (BinFileHandler & binFile, bool ignore, unsigned a
     binFile.input.seekg(HEADER_SIZE, binFile.input.cur); 
     for (unsigned i = 0; i < numAttr; i++){
 
-        if(ignore && i == att)
-            continue;
-
         switch(tupleFormat[i]){
             case INT4: {
-                char attr4[4];
-                binFile.input.read (attr4, sizeof(attr4));
-                buffer += attr4;
+                int attr4;
+                binFile.input.read ((char*)&attr4, sizeof(attr4));
+                if (!(ignore && i == att))
+					buffer += to_string(attr4);
                 break;
             }
             case CHAR32: {
                 char attr32[32];
                 binFile.input.read (attr32, sizeof(attr32));
-                buffer += attr32;
+                if (!(ignore && i == att))
+					buffer += attr32;
                 break;
             }
             case CHAR256:{
                 char attr256[256];
                 binFile.input.read (attr256, sizeof(attr256));
-                buffer += attr256;
+                if (!(ignore && i == att))
+					buffer += attr256;
                 break;
             }
         }
+        buffer += " ";
     }
     return buffer;
 }
