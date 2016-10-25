@@ -126,10 +126,6 @@ hashJoin (DenseIndex *leftEntity, DenseIndex *rightEntity,
 		for (auto localIt = table.begin(bucketIndex); 
 			localIt != table.end(bucketIndex); ++localIt) {
 
-			// just a testing snippet to make sure the hash function is the same
-			if ((*localIt).first != rElement.first)
-				std::cout << "Erro: mismatched hash functions!!!" << std::endl;
-
 			// move binfile stream to element
 			leftHandler.input.seekg((*localIt).second, leftHandler.input.beg);
 			rightHandler.input.seekg(rElement.second, rightHandler.input.beg);
@@ -138,7 +134,8 @@ hashJoin (DenseIndex *leftEntity, DenseIndex *rightEntity,
 			// create joined tuple
 			buffer += lRelation.readRegistry(leftHandler);
 			buffer += rRelation.readRegistry(rightHandler, true, rPosition);
-
+			buffer += '\n';
+			
 			blocks += bytes;
 		}
 		outHandler.output.write(buffer.c_str(), buffer.size());
