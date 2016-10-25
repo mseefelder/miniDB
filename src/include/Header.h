@@ -18,7 +18,7 @@
 struct header {
   char relName[12];
   unsigned int nTuple;
-  time_t timeStamp; // Epoch Time;
+  time_t timeStamp; // epoch Time;
 };
 
 const unsigned short HEADER_SIZE = sizeof(header);

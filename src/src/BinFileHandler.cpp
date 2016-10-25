@@ -6,30 +6,28 @@
 #include <cstdlib>
 #include <cstring>
 
-using namespace std;
-
-BinFileHandler::BinFileHandler (string binFilename, bool readOnly) {
+BinFileHandler::BinFileHandler (const std::string& binFilename, bool readOnly) {
     initAttributes();
     if (readOnly) {
-        input.open(binFilename, ifstream::in | ifstream::binary);
+        input.open(binFilename, std::ifstream::in | std::ifstream::binary);
         setOpened(input.good());
     }
-    else { //write only
-        output.open(binFilename, ofstream::out | ofstream::binary);
+    else { // write-only
+        output.open(binFilename, std::ofstream::out | std::ofstream::binary);
         setOpened(output.good());
     }
 }
 
-BinFileHandler::~BinFileHandler(){
+BinFileHandler::~BinFileHandler() {
     input.close();
     output.close();
 }
 
-void BinFileHandler::writeHeader(header &tupleHeader){
-    output.write ((char*)&tupleHeader, sizeof(tupleHeader));
+void BinFileHandler::writeHeader(header &tupleHeader) {
+    output.write((char*)&tupleHeader, sizeof(tupleHeader));
 }
 
-void BinFileHandler::writeStrongType(string &buffer, unsigned short dataType){
+void BinFileHandler::writeStrongType(const std::string& buffer, unsigned short dataType) {
     switch(dataType){
         case INT4: {
             int attr4 = atoi(buffer.c_str());
@@ -53,6 +51,6 @@ void BinFileHandler::writeStrongType(string &buffer, unsigned short dataType){
     }
 }
 
-void BinFileHandler::initAttributes () {
+void BinFileHandler::initAttributes() {
     setOpened(false);
 }
