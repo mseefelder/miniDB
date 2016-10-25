@@ -1,9 +1,6 @@
 #include "HashIndex.h"
 
-// Constructors/Destructors
-//
-
-HashIndex::HashIndex (string relName, unsigned int numT, unsigned short attrK, unsigned short tSize) {
+HashIndex::HashIndex (const std::string& relName, unsigned int numT, unsigned short attrK, unsigned short tSize) {
     relBinFilename = relName;
     attrKey = attrK;
     tupleSize = tSize;
@@ -11,13 +8,9 @@ HashIndex::HashIndex (string relName, unsigned int numT, unsigned short attrK, u
     initAttributes();
 }
 
-HashIndex::~HashIndex () { }
+HashIndex::~HashIndex () {}
 
-//
-// Methods
-//
-
-bool HashIndex::build(){
+bool HashIndex::build() {
     BinFileHandler relFile(relBinFilename, true);
 
     if (numTuples == 0) return false;
@@ -31,11 +24,11 @@ bool HashIndex::build(){
         index.emplace(tKey, tupleBegByte);
         i++;
     }
+
     relFile.close();
     isBuilt = true;
     writeOnDisk();
 }
-
 
 bool HashIndex::writeOnDisk() {
     if (isBuilt) {
@@ -92,9 +85,9 @@ std::pair<unsigned int, bool> HashIndex::getTuple (int K) {
   const auto IndexEntry = index.find(K);
 
   if (IndexEntry == index.end())
-    return make_pair(0, false);
+    return std::make_pair(0, false);
   else
-    return make_pair((*IndexEntry).second, true);
+    return std::make_pair((*IndexEntry).second, true);
 }
 
 void HashIndex::printIndex(){
@@ -102,13 +95,6 @@ void HashIndex::printIndex(){
         std::cout << i.first << " - " << i.second << std::endl;
     }
 }
-
-// Accessor methods
-//
-
-
-// Other methods
-//
 
 void HashIndex::initAttributes () {
     isBuilt = false;
@@ -118,4 +104,3 @@ void HashIndex::initAttributes () {
     binFilename = filename.str();
 
 }
-

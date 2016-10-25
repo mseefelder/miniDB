@@ -10,10 +10,9 @@ LinkedList::LinkedList()
 }
 
 // Inserts an item at the end of the list.
-void LinkedList::insertItem( Item * newItem )
+void LinkedList::insertItem(Item * newItem)
 {
-    if (!head -> next)
-    {
+    if (!head -> next) {
         head -> next = newItem;
         length++;
         return;
@@ -112,25 +111,3 @@ LinkedList::~LinkedList()
         if (q) delete p;
     }
 }
-
-//*****************************************************************
-// End of File
-//*****************************************************************
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -11,14 +11,12 @@ bruteForceJoin(DenseIndex *leftEntity, DenseIndex *rightEntity,
 
 	unsigned seek = 0, blocks = 0;
 
-
 	const unsigned bytes = lRelation.getTupleSize() + 
 		rRelation.getTupleSize() - rRelation.getAttSize(rPosition);
 
 	int k = 0;
 	for (const auto & lElement: leftEntity -> index) {
 		for (const auto & rElement: rightEntity -> index) {
-
 			if (lElement.first == rElement.first) {
 				string buffer;
 
@@ -105,22 +103,20 @@ hashJoin (DenseIndex *leftEntity, DenseIndex *rightEntity,
 
 	unsigned seek = 0, blocks = 0;
 
-	std::unordered_multimap	<int, unsigned> table;
+	std::unordered_multimap<int, unsigned> table;
 
-	const unsigned bytes = lRelation.getTupleSize() + 
-		rRelation.getTupleSize() - rRelation.getAttSize(rPosition);
+	const unsigned bytes = lRelation.getTupleSize() + rRelation.getTupleSize() - rRelation.getAttSize(rPosition);
 
 	// partioning phase
-	for (const auto & lElement : leftEntity -> index)
+	for (const auto &lElement : leftEntity->index)
 		table.insert(std::pair<int, unsigned> (lElement.first, lElement.second));
 
 	Relation outRelation ("outRelation", lRelation.getTupleFormat(), 
 		                  rRelation.getTupleFormat(), rPosition);
 
 	// probing phase
-	for (const auto & rElement : rightEntity -> index) {
-
-		size_t bucketIndex = std::hash<int>{} (rElement.first);
+	for (const auto &rElement : rightEntity->index) {
+		const size_t bucketIndex = std::hash<int>{} (rElement.first);
 		std::string buffer;
 
 		for (auto localIt = table.begin(bucketIndex); 

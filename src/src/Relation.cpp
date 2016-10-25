@@ -3,9 +3,6 @@
 #include <fstream>
 #include <typeinfo>
 
-// Constructors/Destructors
-//
-
 Relation::Relation (const std::string& schemaName, const std::vector<short>& tupleFormat) {
     initAttributes();
     setName(schemaName);
@@ -16,13 +13,9 @@ Relation::Relation (const std::string& schemaName, const std::vector<short>& tup
     setTupleSize(sizeBytes);
 }
 
-Relation::~Relation () { }
+Relation::~Relation () {}
 
-//
-// Methods
-//
-
-bool Relation::load (const std::string& csvFilename, char delimiter)  {
+bool Relation::load (const std::string& csvFilename, char delimiter) {
     ifstream csvFile(csvFilename);
 
     BinFileHandler binFile(binFilename, false);
@@ -128,7 +121,7 @@ void Relation::printAttr(unsigned int tupleBegByte, unsigned short attrN){
             break;
         }
     }
-    cout << endl;
+    std::cout << std::endl;
     binFile.close();
  }
 
@@ -264,5 +257,3 @@ unsigned Relation::getAttSize(unsigned position) {
             return 256;
     }
 }
-
-//-----------------------------------------------------------------------------

@@ -12,11 +12,9 @@ using namespace std;
 //Creates a table in the database and stores it in the "tables" map
 //Table creation through "csvFile" (relative path to csv file)
 bool DataBase::createTable(std::string csvFile, char separator, vector<short> tupleFormat, std::string relationName){
-
     Relation newRelation(relationName, tupleFormat);
 
-    if(!newRelation.open() ){
-
+    if(!newRelation.open()){
         std::cout << "Carregando dados para base binaria..." << std::endl;
 
         if (IES.load(csvFile, separator)) std::cout << "Carregamento de dados efetuado com sucesso!" << std::endl;
@@ -28,8 +26,9 @@ bool DataBase::createTable(std::string csvFile, char separator, vector<short> tu
         return true;
 
     }
-
-    else std::cout << "Base de dados binaria pre-existente no disco foi encontrada. O carregamento e desnecessario." << std::endl;
+    else {
+    	std::cout << "Base de dados binaria pre-existente no disco foi encontrada. O carregamento e desnecessario." << std::endl;
+    }
 
     return false;
 }
@@ -37,11 +36,8 @@ bool DataBase::createTable(std::string csvFile, char separator, vector<short> tu
 //Creates an indexing structure, according to the id supplied
 //1 for dense, 2 for b+ tree, 3 for hashing
 bool DataBase::createIndex(std::string relationName, int indexTypeId){
-
 	switch(indexTypeId){
-
 		case 1:
-
 		    std::cout << "Instanciando DenseIndex" << std::endl;
 		    DenseIndex dPKEY(tables.at(relationName).getBinFilename(), 
 		    				tables.at(relationName).getNumTuples(), 1, 
@@ -103,24 +99,18 @@ bool DataBase::createIndex(std::string relationName, int indexTypeId){
 
 			break;
 
-
-
 		default:
-
 			std::cout << "nao existe tipo de indexacao valida com esse id" << std::endl;
 			return false;
 
 	}
-
 	return true;
-    
 }
 
 
 //does a search in the database, and can use two tables for joins
 //fields can be supplied through a string array (variable size)
 bool DataBase::select(std::string firstRelation, int key, int join_id = 0, std::string secondRelation = NULL){
-
 	//SELECT fields FROM firstRelation ([WHATEVER] JOIN) secondRelation
 	//WHERE 
 
@@ -135,14 +125,8 @@ bool DataBase::select(std::string firstRelation, int key, int join_id = 0, std::
 
 	if (secondRelation != NULL){
 		secondIndex = indexes.find(secondRelation);
-
 		if (secondIndex == indexes.end() ) { //didn't find
-
 			//do direct access magic
-
 		}
-	}
-
-	
+	}	
 }
-

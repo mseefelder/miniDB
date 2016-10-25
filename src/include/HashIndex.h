@@ -11,7 +11,7 @@ class HashIndex : public Index {
   std::unordered_map<int, unsigned int> index;
 
 public:
-  HashIndex(string relName, unsigned int numT, unsigned short attrK,
+  HashIndex(const std::string& relName, unsigned int numT, unsigned short attrK,
             unsigned short tSize);
 
   virtual ~HashIndex();
