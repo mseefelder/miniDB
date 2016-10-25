@@ -78,25 +78,29 @@ pair<vector<unsigned int>,bool> HashIndex::getRangeTuple (int Ki, int Kf){
     return IndexEntries;
 }
 
-vector<pair<unsigned int,bool>> HashIndex::getBatchTuple (vector<int> Ks){
-    vector<pair<unsigned int,bool>> IndexEntries;
-    for (auto K: Ks){
+std::vector<std::pair<unsigned int,bool>> HashIndex::getBatchTuple (const std::vector<int>& Ks){
+    std::vector<std::pair<unsigned int, bool>> IndexEntries;
+
+    for (const auto& K: Ks) {
       IndexEntries.push_back(getTuple(K));
     }
+
     return IndexEntries;
 }
 
-pair<unsigned int,bool> HashIndex::getTuple (int K){ //http://www.cplusplus.com/reference/unordered_map/unordered_map/find/
-  auto IndexEntry = index.find (K);
+std::pair<unsigned int, bool> HashIndex::getTuple (int K) {
+  const auto IndexEntry = index.find(K);
 
-  if ( IndexEntry == index.end() )
-    return make_pair(0,false);
+  if (IndexEntry == index.end())
+    return make_pair(0, false);
   else
-    return make_pair((*IndexEntry).second,true);
+    return make_pair((*IndexEntry).second, true);
 }
 
 void HashIndex::printIndex(){
-    for(auto i: index) cout << i.first << " - " << i.second << endl;
+    for(const auto& i: index) {
+        std::cout << i.first << " - " << i.second << std::endl;
+    }
 }
 
 // Accessor methods

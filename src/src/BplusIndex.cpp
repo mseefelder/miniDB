@@ -77,11 +77,13 @@ pair<vector<unsigned int>,bool>  BplusIndex::getRangeTuple (int a, int b){
     return result;
 }
 
-vector<pair<unsigned int,bool>> BplusIndex::getBatchTuple (vector<int> Ks){
-    vector<pair<unsigned int,bool>> IndexEntries;
-    for (auto K: Ks){
+std::vector<pair<unsigned int,bool>> BplusIndex::getBatchTuple (const std::vector<int>& Ks){
+    std::vector<std::pair<unsigned int,bool>> IndexEntries;
+
+    for (const auto& K: Ks){
       IndexEntries.push_back(getTuple(K));
     }
+
     return IndexEntries;
 }
 

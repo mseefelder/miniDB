@@ -14,7 +14,6 @@ HashTable::HashTable( int tableLength )
 // Returns an array location for a given item key.
 int HashTable::hash( int itemKey )
 {
-    int value = 0;
     return itemKey % length;
 }
 

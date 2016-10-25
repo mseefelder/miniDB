@@ -1,7 +1,8 @@
-#include <iostream>
-#include <vector>
-#include <string>
 #include <chrono>
+#include <cstdlib>
+#include <iostream>
+#include <string>
+#include <vector>
 
 #include "Relation.h"
 #include "bpt.h"
@@ -9,15 +10,14 @@
 
 using namespace std;
 
-int main()
-{
+int main(int argc, char *argv[]) {
     vector<short> tF {INT4, CHAR32};
     string relationName = "IES";
     Relation IES(relationName, tF);
     if(!IES.open()){
         cout << "Carregando dados para base binaria..." << endl;
         if(IES.load("../csv/lista_ies.csv",'|')) cout << "Carregamento de dados efetuado com sucesso!" << endl;
-        else { cout << "Falha no carregamento da base de dados." << endl; return 1; }
+        else { cout << "Falha no carregamento da base de dados." << endl; return EXIT_FAILURE; }
     }
     else cout << "Base de dados binaria pre-existente no disco foi encontrada. O carregamento e desnecessario." << endl;
 
@@ -53,14 +53,14 @@ int main()
 
 
     //Almost half are keys known to be present on csvFile
-    vector<int> randomKeys = {1988, 1305, 1518, 1817, 1119, 1753, 1329, 1154, 1159, 1895, 1633, 1627, 1593, 1013, 1191, 1560,
+    const std::vector<int> randomKeys = {1988, 1305, 1518, 1817, 1119, 1753, 1329, 1154, 1159, 1895, 1633, 1627, 1593, 1013, 1191, 1560,
         1791, 1740, 1619, 1406, 1516, 1704, 1438, 1989, 1709, 1762, 1352, 1713, 1881, 1603, 1959, 1937, 1930, 1111, 1545,
         1847, 1156, 1279, 1827, 1846, 1667, 1568, 1947, 1882, 1786, 1144, 1614, 1043, 1590, 1094, 1272, 1102, 1832, 1522,
         1900, 1231, 1604, 1369, 1605, 1906, 1877, 1050, 1028, 1172, 1024, 1408, 1934, 1475, 1775, 1473, 1778, 1089, 1226,
         1994, 1030, 1072, 1513, 1444, 1020, 1412, 1160, 1580, 1341, 1335, 1147, 1419, 1984, 1661, 1165, 1997, 1120, 1491,
         1852, 1557, 1425, 1286, 1640, 1237, 1577, 1263};
 
-    short TestCase=0, hits=0, miss=0;
+    short hits=0, miss=0;
 
     //1st test case: Direct Access //One select
     {
@@ -315,5 +315,5 @@ int main()
         miss = 0;
 
 
-    return 0;
+    return EXIT_SUCCESS;
 }

@@ -144,7 +144,6 @@ hashJoin (DenseIndex *leftEntity, DenseIndex *rightEntity,
 	return std::make_pair(seek, blocks / BLOCK_SIZE);
 }
 
-unsigned computeTime (const std::pair<unsigned, unsigned> values) {
-
+unsigned computeTime(const std::pair<unsigned, unsigned> values) {
 	return 10 * values.first + values.second;
 }

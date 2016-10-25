@@ -42,10 +42,10 @@ public:
   vector<DenseIndex> denseIndex;
   vector<BplusIndex> bplusIndex;
 
-  Relation(string schemaName, vector<short> tupleFormat);
+  Relation(const std::string& schemaName, const std::vector<short>& tupleFormat);
 
-  Relation (string schemaName, std::vector<short> lFormat, 
-            std::vector<short> rFormat, int rPosition);
+  Relation (const std::string& schemaName, const std::vector<short>& lFormat, 
+            const std::vector<short>& rFormat, unsigned rPosition);
 
   /**
    * Empty Destructor
@@ -60,7 +60,7 @@ public:
    * @param  csvFile
    * @param  delimiter
    */
-  bool load(string csvFilename, char delimiter);
+  bool load(const std::string& csvFilename, char delimiter);
 
   bool open();
 

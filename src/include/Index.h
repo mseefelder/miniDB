@@ -13,7 +13,6 @@ using namespace std;
   * This "interface" ties properties and methods common to all diff types of
  * index.
   */
-
 class Index {
 
 public:
@@ -31,7 +30,7 @@ public:
    * @return vector<int>
    * @param  Ks vector with the random keys to be found
    */
-  virtual vector<pair<unsigned int, bool>> getBatchTuple(vector<int> Ks) = 0;
+  virtual vector<pair<unsigned int, bool>> getBatchTuple(const std::vector<int>& Ks) = 0;
 
   /**
    * Returns a vector containing address of the tuples selected: a <= K <= b. In
@@ -50,9 +49,6 @@ public:
 
   virtual bool load() = 0;
 
-  /**
- * Empty Destructor
- */
   virtual ~Index();
 
 protected:
@@ -70,29 +66,13 @@ protected:
   bool isOpened;
 
 public:
-  /**
-   * Set the value of binFilename
-   * @param new_var the new value of binFilename
-   */
-  void setBinFilename(string new_var) { binFilename = new_var; }
+  void setBinFilename(const std::string& new_var) { binFilename = new_var; }
 
-  /**
-   * Get the value of binFilename
-   * @return the value of binFilename
-   */
-  string getBinFilename() { return binFilename; }
+  string getBinFilename() const { return binFilename; }
 
-  /**
-   * Get the value of relBinFilename
-   * @return the value of relBinFilename
-   */
-  string getRelBinFilename() { return relBinFilename; }
+  string getRelBinFilename() const { return relBinFilename; }
 
-  /**
- * Get the value of numTuple
- * @return the value of numTuple
- */
-  unsigned int getNumTuples() { return numTuples; }
+  unsigned int getNumTuples() const { return numTuples; }
 
   void setNumTuples(unsigned int new_var) { numTuples = new_var; }
 };

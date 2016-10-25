@@ -6,7 +6,7 @@
 // Constructors/Destructors
 //
 
-Relation::Relation (string schemaName, vector<short> tupleFormat) {
+Relation::Relation (const std::string& schemaName, const std::vector<short>& tupleFormat) {
     initAttributes();
     setName(schemaName);
     setTupleFormat(tupleFormat);
@@ -22,7 +22,7 @@ Relation::~Relation () { }
 // Methods
 //
 
-bool Relation::load (string csvFilename, char delimiter)  {
+bool Relation::load (const std::string& csvFilename, char delimiter)  {
     ifstream csvFile(csvFilename);
 
     BinFileHandler binFile(binFilename, false);
@@ -43,7 +43,7 @@ bool Relation::load (string csvFilename, char delimiter)  {
 
             binFile.writeHeader(tHeader);
 
-            for(auto c: line) {
+            for(const auto& c: line) {
                 if(c != delimiter && c != '\r' && c!= '\n') buffer.push_back(c);
                 else if (c == delimiter && (attrN < numAttr)){
                     buffer.push_back('\0');
@@ -67,10 +67,14 @@ bool Relation::load (string csvFilename, char delimiter)  {
 
 bool Relation::open(){
     BinFileHandler binFile(binFilename, true);
-    if (!binFile.isOpened()) return false;
+    if (!binFile.isOpened()) {
+        return false;
+    }
+    
     binFile.input.seekg (0, binFile.input.end);
     setNumTuples(binFile.input.tellg() / tupleSize);
     binFile.close();
+    
     return true;
 }
 
@@ -165,7 +169,7 @@ void Relation::printAttr(unsigned int tupleBegByte, unsigned short attrN){
 // Other methods
 //
 
-void Relation::initAttributes () {
+void Relation::initAttributes() {
     setIsLoaded(false);
     setNumAttr(0);
     setNumTuples(0);
@@ -175,8 +179,8 @@ void Relation::initAttributes () {
 
 //-----------------------------------------------------------------------------
 
-Relation::Relation (string schemaName, std::vector<short> lFormat, 
-                    std::vector<short> rFormat, int rPosition) {
+Relation::Relation (const std::string& schemaName, const std::vector<short>& lFormat, 
+                    const std::vector<short>& rFormat, unsigned rPosition) {
     initAttributes();
     setName(schemaName);
 
@@ -248,7 +252,6 @@ vector<short> Relation::excludeColumn(size_t i) {
 }
 
 unsigned Relation::getAttSize(unsigned position) {
-
     switch(tupleFormat[position]){
         case INT4:
             return 4;

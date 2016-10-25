@@ -92,9 +92,9 @@ pair<vector<unsigned int>,bool> DenseIndex::getRangeTuple (int Ki, int Kf){
     return IndexEntries;
 }
 
-vector<pair<unsigned int,bool>> DenseIndex::getBatchTuple (vector<int> Ks){
+vector<pair<unsigned int,bool>> DenseIndex::getBatchTuple (const std::vector<int>& Ks){
     vector<pair<unsigned int,bool>> IndexEntries;
-    for (auto K: Ks){
+    for (const auto& K: Ks){
       IndexEntries.push_back(getTuple(K));
     }
     return IndexEntries;

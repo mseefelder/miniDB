@@ -36,7 +36,7 @@ public:
 
   virtual pair<vector<unsigned int>, bool> getRangeTuple(int a, int b);
 
-  virtual vector<pair<unsigned int, bool>> getBatchTuple(vector<int> Ks);
+  virtual vector<pair<unsigned int, bool>> getBatchTuple(const std::vector<int>& Ks);
 
   virtual pair<unsigned int, bool> getTuple(int K);
   //
