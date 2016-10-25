@@ -100,7 +100,7 @@ mergeSortJoin (DenseIndex *leftEntity, DenseIndex *rightEntity,
 std::pair<unsigned, unsigned>
 hashJoin (DenseIndex *leftEntity, DenseIndex *rightEntity,
                BinFileHandler& leftHandler, BinFileHandler& rightHandler,
-               BinFileHandler& outHandler, Relation& lRelation,
+               BinFileHandler& outHandler, const Relation& lRelation,
                Relation& rRelation, unsigned rPosition) {
 
 	unsigned seek = 0, blocks = 0;

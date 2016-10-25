@@ -37,17 +37,17 @@ bool HashIndex::build(){
 }
 
 
-bool HashIndex::writeOnDisk(){
+bool HashIndex::writeOnDisk() {
     if (isBuilt) {
-        ofstream indexFile(binFilename, ios::out | ios::trunc | ios::binary);
-        for (auto key : index)
+        std::ofstream indexFile(binFilename, ios::out | ios::trunc | ios::binary);
+        for (const auto& key : index)
             indexFile.write(reinterpret_cast<const char *>(&key), sizeof(pair<int,unsigned int>));
         return true;
     }
     else return false;
 }
 
-bool HashIndex::load(){
+bool HashIndex::load() {
     if (!isBuilt) {
         ifstream indexFile(binFilename, ios::in | ios::binary);
         if (!indexFile.good()) return false;

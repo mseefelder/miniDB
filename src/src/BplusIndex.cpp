@@ -1,9 +1,6 @@
 #include "BplusIndex.h"
 
-// Constructors/Destructors
-//
-
-BplusIndex::BplusIndex (string relName, unsigned int numT, unsigned short attrK, unsigned short tSize) {
+BplusIndex::BplusIndex (const std::string& relName, unsigned int numT, unsigned short attrK, unsigned short tSize) {
 	relBinFilename = relName;
     attrKey = attrK;
     tupleSize = tSize;
@@ -12,10 +9,6 @@ BplusIndex::BplusIndex (string relName, unsigned int numT, unsigned short attrK,
 }
 
 BplusIndex::~BplusIndex () { }
-
-//
-// Methods
-//
 
 bool BplusIndex::build(){
 	BinFileHandler relFile(relBinFilename, true);
@@ -37,7 +30,6 @@ bool BplusIndex::build(){
     relFile.close();
     return true;
 }
-
 
 bool BplusIndex::writeOnDisk(){
 }
@@ -97,13 +89,6 @@ pair<unsigned int,bool> BplusIndex::getTuple (int K){
         return make_pair(0, false);
     }
 }
-
-// Accessor methods
-//
-
-
-// Other methods
-//
 
 void BplusIndex::initAttributes () {
 	isBuilt = false;

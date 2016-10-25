@@ -1,9 +1,6 @@
 #include "DenseIndex.h"
 
-// Constructors/Destructors
-//
-
-DenseIndex::DenseIndex (string relName, unsigned int numT, unsigned short attrK, unsigned short tSize)
+DenseIndex::DenseIndex (const std::string& relName, unsigned int numT, unsigned short attrK, unsigned short tSize)
  {
     relBinFilename = relName;
     attrKey = attrK;
@@ -13,10 +10,6 @@ DenseIndex::DenseIndex (string relName, unsigned int numT, unsigned short attrK,
 }
 
 DenseIndex::~DenseIndex () { }
-
-//
-// Methods
-//
 
 bool DenseIndex::build(){
     BinFileHandler relFile(relBinFilename, true);
@@ -111,13 +104,6 @@ pair<unsigned int,bool> DenseIndex::getTuple (int K){ //http://www.cplusplus.com
 void DenseIndex::printIndex(){
     for(auto i: index) cout << i.first << " - " << i.second << endl;
 }
-
-// Accessor methods
-//
-
-
-// Other methods
-//
 
 void DenseIndex::initAttributes () {
     isBuilt = false;

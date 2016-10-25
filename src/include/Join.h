@@ -10,8 +10,6 @@
 	the relation with the higher join factor as the left relation. This is
 	better to perform joins due to disk block access when dealing with bin files
 	strictly.*/
-
-
 std::pair<unsigned, unsigned>
 bruteForceJoin(DenseIndex *leftEntity, DenseIndex *rightEntity,
                BinFileHandler& leftHandler, BinFileHandler& rightHandler,
@@ -27,7 +25,7 @@ mergeSortJoin (DenseIndex *leftEntity, DenseIndex *rightEntity,
 std::pair<unsigned, unsigned>
 hashJoin (DenseIndex *leftEntity, DenseIndex *rightEntity,
                BinFileHandler& leftHandler, BinFileHandler& rightHandler,
-               BinFileHandler& outHandler, Relation& lRelation,
+               BinFileHandler& outHandler, const Relation& lRelation,
                Relation& rRelation, unsigned rPosition);
 
 unsigned computeTime(const std::pair<unsigned, unsigned> values);

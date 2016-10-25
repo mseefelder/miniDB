@@ -196,7 +196,7 @@ Relation::Relation (const std::string& schemaName, const std::vector<short>& lFo
 }
 
 
-string Relation::readRegistry (BinFileHandler & binFile, bool ignore, unsigned att) {
+string Relation::readRegistry (BinFileHandler & binFile, bool ignore, unsigned att) const {
 
     string buffer;
 

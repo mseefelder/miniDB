@@ -22,7 +22,6 @@ set(
 	PROJECT_HEADERS
 	"${INCLUDE_DIR}/BinFileHandler.h"
 	"${INCLUDE_DIR}/BplusIndex.h"
-	"${INCLUDE_DIR}/BplusTree.h"
 	"${INCLUDE_DIR}/DenseIndex.h"
 	"${INCLUDE_DIR}/HashIndex.h"
 	"${INCLUDE_DIR}/HashTable.h"
@@ -38,7 +37,6 @@ set(
 set(PROJECT_SOURCES
 	"${SRC_DIR}/BinFileHandler.cpp"
 	"${SRC_DIR}/BplusIndex.cpp"
-	"${SRC_DIR}/BplusTree.cpp"
 	"${SRC_DIR}/DenseIndex.cpp"
 	"${SRC_DIR}/HashIndex.cpp"
 	"${SRC_DIR}/HashTable.cpp"

@@ -85,30 +85,27 @@ public:
    * Get the value of numAttr
    * @return the value of numAttr
    */
-  unsigned short getNumAttr() { return numAttr; }
+  unsigned short getNumAttr() const { return numAttr; }
 
   /**
    * Get the value of numTuple
    * @return the value of numTuple
    */
-  unsigned int getNumTuples() { return numTuples; }
+  unsigned int getNumTuples() const { return numTuples; }
 
   /**
    * Get the value of tupleSize
    * Size in bytes of a tuple, considering the header.
    * @return the value of tupleSize
    */
-  unsigned short getTupleSize() { return tupleSize; }
+  unsigned short getTupleSize() const { return tupleSize; }
 
   /**
    * Get the value of tupleFormat
    * Tuple format, that is, datatype of each attribute.
    * @return the value of tupleFormat
    */
-  vector<short> getTupleFormat() {
-    // for (auto i : tupleFormat) {
-    //   cout << i << endl;
-    // }
+  vector<short> getTupleFormat() const {
     return tupleFormat;
   }
 
@@ -130,7 +127,7 @@ public:
   void initAttributes();
 
   string readRegistry(BinFileHandler &binFile, bool ignore = false,
-                      unsigned att = 0);
+                      unsigned att = 0) const;
 
   void writeRegistry(BinFileHandler &binFile, string buffer);
 
@@ -145,7 +142,7 @@ private: // methods
    * Set the value of name
    * @param new_var the new value of name
    */
-  void setName(string new_var) {
+  void setName(const std::string& new_var) {
     memset(name, 0, sizeof(name));
     if (new_var != "")
       strncpy(name, new_var.c_str(), 11);
@@ -161,7 +158,7 @@ private: // methods
    * Tuple format, that is, datatype of each attribute.
    * @param new_var the new value of tupleFormat
    */
-  void setTupleFormat(vector<short> new_var) { tupleFormat = new_var; }
+  void setTupleFormat(const std::vector<short>& new_var) { tupleFormat = new_var; }
 
   /**
    * Set the value of tupleSize
@@ -192,7 +189,7 @@ private: // methods
   * relation.
   * @param new_var the new value of binFilename
   */
-  void setBinFilename(string new_var) { 
+  void setBinFilename(const std::string& new_var) { 
     binFilename = new_var + ".bin";
   }
 };

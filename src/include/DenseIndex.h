@@ -23,7 +23,7 @@ public:
   /**
    * Empty Constructor
    */
-  DenseIndex(string relName, unsigned int numT, unsigned short attrK,
+  DenseIndex(const std::string& relName, unsigned int numT, unsigned short attrK,
              unsigned short tSize);
 
   /**
