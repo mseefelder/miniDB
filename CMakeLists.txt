@@ -26,6 +26,7 @@ set(
 	"${INCLUDE_DIR}/HashIndex.h"
 	"${INCLUDE_DIR}/HashTable.h"
 	"${INCLUDE_DIR}/Header.h"
+	"${INCLUDE_DIR}/Helpers.h"
 	"${INCLUDE_DIR}/Index.h"
 	"${INCLUDE_DIR}/Join.h"
 	"${INCLUDE_DIR}/LinkedList.h"
@@ -40,6 +41,7 @@ set(PROJECT_SOURCES
 	"${SRC_DIR}/DenseIndex.cpp"
 	"${SRC_DIR}/HashIndex.cpp"
 	"${SRC_DIR}/HashTable.cpp"
+	"${SRC_DIR}/Helpers.cpp"
 	"${SRC_DIR}/Index.cpp"
 	"${SRC_DIR}/Join.cpp"
 	"${SRC_DIR}/LinkedList.cpp"
@@ -88,6 +90,18 @@ if(TEST)
 		${GTEST_LIBRARIES}
 	)
 	
+	add_executable(
+		TestHelpers
+		"${TEST_DIR}/TestHelpers.cpp"
+		$<TARGET_OBJECTS:MINIDB_LIBRARY>
+	)
+	
+	target_link_libraries(
+		TestHelpers
+		${GTEST_LIBRARIES}
+	)
+
 	# Integrate with ctest (`make test`)
 	add_test(NAME TestHashTable COMMAND TestHashTable)
+	add_test(NAME TestHelpers COMMAND TestHelpers)
 endif()
