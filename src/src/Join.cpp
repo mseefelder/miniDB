@@ -54,11 +54,14 @@ bruteForceJoin (Relation& lRelation, Relation& rRelation,
   else {
       while (lRelation.binIn->input.good() &&
              lRelation.binIn->input.peek() != EOF) {
+
+          // read outer tuple
+          const std::vector<std::string> lTuple (lRelation.readTuple());
+
           while (rRelation.binIn->input.good() &&
                  rRelation.binIn->input.peek() != EOF ) {
 
-              // read tuples from binary file
-              const std::vector<std::string> lTuple (lRelation.readTuple());
+              // read inner tuple
               const std::vector<std::string> rTuple (rRelation.readTuple());
 
               if (!lTuple[lPosition].compare(rTuple[rPosition])) {
@@ -73,14 +76,14 @@ bruteForceJoin (Relation& lRelation, Relation& rRelation,
                   outRelation.writeTuple(oTuple);
               }
           }
-          rRelation.binIn->input.seekg(0, rRelation.binIn->input.beg);
+          rRelation.resetStream();
       }
   }
 
   // clean file pointers
   lRelation.resetStream();
   rRelation.resetStream();
-  
+
  	return std::make_pair(seek, blocks / BLOCK_SIZE);
 }
 
