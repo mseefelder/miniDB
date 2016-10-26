@@ -13,7 +13,7 @@ public:
 
   virtual ~BplusIndex();
 
-  virtual bool build();
+  virtual std::pair<bool, std::pair<unsigned, unsigned> > build();
 
   virtual bool load();
 

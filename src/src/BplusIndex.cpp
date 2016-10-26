@@ -12,15 +12,16 @@ BplusIndex::BplusIndex (const std::string& relName, unsigned int numT, unsigned 
 
 BplusIndex::~BplusIndex () { }
 
-std::pair<bool, std::pair<unsigned, unsigned>
-BplusIndex::build(){
+std::pair<bool, std::pair<unsigned, unsigned> >
+BplusIndex::build() {
 	
     BinFileHandler relFile(relBinFilename, true);
     
     unsigned seek = 0;
     unsigned blocks = 0;
 
-    if (numTuples == 0) return false;
+    if (numTuples == 0)
+        return std::make_pair(false, std::make_pair(0,0));
 
     unsigned int i = 0;
     while (i < numTuples){

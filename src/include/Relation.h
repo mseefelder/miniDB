@@ -37,15 +37,15 @@ private: // properties
   // same for all tuples in relations present in this DBMS.
 
   bool isLoaded;
-  
-  BinFileHandler* binIn;
-  BinFileHandler* binOut;
 
   //Quick reference to some Index of this Relation
   DenseIndex* index;
   bool indexExists;
 
 public:
+
+  BinFileHandler* binIn;
+  BinFileHandler* binOut;
 
   Relation(const std::string& schemaName, const std::vector<short>& tupleFormat);
 
@@ -131,7 +131,7 @@ public:
 
   void initAttributes();
 
-  std::vector<string> readTuple (bool ignore, unsigned att) const;
+  std::vector<string> readTuple (const bool &ignore = false, const unsigned &att = 0) const;
 
   void writeTuple (std::vector<std::string> buffer);
 

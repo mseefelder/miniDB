@@ -14,7 +14,7 @@ public:
              unsigned short tSize);
   virtual ~DenseIndex();
 
-  virtual bool build();
+  virtual std::pair<bool, std::pair<unsigned, unsigned> > build();
 
   virtual bool load();
 

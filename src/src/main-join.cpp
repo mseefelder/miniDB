@@ -42,17 +42,15 @@ int main()
     BinFileHandler bfh5 ("hsJoin.bin",false);
 
     std::cout << std::endl << "bruteForceJoin" << std::endl;
-    pair<unsigned, unsigned> bFJoin = bruteForceJoin(Cidade.getIndex(), Nome.getIndex(), bfh1, bfh2, bfh3, Cidade, Nome, 0);
-    std::cout << std::endl << "mergeSortJoin" << std::endl;
-    pair<unsigned, unsigned> mSJoin = mergeSortJoin(Cidade.getIndex(), Nome.getIndex(), bfh1, bfh2, bfh4, Cidade, Nome, 0);
-    std::cout << std::endl << "hashJoin" << std::endl;
-    pair<unsigned, unsigned> hsJoin = hashJoin(Cidade.getIndex(), Nome.getIndex(), bfh1, bfh2, bfh5, Cidade, Nome, 0);
+    pair<unsigned, unsigned> bFJoin = bruteForceJoin(Cidade, Nome, 0, 0, true);
+    // std::cout << std::endl << "mergeSortJoin" << std::endl;
+    // pair<unsigned, unsigned> mSJoin = mergeSortJoin(Cidade.getIndex(), Nome.getIndex(), bfh1, bfh2, bfh4, Cidade, Nome, 0);
+    // std::cout << std::endl << "hashJoin" << std::endl;
+    // pair<unsigned, unsigned> hsJoin = hashJoin(Cidade.getIndex(), Nome.getIndex(), bfh1, bfh2, bfh5, Cidade, Nome, 0);
 
     std::cout << computeTime(bFJoin) << std::endl;
-    std::cout << computeTime(mSJoin) << std::endl;
-    std::cout << computeTime(hsJoin) << std::endl;
-
-    Relation joinRelation("joinOut", Cidade.getTupleFormat(), Nome.getTupleFormat(), 0);
     
+    Relation joinRelation("joinOut", Cidade.getTupleFormat(), Nome.getTupleFormat(), 0);
+
     return 0;
 }

@@ -11,10 +11,9 @@
 	better to perform joins due to disk block access when dealing with bin files
 	strictly.*/
 std::pair<unsigned, unsigned>
-bruteForceJoin(DenseIndex *leftEntity, DenseIndex *rightEntity,
-               BinFileHandler& leftHandler, BinFileHandler& rightHandler,
-               BinFileHandler& outHandler, Relation& lRelation,
-               Relation& rRelation, unsigned rPosition);
+bruteForceJoin (Relation& lRelation, Relation& rRelation,
+                     unsigned lPosition, unsigned rPosition,
+                     bool useIndex);
 
 std::pair<unsigned, unsigned>
 mergeSortJoin (DenseIndex *leftEntity, DenseIndex *rightEntity,
@@ -29,5 +28,9 @@ hashJoin (DenseIndex *leftEntity, DenseIndex *rightEntity,
                Relation& rRelation, unsigned rPosition);
 
 unsigned computeTime(const std::pair<unsigned, unsigned> values);
+
+std::string
+generateJoinedSchemaName(const std::string &rName, const std::string &lName, 
+                               const std::string& joinType);
 
 #endif // JOIN_H

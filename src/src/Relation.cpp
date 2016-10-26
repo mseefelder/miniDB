@@ -195,31 +195,31 @@ Relation::Relation (const std::string& schemaName, const std::vector<short>& lFo
 
 
 std::vector<string>
-Relation::readTuple (bool ignore, unsigned att) const {
+Relation::readTuple (const bool &ignore, const unsigned &att) const {
 
     std::vector<std::string> buffer;
 
-    binIn.input.seekg(HEADER_SIZE, binIn.input.cur);
+    binIn->input.seekg(HEADER_SIZE, binIn->input.cur);
     for (unsigned i = 0; i < numAttr; i++){
 
         switch(tupleFormat[i]){
             case INT4: {
                 char attr4 [4];
-                binIn.input.read (attr4, sizeof(attr4));
+                binIn->input.read (attr4, sizeof(attr4));
                 if (!(ignore && i == att))
                     buffer.push_back(attr4);
                 break;
             }
             case CHAR32: {
                 char attr32 [32];
-                binIn.input.read (attr32, sizeof(attr32));
+                binIn->input.read (attr32, sizeof(attr32));
                 if (!(ignore && i == att))
                     buffer.push_back(attr32);
                 break;
             }
             case CHAR256:{
                 char attr256 [256];
-                binIn.input.read (attr256, sizeof(attr256));
+                binIn->input.read (attr256, sizeof(attr256));
                 if (!(ignore && i == att))
                     buffer.push_back(attr256);
                 break;
@@ -234,9 +234,9 @@ void Relation::writeTuple (std::vector<std::string> buffer) {
     strcpy(tHeader.relName, name);
     tHeader.nTuple = ++numTuples;
     tHeader.timeStamp = time(nullptr);
-    binFile.writeHeader(tHeader);
+    binOut->writeHeader(tHeader);
     for (unsigned i = 0; i < tupleFormat.size(); ++i)
-        binOut.writeStrongType(buffer[i], tupleFormat[i]);
+        binOut->writeStrongType(buffer[i], tupleFormat[i]);
 }
 
 vector<short> Relation::excludeColumn(size_t i) {
@@ -267,18 +267,19 @@ bool Relation::loadOrBuildIndex(unsigned attrPos){
     index = new DenseIndex(binFilename, numTuples, attrPos, tupleSize); //for while, DenseIndex works only for the 1st attribute, considering it as a INT4
     if (!index->load()) {
       cout << "Construindo DenseIndex" << endl;
-      if(index->build()) cout << "DenseIndex construido e gravado em disco com sucesso";
+      if(index->build().first) cout << "DenseIndex construido e gravado em disco com sucesso";
       else cout << "Falha na construcao ou gravacao do DenseIndex";
     }
     else {
         loaded = true;
         cout << "DenseIndex pre-existente no disco foi encontrado e carregado em memoria." << endl; // index.printIndex();
     }
-
+    indexExists = true;
     return loaded;
 }
 
 bool Relation::hasIndex(unsigned attrPos){
+    //std::cout << indexExists && (attrPos == index->getAttrPos()) << std::endl;
     return indexExists && (attrPos == index->getAttrPos());
 }
 
