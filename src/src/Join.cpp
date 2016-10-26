@@ -21,33 +21,30 @@ bruteForceJoin (Relation& lRelation, Relation& rRelation,
 	Relation outRelation (outName, lRelation.getTupleFormat(),
                         rRelation.getTupleFormat(), rPosition);
 
-
-
   if (useIndex) {
       if (!(rRelation.hasIndex(rPosition + 1) && lRelation.hasIndex(lPosition + 1))) {
               std::cout << "No index strutcture for the desired attributes!" << std::endl;
               return std::make_pair (0,0);
           }
+
       for (const auto & lElement: lRelation.getIndex()->index) {
           for (const auto & rElement: rRelation.getIndex()->index) {
               if (lElement.first == rElement.first) {
+
                   // move binfile stream to element
                   lRelation.binIn->input.seekg(lElement.second,
                                               lRelation.binIn->input.beg);
                   lRelation.binIn->input.seekg(rElement.second,
                                               rRelation.binIn->input.beg);
                   seek += 2;
+
                   // read tuples from binary file
                   std::vector<std::string> lTuple (lRelation.readTuple());
                   const std::vector<std::string> rTuple (rRelation.readTuple(true, rPosition));
 
                   // merge tuples for join
                   lTuple.insert(lTuple.end(), rTuple.begin(), rTuple.end());
-
-                  ///*DEBUG*/cout << " checgou aqui 4.5 "<< *(lTuple.begin()) << " " << *(lTuple.end()) << endl;		  
-
                   outRelation.writeTuple(lTuple);
-
                   blocks += bytes;
               }
           }
@@ -79,59 +76,127 @@ bruteForceJoin (Relation& lRelation, Relation& rRelation,
           rRelation.binIn->input.seekg(0, rRelation.binIn->input.beg);
       }
   }
+
+  // clean file pointers
+  lRelation.resetStream();
+  rRelation.resetStream();
+  
  	return std::make_pair(seek, blocks / BLOCK_SIZE);
 }
 
-// std::pair<unsigned, unsigned>
-// mergeSortJoin (DenseIndex *leftEntity, DenseIndex *rightEntity,
-//                BinFileHandler& leftHandler, BinFileHandler& rightHandler,
-//                BinFileHandler& outHandler, Relation& lRelation,
-//                Relation& rRelation, unsigned rPosition) {
+std::pair<unsigned, unsigned>
+mergeSortJoin (Relation& lRelation, Relation& rRelation,
+               unsigned lPosition, unsigned rPosition,
+               bool useIndex) {
 
-// 	unsigned seek = 0, blocks = 0;
-// 	unsigned i = 0, j = 0;
+    unsigned seek = 0, blocks = 0;
 
-// 	const unsigned bytes = lRelation.getTupleSize() +
-// 		rRelation.getTupleSize() - rRelation.getAttSize(rPosition);
+    const unsigned bytes = lRelation.getTupleSize() +
+        rRelation.getTupleSize() - rRelation.getAttSize(rPosition);
 
-// 	int k = 0;
+    std::string outName = generateJoinedSchemaName (lRelation.getName(),
+                                                    rRelation.getName(), "MS");
 
-// 	while (i < leftEntity -> index.size() && j < rightEntity -> index.size()) {
+    Relation outRelation (outName, lRelation.getTupleFormat(),
+                          rRelation.getTupleFormat(), rPosition);
 
-// 		if (leftEntity->index[i].first < rightEntity->index[j].first) {++i; ++k;}
+    const unsigned rSize = rRelation.getTupleSize();
+    const unsigned lSize = lRelation.getTupleSize();
+    const unsigned oSize = outRelation.getTupleSize();
 
-// 		else {
-// 			j += leftEntity->index[i].first > rightEntity->index[j].first;
-// 			++k;
-// 		}
+    if (useIndex) {
+        if (!(rRelation.hasIndex(rPosition + 1) && lRelation.hasIndex(lPosition + 1))) {
+            std::cout << "No index strutcture for the desired attributes!" << std::endl;
+            return std::make_pair (0,0);
+        }
 
-// 		// find all matching entries
-// 		while (j < rightEntity -> index.size() &&
-// 			leftEntity->index[i].first == rightEntity->index[j].first) {
+        unsigned i = 0, j = 0;
+        const auto lIndex = lRelation.getIndex()->index;
+        const auto rIndex = rRelation.getIndex()->index;
 
-// 			string buffer;
+        while (i < lIndex.size() && j < rIndex.size()) {
 
-// 			// move binfile stream to element
-// 			leftHandler.input.seekg(leftEntity->index[i].second, leftHandler.input.beg);
-// 			rightHandler.input.seekg(rightEntity->index[j].second, rightHandler.input.beg);
-// 			seek += 2;
+            if (lIndex[i].first < rIndex[j].first) ++i;
 
-// 			// create joined tuple
-// 			buffer += lRelation.readRegistry(leftHandler);
-// 			buffer += rRelation.readRegistry(rightHandler, true, rPosition);
-// 			buffer += '\n';
-// 			blocks += bytes;
+            else {
+                j += lIndex[i].first > rIndex[j].first;
+            }
 
-// 			// write output to disk
-// 			outHandler.output.write(buffer.c_str(), buffer.size());
+            // find all matching entries
+            while (j < rIndex.size() &&
+                   lIndex[i].first == rIndex[j].first) {
 
-// 			++j;
-// 			++k;
-// 		}
-// 	}
-// 	std::cout << k << std::endl;
-// 	return std::make_pair(seek, blocks / BLOCK_SIZE);
-// }
+                // move binfile stream to element
+                lRelation.binIn->input.seekg(lIndex[i].second,
+                                             lRelation.binIn->input.beg);
+                lRelation.binIn->input.seekg(lIndex[j].second,
+                                             rRelation.binIn->input.beg);
+                seek += 2;
+
+                // read tuples from binary file
+                std::vector<std::string> lTuple (lRelation.readTuple());
+                const std::vector<std::string> rTuple (rRelation.readTuple(true, rPosition));
+
+                // merge tuples for join
+                lTuple.insert(lTuple.end(), rTuple.begin(), rTuple.end());
+                outRelation.writeTuple(lTuple);
+                blocks += bytes;
+
+                ++j;
+            }
+        }
+    }
+
+    else {
+
+        // read tuples from binary file
+        std::vector<std::string> lTuple (lRelation.readTuple());
+        std::vector<std::string> rTuple (rRelation.readTuple());
+        blocks += rSize + lSize;
+
+        while (lRelation.binIn->input.peek() != EOF &&
+               rRelation.binIn->input.peek() != EOF) {
+
+            if (lTuple[lPosition].compare(rTuple[rPosition]) < 0) {
+                lTuple = lRelation.readTuple();
+                ++seek;
+                blocks += lSize;
+            }
+
+            else if (lTuple[lPosition].compare(rTuple[rPosition]) > 0) {
+                rTuple = rRelation.readTuple();
+                ++seek;
+                blocks += rSize;
+            }
+
+            // find all matching tuples
+            while (lRelation.binIn->input.peek() != EOF &&
+                   rRelation.binIn->input.peek() != EOF &&
+                   !lTuple[lPosition].compare(rTuple[rPosition])) {
+
+                // merge tuples for join
+                std::vector<std::string> oTuple (lTuple);
+                for (unsigned i = 0; i < rTuple.size(); ++i) {
+                    if (i != rPosition) {
+                        oTuple.push_back(rTuple[i]);
+                    }
+                }
+
+                // write output tuple and proceed algorithm
+                outRelation.writeTuple(oTuple);
+                rTuple = rRelation.readTuple();
+                blocks += oSize + rSize;
+                ++seek;
+            }
+        }
+    }
+
+  // clean file pointers
+  lRelation.resetStream();
+  rRelation.resetStream();
+
+	return std::make_pair(seek, blocks / BLOCK_SIZE);
+}
 
 
 // std::pair<unsigned, unsigned>
@@ -177,7 +242,7 @@ bruteForceJoin (Relation& lRelation, Relation& rRelation,
 // 	}
 
 // 	return std::make_pair(seek, blocks / BLOCK_SIZE);
-// }
+//}
 
 unsigned computeTime(const std::pair<unsigned, unsigned> values) {
 	return 10 * values.first + values.second;

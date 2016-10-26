@@ -264,6 +264,11 @@ unsigned Relation::getAttSize(unsigned position) {
     }
 }
 
+void Relation::resetStream() {
+    binIn->input.seekg(0, binIn->output.beg);
+    binOut->output.seekp(0, binIn->output.beg);
+}
+
 bool Relation::loadOrBuildIndex(unsigned attrPos){
     if (indexExists) {
         delete index;

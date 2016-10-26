@@ -137,6 +137,8 @@ public:
 
   vector<short> excludeColumn(size_t i);
 
+  void resetStream();
+
   unsigned getAttSize(unsigned position);
 
   /**
