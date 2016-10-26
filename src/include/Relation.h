@@ -38,9 +38,14 @@ private: // properties
 
   bool isLoaded;
 
+  //Quick reference to some Index of this Relation
+  DenseIndex* index;
+  bool index_bound;
+  unsigned short index_attr_pos;
+
 public:
-  vector<DenseIndex> denseIndex;
-  vector<BplusIndex> bplusIndex;
+  //vector<DenseIndex> denseIndex;
+  //vector<BplusIndex> bplusIndex;
 
   Relation(const std::string& schemaName, const std::vector<short>& tupleFormat);
 
@@ -134,6 +139,12 @@ public:
   vector<short> excludeColumn(size_t i);
 
   unsigned getAttSize(unsigned position);
+
+  bool bindIndex(Index* i);
+
+  bool unbindIndex();
+
+  bool hasIndexBound();
 
 private: // methods
   void setIsLoaded(bool new_var) { isLoaded = new_var; }

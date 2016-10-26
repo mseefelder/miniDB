@@ -166,6 +166,8 @@ void Relation::initAttributes() {
     setIsLoaded(false);
     setNumAttr(0);
     setNumTuples(0);
+    index = 0;
+    index_bound = false;
 }
 
 
@@ -256,4 +258,22 @@ unsigned Relation::getAttSize(unsigned position) {
         default:
             return 256;
     }
+}
+
+bool Relation::bindIndex(Index* i) {
+    bool previousState = indexBound;
+    index = i;
+    indexBound = true;
+    return previousState;
+}
+
+bool Relation::unbindIndex() {
+    bool previousState = indexBound;
+    index = 0;
+    indexBound = false;
+    return previousState;
+}
+
+bool Relation::hasIndexBound(){
+    return indexBound;
 }
