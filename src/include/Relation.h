@@ -22,7 +22,7 @@ using namespace std;
 class Relation {
 
 private: // properties
-  char name[12];
+  char name[30];
   string nameStr;
   unsigned short numAttr;
   unsigned int numTuples;
@@ -126,10 +126,9 @@ public:
 
   void initAttributes();
 
-  string readRegistry(BinFileHandler &binFile, bool ignore = false,
-                      unsigned att = 0) const;
+  std::vector<string> readTuple (bool ignore, unsigned att) const;
 
-  void writeRegistry(BinFileHandler &binFile, string buffer);
+  void writeTuple (std::vector<std::string> buffer);
 
   vector<short> excludeColumn(size_t i);
 

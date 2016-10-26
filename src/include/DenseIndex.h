@@ -1,4 +1,3 @@
-
 #ifndef DENSEINDEX_H
 #define DENSEINDEX_H
 

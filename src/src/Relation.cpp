@@ -189,53 +189,49 @@ Relation::Relation (const std::string& schemaName, const std::vector<short>& lFo
 }
 
 
-string Relation::readRegistry (BinFileHandler & binFile, bool ignore, unsigned att) const {
+std::vector<string>
+Relation::readTuple (bool ignore, unsigned att) const {
 
-    string buffer;
+    std::vector<std::string> buffer;
 
-    binFile.input.seekg(HEADER_SIZE, binFile.input.cur); 
+    binIn.input.seekg(HEADER_SIZE, binIn.input.cur);
     for (unsigned i = 0; i < numAttr; i++){
 
         switch(tupleFormat[i]){
             case INT4: {
-                int attr4;
-                binFile.input.read ((char*)&attr4, sizeof(attr4));
+                char attr4 [4];
+                binIn.input.read (attr4, sizeof(attr4));
                 if (!(ignore && i == att))
-					buffer += attr4;
+                    buffer.push_back(attr4);
                 break;
             }
             case CHAR32: {
-                char attr32[32];
-                binFile.input.read (attr32, sizeof(attr32));
+                char attr32 [32];
+                binIn.input.read (attr32, sizeof(attr32));
                 if (!(ignore && i == att))
-					buffer += attr32;
+                    buffer.push_back(attr32);
                 break;
             }
             case CHAR256:{
-                char attr256[256];
-                binFile.input.read (attr256, sizeof(attr256));
+                char attr256 [256];
+                binIn.input.read (attr256, sizeof(attr256));
                 if (!(ignore && i == att))
-					buffer += attr256;
+                    buffer.push_back(attr256);
                 break;
             }
         }
-        buffer += " ";
     }
     return buffer;
 }
 
-void Relation::writeRegistry (BinFileHandler & binFile, std::string buffer) {
-
-    unsigned i = 0;
-
-    for (const auto &c: buffer) 
-        std::cout << c << std::endl;
-    for (const auto &t : tupleFormat) {
-        std::string sub (buffer.substr(i,t));
-        std::cout << sub << std::endl;
-        binFile.writeStrongType(sub, t);
-        i += t;
-    }
+void Relation::writeTuple (std::vector<std::string> buffer) {
+    header tHeader;
+    strcpy(tHeader.relName, name);
+    tHeader.nTuple = ++numTuples;
+    tHeader.timeStamp = time(nullptr);
+    binFile.writeHeader(tHeader);
+    for (unsigned i = 0; i < tupleFormat.size(); ++i)
+        binOut.writeStrongType(buffer[i], tupleFormat[i]);
 }
 
 vector<short> Relation::excludeColumn(size_t i) {
