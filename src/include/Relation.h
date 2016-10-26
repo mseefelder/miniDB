@@ -37,6 +37,9 @@ private: // properties
   // same for all tuples in relations present in this DBMS.
 
   bool isLoaded;
+  
+  BinFileHandler* binIn;
+  BinFileHandler* binOut;
 
   //Quick reference to some Index of this Relation
   DenseIndex* index;

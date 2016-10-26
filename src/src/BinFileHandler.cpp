@@ -13,7 +13,7 @@ BinFileHandler::BinFileHandler (const std::string& binFilename, bool readOnly) {
         setOpened(input.good());
     }
     else { // write-only
-        output.open(binFilename, std::ofstream::out | std::ofstream::binary);
+        output.open(binFilename, std::ofstream::out | std::ofstream::binary | std::ofstream::app);
         setOpened(output.good());
     }
 }
