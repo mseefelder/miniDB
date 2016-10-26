@@ -22,14 +22,7 @@ int main()
     }
     else cout << "Base de dados binaria pre-existente no disco foi encontrada. O carregamento e desnecessario." << endl;
 
-    cout << "Instanciando DenseIndex" << endl;
-    DenseIndex denseCidade(Cidade.getBinFilename(), Cidade.getNumTuples(), 1, Cidade.getTupleSize()); //for while, DenseIndex works only for the 1st attribute, considering it as a INT4
-    if (!denseCidade.load()) {
-        cout << "Construindo DenseIndex" << endl;
-        if(denseCidade.build()) cout << "DenseIndex construido e gravado em disco com sucesso";
-        else cout << "Falha na construcao ou gravacao do DenseIndex" << endl;
-    }
-    else cout << "DenseIndex pre-existente no disco foi encontrado e carregado em memoria." << endl; // denseCidade.printIndex();
+    Cidade.loadOrBuildIndex(1);
 
     string relationNameNome = "Nome";
     Relation Nome(relationNameNome, tF);
@@ -40,27 +33,20 @@ int main()
     }
     else cout << "Base de dados binaria pre-existente no disco foi encontrada. O carregamento e desnecessario." << endl;
 
-    cout << "Instanciando DenseIndex" << endl;
-    DenseIndex denseNome(Nome.getBinFilename(), Nome.getNumTuples(), 1, Nome.getTupleSize()); //for while, DenseIndex works only for the 1st attribute, considering it as a INT4
-    if (!denseNome.load()) {
-        cout << "Construindo DenseIndex" << endl;
-        if(denseNome.build()) cout << "DenseIndex construido e gravado em disco com sucesso" << endl;
-        else cout << "Falha na construcao ou gravacao do DenseIndex" << endl;
-    }
-    else cout << "DenseIndex pre-existente no disco foi encontrado e carregado em memoria." << endl; // denseNome.printIndex();
+    Nome.loadOrBuildIndex(1);
 
-    BinFileHandler bfh1 (denseCidade.getRelBinFilename(), true);
-    BinFileHandler bfh2 (denseNome.getRelBinFilename(), true);
+    BinFileHandler bfh1 (Cidade.getIndex()->getRelBinFilename(), true);
+    BinFileHandler bfh2 (Nome.getIndex()->getRelBinFilename(), true);
     BinFileHandler bfh3 ("bfJoin.bin",false);
     BinFileHandler bfh4 ("msJoin.bin",false);
     BinFileHandler bfh5 ("hsJoin.bin",false);
 
     std::cout << std::endl << "bruteForceJoin" << std::endl;
-    pair<unsigned, unsigned> bFJoin = bruteForceJoin(&denseCidade, &denseNome, bfh1, bfh2, bfh3, Cidade, Nome, 0);
+    pair<unsigned, unsigned> bFJoin = bruteForceJoin(Cidade.getIndex(), Nome.getIndex(), bfh1, bfh2, bfh3, Cidade, Nome, 0);
     std::cout << std::endl << "mergeSortJoin" << std::endl;
-    pair<unsigned, unsigned> mSJoin = mergeSortJoin(&denseCidade, &denseNome, bfh1, bfh2, bfh4, Cidade, Nome, 0);
+    pair<unsigned, unsigned> mSJoin = mergeSortJoin(Cidade.getIndex(), Nome.getIndex(), bfh1, bfh2, bfh4, Cidade, Nome, 0);
     std::cout << std::endl << "hashJoin" << std::endl;
-    pair<unsigned, unsigned> hsJoin = hashJoin(&denseCidade, &denseNome, bfh1, bfh2, bfh5, Cidade, Nome, 0);
+    pair<unsigned, unsigned> hsJoin = hashJoin(Cidade.getIndex(), Nome.getIndex(), bfh1, bfh2, bfh5, Cidade, Nome, 0);
 
     std::cout << computeTime(bFJoin) << std::endl;
     std::cout << computeTime(mSJoin) << std::endl;

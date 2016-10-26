@@ -1,5 +1,7 @@
 #include "BplusIndex.h"
 
+#define BLOCK_SIZE 4096
+
 BplusIndex::BplusIndex (const std::string& relName, unsigned int numT, unsigned short attrK, unsigned short tSize) {
 	relBinFilename = relName;
     attrKey = attrK;
@@ -10,16 +12,27 @@ BplusIndex::BplusIndex (const std::string& relName, unsigned int numT, unsigned 
 
 BplusIndex::~BplusIndex () { }
 
-bool BplusIndex::build(){
-	BinFileHandler relFile(relBinFilename, true);
+std::pair<bool, std::pair<unsigned, unsigned>
+BplusIndex::build(){
+	
+    BinFileHandler relFile(relBinFilename, true);
+    
+    unsigned seek = 0;
+    unsigned blocks = 0;
 
     if (numTuples == 0) return false;
 
     unsigned int i = 0;
     while (i < numTuples){
         relFile.input.seekg(i*tupleSize + HEADER_SIZE, relFile.input.beg); //PT_BR: percorrendo a tabela, saltando registro a registro direto para o 1° atributo (considerado um inteiro que guarda chave primária K)
+        seek++;
         int tKey;
+
+        //read [right parameter] chars from stream and stores
+        //in [left parameter]
         relFile.input.read((char*)&tKey, sizeof(tKey));
+
+        blocks += sizeof(tKey);
 
         unsigned int tupleBegByte = static_cast<unsigned int>(relFile.input.tellg())-(INT4+HEADER_SIZE);
 
@@ -27,8 +40,11 @@ bool BplusIndex::build(){
         index->insert((to_string(tKey)).c_str(), tupleBegByte);
         i++;
     }
+
+    blocks /= BLOCK_SIZE;
+
     relFile.close();
-    return true;
+    return std::make_pair(true, std::make_pair(seek, blocks));
 }
 
 bool BplusIndex::writeOnDisk(){

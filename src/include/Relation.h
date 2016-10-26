@@ -37,10 +37,15 @@ private: // properties
   // same for all tuples in relations present in this DBMS.
 
   bool isLoaded;
+  
+  BinFileHandler* binIn;
+  BinFileHandler* binOut;
+
+  //Quick reference to some Index of this Relation
+  DenseIndex* index;
+  bool indexExists;
 
 public:
-  vector<DenseIndex> denseIndex;
-  vector<BplusIndex> bplusIndex;
 
   Relation(const std::string& schemaName, const std::vector<short>& tupleFormat);
 
@@ -133,6 +138,22 @@ public:
   vector<short> excludeColumn(size_t i);
 
   unsigned getAttSize(unsigned position);
+
+  /**
+   * Checks if index exists for desired attribute
+   * @param attrPos attribute position
+   * @return boolean indicating whether exists or not
+   */
+  bool hasIndex(unsigned attrPos);
+
+  /**
+   * Loads or builds DenseIndex for attribute
+   * @param attrPos attribute position
+   * @return true if loaded from disk, false if built index
+   */
+  bool loadOrBuildIndex(unsigned attrPos);
+
+  DenseIndex* getIndex();
 
 private: // methods
   void setIsLoaded(bool new_var) { isLoaded = new_var; }

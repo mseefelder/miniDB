@@ -43,7 +43,6 @@ public:
    */
   virtual pair<vector<unsigned int>, bool> getRangeTuple(int a, int b) = 0;
 
-  virtual bool build() = 0;
 
   virtual bool writeOnDisk() = 0;
 
@@ -75,6 +74,8 @@ public:
   unsigned int getNumTuples() const { return numTuples; }
 
   void setNumTuples(unsigned int new_var) { numTuples = new_var; }
+
+  unsigned short getAttrPos() { return attrKey; }
 };
 
 #endif // INDEX_H
