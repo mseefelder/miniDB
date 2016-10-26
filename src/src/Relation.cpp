@@ -25,11 +25,13 @@ Relation::~Relation () {
 
 bool Relation::load (const std::string& csvFilename, char delimiter) {
     ifstream csvFile(csvFilename);
-
+	
     header tHeader;
     strcpy(tHeader.relName, name);
     string line;
     unsigned int lineCounter = 0;
+
+	if (!csvFile.good()) return false;
 
     while(csvFile.good()) {
         getline(csvFile, line);
@@ -62,9 +64,10 @@ bool Relation::load (const std::string& csvFilename, char delimiter) {
         }
    }
    csvFile.close();
+   binOut->output.flush();
    setNumTuples(lineCounter);
    delete binIn;
-   binIn = new BinFileHandler(binFilename, true); 
+   binIn = new BinFileHandler(binFilename, true);
 }
 
 bool Relation::open(){
@@ -191,6 +194,7 @@ Relation::Relation (const std::string& schemaName, const std::vector<short>& lFo
     unsigned short sizeBytes = 0;
     for(auto i: tupleFormat) sizeBytes += i;
     setTupleSize(sizeBytes);
+    binOut = new BinFileHandler(binFilename, false);
 }
 
 
@@ -237,6 +241,7 @@ void Relation::writeTuple (std::vector<std::string> buffer) {
     binOut->writeHeader(tHeader);
     for (unsigned i = 0; i < tupleFormat.size(); ++i)
         binOut->writeStrongType(buffer[i], tupleFormat[i]);
+    binOut->output.flush();
 }
 
 vector<short> Relation::excludeColumn(size_t i) {

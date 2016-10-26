@@ -35,11 +35,11 @@ int main()
 
     Nome.loadOrBuildIndex(1);
 
-    BinFileHandler bfh1 (Cidade.getIndex()->getRelBinFilename(), true);
-    BinFileHandler bfh2 (Nome.getIndex()->getRelBinFilename(), true);
-    BinFileHandler bfh3 ("bfJoin.bin",false);
-    BinFileHandler bfh4 ("msJoin.bin",false);
-    BinFileHandler bfh5 ("hsJoin.bin",false);
+    //BinFileHandler bfh1 (Cidade.getIndex()->getRelBinFilename(), true);
+    //BinFileHandler bfh2 (Nome.getIndex()->getRelBinFilename(), true);
+    //BinFileHandler bfh3 ("bfJoin.bin",false);
+    //BinFileHandler bfh4 ("msJoin.bin",false);
+    //BinFileHandler bfh5 ("hsJoin.bin",false);
 
     std::cout << std::endl << "bruteForceJoin" << std::endl;
     pair<unsigned, unsigned> bFJoin = bruteForceJoin(Cidade, Nome, 0, 0, true);

@@ -21,30 +21,31 @@ bruteForceJoin (Relation& lRelation, Relation& rRelation,
 	Relation outRelation (outName, lRelation.getTupleFormat(),
                         rRelation.getTupleFormat(), rPosition);
 
-  if (useIndex) {
 
+
+  if (useIndex) {
       if (!(rRelation.hasIndex(rPosition + 1) && lRelation.hasIndex(lPosition + 1))) {
               std::cout << "No index strutcture for the desired attributes!" << std::endl;
               return std::make_pair (0,0);
           }
-
       for (const auto & lElement: lRelation.getIndex()->index) {
           for (const auto & rElement: rRelation.getIndex()->index) {
               if (lElement.first == rElement.first) {
-
                   // move binfile stream to element
                   lRelation.binIn->input.seekg(lElement.second,
                                               lRelation.binIn->input.beg);
                   lRelation.binIn->input.seekg(rElement.second,
                                               rRelation.binIn->input.beg);
                   seek += 2;
-
                   // read tuples from binary file
                   std::vector<std::string> lTuple (lRelation.readTuple());
                   const std::vector<std::string> rTuple (rRelation.readTuple(true, rPosition));
 
                   // merge tuples for join
                   lTuple.insert(lTuple.end(), rTuple.begin(), rTuple.end());
+
+                  ///*DEBUG*/cout << " checgou aqui 4.5 "<< *(lTuple.begin()) << " " << *(lTuple.end()) << endl;		  
+
                   outRelation.writeTuple(lTuple);
 
                   blocks += bytes;
