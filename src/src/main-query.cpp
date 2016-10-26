@@ -11,7 +11,7 @@
 using namespace std;
 
 int main(int argc, char *argv[]) {
-    vector<short> tF {INT4, CHAR32};
+    vector<short> tF {INT4, CHAR256, CHAR32};
     string relationName = "IES";
     Relation IES(relationName, tF);
     if(!IES.open()){
@@ -21,7 +21,9 @@ int main(int argc, char *argv[]) {
     }
     else cout << "Base de dados binaria pre-existente no disco foi encontrada. O carregamento e desnecessario." << endl;
 
-
+    
+//    if(IES.load("../csv/lista_ies.csv",'|')) cout << "Carregamento de dados efetuado com sucesso!" << endl;
+        
     // DENSE INDEX CREATION
     /*DEBUG*/ //cout << IES.getName() << " " << IES.getNumAttr() << " " << IES.getTupleSize() <<  " " << IES.getNumTuples() << IES.getTupleFormat() << endl;
 

@@ -43,7 +43,6 @@ public:
    */
   virtual pair<vector<unsigned int>, bool> getRangeTuple(int a, int b) = 0;
 
-  virtual bool build() = 0;
 
   virtual bool writeOnDisk() = 0;
 

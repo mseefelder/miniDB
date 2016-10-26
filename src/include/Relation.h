@@ -37,10 +37,13 @@ private: // properties
   // same for all tuples in relations present in this DBMS.
 
   bool isLoaded;
+  
+  BinFileHandler* binIn;
+  BinFileHandler* binOut;
 
 public:
-  vector<DenseIndex> denseIndex;
-  vector<BplusIndex> bplusIndex;
+  //vector<Index> denseIndex;
+  //vector<BplusIndex> bplusIndex;
 
   Relation(const std::string& schemaName, const std::vector<short>& tupleFormat);
 
