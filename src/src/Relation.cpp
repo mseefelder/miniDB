@@ -13,7 +13,11 @@ Relation::Relation (const std::string& schemaName, const std::vector<short>& tup
     setTupleSize(sizeBytes);
 }
 
-Relation::~Relation () {}
+Relation::~Relation () {
+    if (indexExists) {
+        delete index;
+    }
+}
 
 bool Relation::load (const std::string& csvFilename, char delimiter) {
     ifstream csvFile(csvFilename);
@@ -167,7 +171,7 @@ void Relation::initAttributes() {
     setNumAttr(0);
     setNumTuples(0);
     index = 0;
-    index_bound = false;
+    indexExists = false;
 }
 
 
@@ -260,20 +264,32 @@ unsigned Relation::getAttSize(unsigned position) {
     }
 }
 
-bool Relation::bindIndex(Index* i) {
-    bool previousState = indexBound;
-    index = i;
-    indexBound = true;
-    return previousState;
+bool Relation::loadOrBuildIndex(unsigned attrPos){
+    if (indexExists) {
+        delete index;
+    }
+    bool loaded = false;
+    index = new DenseIndex(binFilename, numTuples, attrPos, tupleSize); //for while, DenseIndex works only for the 1st attribute, considering it as a INT4
+    if (!index->load()) {
+      cout << "Construindo DenseIndex" << endl;
+      if(index->build()) cout << "DenseIndex construido e gravado em disco com sucesso";
+      else cout << "Falha na construcao ou gravacao do DenseIndex";
+    }
+    else {
+        loaded = true;
+        cout << "DenseIndex pre-existente no disco foi encontrado e carregado em memoria." << endl; // index.printIndex();
+    }
+
+    return loaded;
 }
 
-bool Relation::unbindIndex() {
-    bool previousState = indexBound;
-    index = 0;
-    indexBound = false;
-    return previousState;
+bool Relation::hasIndex(unsigned &attrPos){
+    if (indexExists) {
+        attrPos = index->getAttrPos();
+    }
+    return indexExists;
 }
 
-bool Relation::hasIndexBound(){
-    return indexBound;
+DenseIndex* Relation::getIndex(){
+    return index;
 }

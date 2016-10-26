@@ -75,6 +75,8 @@ public:
   unsigned int getNumTuples() const { return numTuples; }
 
   void setNumTuples(unsigned int new_var) { numTuples = new_var; }
+
+  unsigned short getAttrPos() { return attrKey; }
 };
 
 #endif // INDEX_H

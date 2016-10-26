@@ -40,12 +40,9 @@ private: // properties
 
   //Quick reference to some Index of this Relation
   DenseIndex* index;
-  bool index_bound;
-  unsigned short index_attr_pos;
+  bool indexExists;
 
 public:
-  //vector<DenseIndex> denseIndex;
-  //vector<BplusIndex> bplusIndex;
 
   Relation(const std::string& schemaName, const std::vector<short>& tupleFormat);
 
@@ -140,11 +137,21 @@ public:
 
   unsigned getAttSize(unsigned position);
 
-  bool bindIndex(Index* i);
+  /**
+   * Checks if index exists
+   * @param attrPos value is updated to attribute position if it exists
+   * @return boolean indicating whether exists or not
+   */
+  bool hasIndex(unsigned &attrPos);
 
-  bool unbindIndex();
+  /**
+   * Loads or builds DenseIndex for attribute
+   * @param attrPos attribute position
+   * @return true if loaded from disk, false if built index
+   */
+  bool loadOrBuildIndex(unsigned attrPos);
 
-  bool hasIndexBound();
+  DenseIndex* getIndex();
 
 private: // methods
   void setIsLoaded(bool new_var) { isLoaded = new_var; }
