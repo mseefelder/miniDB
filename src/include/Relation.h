@@ -138,11 +138,11 @@ public:
   unsigned getAttSize(unsigned position);
 
   /**
-   * Checks if index exists
-   * @param attrPos value is updated to attribute position if it exists
+   * Checks if index exists for desired attribute
+   * @param attrPos attribute position
    * @return boolean indicating whether exists or not
    */
-  bool hasIndex(unsigned &attrPos);
+  bool hasIndex(unsigned attrPos);
 
   /**
    * Loads or builds DenseIndex for attribute

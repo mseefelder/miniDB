@@ -283,11 +283,8 @@ bool Relation::loadOrBuildIndex(unsigned attrPos){
     return loaded;
 }
 
-bool Relation::hasIndex(unsigned &attrPos){
-    if (indexExists) {
-        attrPos = index->getAttrPos();
-    }
-    return indexExists;
+bool Relation::hasIndex(unsigned attrPos){
+    return indexExists && (attrPos == index->getAttrPos());
 }
 
 DenseIndex* Relation::getIndex(){
