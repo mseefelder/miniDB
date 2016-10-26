@@ -60,11 +60,11 @@ add_executable(
 	$<TARGET_OBJECTS:MINIDB_LIBRARY>
 )
 
-add_executable(
-	main-query
-	"${SRC_DIR}/main-query.cpp"
-	$<TARGET_OBJECTS:MINIDB_LIBRARY>
-)
+#add_executable(
+#	main-query
+#	"${SRC_DIR}/main-query.cpp"
+#	$<TARGET_OBJECTS:MINIDB_LIBRARY>
+#)
 
 if(TEST)
 	enable_testing()

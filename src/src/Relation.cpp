@@ -19,8 +19,8 @@ Relation::~Relation () {
     if (indexExists) {
         delete index;
     }
-	delete binIn;
-    delete binOut;
+	//delete binIn;
+    //delete binOut;
 }
 
 bool Relation::load (const std::string& csvFilename, char delimiter) {
