@@ -77,6 +77,7 @@ bool Relation::open(){
     
     binIn->input.seekg(0, binIn->input.end);
     setNumTuples(binIn->input.tellg() / tupleSize);
+    resetStream();
     
     return true;
 }
@@ -97,12 +98,12 @@ bool Relation::selAttr (int K, unsigned short attrN){
                 printTuple(tupleBegByte);
             else
                 printAttr(tupleBegByte, attrN);
-            binIn->input.clear();
+            resetStream();
             return true;
         }
         i++;
     }
-    binIn->input.clear();
+    resetStream();
     return false;
 }
 
@@ -246,7 +247,7 @@ void Relation::writeTuple (std::vector<std::string> buffer) {
     binOut->writeHeader(tHeader);
     for (unsigned i = 0; i < tupleFormat.size(); ++i) {
         binOut->writeStrongType(buffer[i], tupleFormat[i]);
-        std::cout << buffer[i] << binFilename << std::endl;
+        //std::cout << buffer[i] << binFilename << std::endl;
 
     }
     binOut->output.flush();
@@ -273,7 +274,9 @@ unsigned Relation::getAttSize(unsigned position) {
 }
 
 void Relation::resetStream() {
+    binIn->input.clear();
     binIn->input.seekg(0, binIn->output.beg);
+    binOut->output.flush();
     binOut->output.seekp(0, binIn->output.beg);
 }
 

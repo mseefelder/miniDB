@@ -28,7 +28,7 @@ std::pair<unsigned, unsigned>
 unsigned computeTime(const std::pair<unsigned, unsigned> values);
 
 std::string
-generateJoinedSchemaName(const std::string &rName, const std::string &lName, 
-                               const std::string& joinType);
+generateJoinedSchemaName(const std::string &rName, const std::string &lName,
+						 const std::string &joinType, bool &useIndex);
 
 #endif // JOIN_H

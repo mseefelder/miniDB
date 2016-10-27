@@ -35,26 +35,31 @@ int main()
 
     Nome.loadOrBuildIndex(1);
 
-    //BinFileHandler bfh1 (Cidade.getIndex()->getRelBinFilename(), true);
-    //BinFileHandler bfh2 (Nome.getIndex()->getRelBinFilename(), true);
-    //BinFileHandler bfh3 ("bfJoin.bin",false);
-    //BinFileHandler bfh4 ("msJoin.bin",false);
-    //BinFileHandler bfh5 ("hsJoin.bin",false);
+    std::cout << std::endl << "bruteForceJoin without index" << std::endl;
+    pair<unsigned, unsigned> bFJoinWOI = bruteForceJoin(Cidade, Nome, 0, 0, false);
 
-    std::cout << std::endl << "bruteForceJoin" << std::endl;
-    pair<unsigned, unsigned> bFJoin = bruteForceJoin(Cidade, Nome, 0, 0, false);
-    // std::cout << std::endl << "mergeSortJoin" << std::endl;
 
-    // std::cout << std::endl << "mergeSortJoin" << std::endl;
-    // pair<unsigned, unsigned> mSJoin = mergeSortJoin(Cidade, Nome, 0, 0, true);
+    std::cout << std::endl << "bruteForceJoin with index" << std::endl;
+    pair<unsigned, unsigned> bFJoinWI = bruteForceJoin(Cidade, Nome, 0, 0, true);
 
-    // std::cout << std::endl << "hashJoin" << std::endl;
-    // pair<unsigned, unsigned> hsJoin = hashJoin(Cidade, Nome, 0, 0, false);
+// Only when we implement relations physically ordered by key
+//    std::cout << std::endl << "mergeSortJoin" << std::endl;
+//    pair<unsigned, unsigned> mSJoinWOI = mergeSortJoin(Cidade, Nome, 0, 0, false); 
+    
+    std::cout << std::endl << "mergeSortJoin with index" << std::endl;
+    pair<unsigned, unsigned> mSJoinWI = mergeSortJoin(Cidade, Nome, 0, 0, true);
+
+    std::cout << std::endl << "hashJoin without index" << std::endl;
+    pair<unsigned, unsigned> hsJoinWOI = hashJoin(Cidade, Nome, 0, 0, false);
+
+	std::cout << std::endl << "hashJoin without index" << std::endl;
+    pair<unsigned, unsigned> hsJoinWI = hashJoin(Cidade, Nome, 0, 0, true);
+
 
     // std::cout << computeTime(bFJoin) << std::endl;
     // std::cout << computeTime(mSJoin) << std::endl;
 
-    Relation joinRelation("joinOut", Cidade.getTupleFormat(), Nome.getTupleFormat(), 0);
+    //Relation joinRelation("joinOut", Cidade.getTupleFormat(), Nome.getTupleFormat(), 0);
 
     return 0;
 }
