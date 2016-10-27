@@ -208,10 +208,15 @@ Relation::readTuple (const bool &ignore, const unsigned &att) const {
 
         switch(tupleFormat[i]){
             case INT4: {
-                char attr4 [4];
-                binIn->input.read (attr4, sizeof(attr4));
+				//char [4] doesnt work here with a vector of strings. 'cause when push_back,
+				// the implicitly constructed string would follow the ascii table for every byte,
+				//but in the ascii table, the bytes of a integer has another meanings.
+				// So we would have a malformed (0) string to be written.
+				//Anyway, this will be corrected in writeStrongType that realizes the respective datatypes conversions.
+                int attr4; 
+                binIn->input.read ((char*)&attr4, sizeof(attr4));
                 if (!(ignore && i == att))
-                    buffer.push_back(attr4);
+                    buffer.push_back(to_string(attr4));
                 break;
             }
             case CHAR32: {
