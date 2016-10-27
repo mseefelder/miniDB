@@ -35,31 +35,206 @@ int main()
 
     Nome.loadOrBuildIndex(1);
 
-    std::cout << std::endl << "bruteForceJoin without index" << std::endl;
-    pair<unsigned, unsigned> bFJoinWOI = bruteForceJoin(Cidade, Nome, 0, 0, false);
+    std::cout << "Testando metodos de join." << std::endl << std::endl;
 
-
-    std::cout << std::endl << "bruteForceJoin with index" << std::endl;
-    pair<unsigned, unsigned> bFJoinWI = bruteForceJoin(Cidade, Nome, 0, 0, true);
-
-// Only when we implement relations physically ordered by key
-//    std::cout << std::endl << "mergeSortJoin" << std::endl;
-//    pair<unsigned, unsigned> mSJoinWOI = mergeSortJoin(Cidade, Nome, 0, 0, false); 
+    // keys with keys ---------------------------------------------------------
     
-    std::cout << std::endl << "mergeSortJoin with index" << std::endl;
-    pair<unsigned, unsigned> mSJoinWI = mergeSortJoin(Cidade, Nome, 0, 0, true);
+    std::cout << "---------------------------------------------------" << std::endl;
+    std::cout << " Chaves primarias com chaves estrangeiras." << std::endl;
+    std::cout << "---------------------------------------------------" << std::endl << std::endl;
 
-    std::cout << std::endl << "hashJoin without index" << std::endl;
-    pair<unsigned, unsigned> hsJoinWOI = hashJoin(Cidade, Nome, 0, 0, false);
+    //----using index
 
-	std::cout << std::endl << "hashJoin without index" << std::endl;
-    pair<unsigned, unsigned> hsJoinWI = hashJoin(Cidade, Nome, 0, 0, true);
+    std::cout << "***************************************************" << std::endl;
+    std::cout << " Usando indices existentes." << std::endl;
+    std::cout << "***************************************************" << std::endl;
+    std::pair<unsigned, unsigned> bFJoinWI = bruteForceJoin(Cidade, Nome, 0, 0, true);
+    std::pair<unsigned, unsigned> mSJoinWI = mergeSortJoin(Cidade, Nome, 0, 0, true);
+    std::pair<unsigned, unsigned> hsJoinWI = hashJoin(Cidade, Nome, 0, 0, true);
+
+    std::cout << "Forca bruta " << std::endl;
+    std::cout << "Tempo = " << computeTime(bFJoinWI) << std::endl; 
+    std::cout << "Merge Sort Join" << std::endl;
+    std::cout << "Tempo = " << computeTime(mSJoinWI) << std::endl;
+    std::cout << "Hash Join" << std::endl;
+    std::cout << "Tempo = " << computeTime(hsJoinWI) << std::endl;
+
+    //----creating index
+
+    std::cout << "***************************************************" << std::endl;
+    std::cout << " Criando indices." << std::endl;
+    std::cout << "***************************************************" << std::endl;
+
+    DenseIndex *dRightRelation = new DenseIndex(Cidade.getBinFilename(),
+                                               Cidade.getNumTuples(), 
+                                               0, 
+                                               Cidade.getTupleSize());
+    DenseIndex *dLeftRelation = new DenseIndex(Nome.getBinFilename(),
+                                              Nome.getNumTuples(), 
+                                              0, 
+                                              Nome.getTupleSize());
+
+    auto rPair = dRightRelation->build();
+    auto lPair = dLeftRelation->build();
+
+    unsigned indexTime = + computeTime(rPair.second) + computeTime(lPair.second);
+
+    std::cout << "Forca bruta " << std::endl;
+    std::cout << "Tempo = " << computeTime(bFJoinWI) + indexTime << std::endl; 
+    std::cout << "Merge Sort Join" << std::endl;
+    std::cout << "Tempo = " << computeTime(mSJoinWI) + indexTime << std::endl;
+    std::cout << "Hash Join" << std::endl;
+    std::cout << "Tempo = " << computeTime(hsJoinWI) + indexTime << std::endl;
+
+    //----using bin file
+
+    std::cout << "***************************************************" << std::endl;
+    std::cout << " Usando arquivo binario." << std::endl;
+    std::cout << "***************************************************" << std::endl;
+
+    std::pair<unsigned, unsigned> bFJoinWOI = bruteForceJoin(Cidade, Nome, 0, 0, false);
+    std::pair<unsigned, unsigned> mSJoinWOI = mergeSortJoin(Cidade, Nome, 0, 0, false);
+    std::pair<unsigned, unsigned> hsJoinWOI = hashJoin(Cidade, Nome, 0, 0, false);
 
 
-    // std::cout << computeTime(bFJoin) << std::endl;
-    // std::cout << computeTime(mSJoin) << std::endl;
+    std::cout << "Forca bruta " << std::endl;
+    std::cout << "Tempo = " << computeTime(bFJoinWOI) << std::endl; 
+    std::cout << "Merge Sort Join" << std::endl;
+    std::cout << "Tempo = " << computeTime(mSJoinWOI) << std::endl;
+    std::cout << "Hash Join" << std::endl;
+    std::cout << "Tempo = " << computeTime(hsJoinWOI) << std::endl;
 
-    //Relation joinRelation("joinOut", Cidade.getTupleFormat(), Nome.getTupleFormat(), 0);
+    // keys with non-keys -----------------------------------------------------
+
+   //  std::cout << "---------------------------------------------------" << std::endl;
+   //  std::cout << " Chaves primarias com atributos nao-chave." << std::endl;
+   //  std::cout << "---------------------------------------------------" << std::endl << std::endl;
+
+   //  //----using index
+
+   //  std::cout << "***************************************************" << std::endl;
+   //  std::cout << " Usando indices existentes." << std::endl;
+   //  std::cout << "***************************************************" << std::endl;
+   //  std::pair<unsigned, unsigned> bFJoinWI = bruteForceJoin(Cidade, Nome, 0, 1, true);
+   //  std::pair<unsigned, unsigned> mSJoinWI = mergeSortJoin(Cidade, Nome, 0, 1, true);
+   //  std::pair<unsigned, unsigned> hsJoinWI = hashJoin(Cidade, Nome, 0, 1, true);
+
+   //  std::cout << "Forca bruta " << std::endl;
+   //  std::cout << "Tempo = " << computeTime(bFJoinWI) << std::endl; 
+   //  std::cout << "Merge Sort Join" << std::endl;
+   //  std::cout << "Tempo = " << computeTime(mSJoinWI) << std::endl;
+   //  std::cout << "Hash Join" << std::endl;
+   //  std::cout << "Tempo = " << computeTime(hsJoinWI) << std::endl;
+
+   //  //----creating index
+
+   //  std::cout << "***************************************************" << std::endl;
+   //  std::cout << " Criando indices." << std::endl;
+   //  std::cout << "***************************************************" << std::endl;
+
+   //  DenseIndex *dRightRelation = new DenseIndex(Cidade.getBinFilename(),
+   //                                             Cidade.getNumTuples(), 
+   //                                             0, 
+   //                                             Cidade.getTupleSize());
+   //  DenseIndex *dLeftRelation = new DenseIndex(Nome.getBinFilename(),
+   //                                            Nome.getNumTuples(), 
+   //                                            0, 
+   //                                            Nome.getTupleSize());
+
+   //  auto rPair = dRightRelation->build();
+   //  auto lPair = dLeftRelation->build();
+
+   //  unsigned indexTime = + computeTime(rPair.second) + computeTime(lPair.second);
+
+   //  std::cout << "Forca bruta " << std::endl;
+   //  std::cout << "Tempo = " << computeTime(bFJoinWI) + indexTime << std::endl; 
+   //  std::cout << "Merge Sort Join" << std::endl;
+   //  std::cout << "Tempo = " << computeTime(mSJoinWI) + indexTime << std::endl;
+   //  std::cout << "Hash Join" << std::endl;
+   //  std::cout << "Tempo = " << computeTime(hsJoinWI) + indexTime << std::endl;
+
+   //  //----using bin file
+
+   //  std::cout << "***************************************************" << std::endl;
+   //  std::cout << " Usando arquivo binario." << std::endl;
+   //  std::cout << "***************************************************" << std::endl;
+
+   //  std::pair<unsigned, unsigned> bFJoinWOI = bruteForceJoin(Cidade, Nome, 0, 0, false);
+   //  std::pair<unsigned, unsigned> mSJoinWOI = mergeSortJoin(Cidade, Nome, 0, 0, false);
+   //  std::pair<unsigned, unsigned> hsJoinWOI = hashJoin(Cidade, Nome, 0, 0, false);
+
+
+   //  std::cout << "Forca bruta " << std::endl;
+   //  std::cout << "Tempo = " << computeTime(bFJoinWOI) << std::endl; 
+   //  std::cout << "Merge Sort Join" << std::endl;
+   //  std::cout << "Tempo = " << computeTime(mSJoinWOI) << std::endl;
+   //  std::cout << "Hash Join" << std::endl;
+   //  std::cout << "Tempo = " << computeTime(hsJoinWOI) << std::endl;
+
+   //  std::cout << "---------------------------------------------------" << std::endl;
+   //  std::cout << " Atributos nao-chave com atributos nao-chave." << std::endl;
+   //  std::cout << "---------------------------------------------------" << std::endl << std::endl;
+
+   // //----using index
+
+   //  std::cout << "***************************************************" << std::endl;
+   //  std::cout << " Usando indices existentes." << std::endl;
+   //  std::cout << "***************************************************" << std::endl;
+   //  std::pair<unsigned, unsigned> bFJoinWI = bruteForceJoin(Cidade, Nome, 0, 0, true);
+   //  std::pair<unsigned, unsigned> mSJoinWI = mergeSortJoin(Cidade, Nome, 0, 0, true);
+   //  std::pair<unsigned, unsigned> hsJoinWI = hashJoin(Cidade, Nome, 0, 0, true);
+
+   //  std::cout << "Forca bruta " << std::endl;
+   //  std::cout << "Tempo = " << computeTime(bFJoinWI) << std::endl; 
+   //  std::cout << "Merge Sort Join" << std::endl;
+   //  std::cout << "Tempo = " << computeTime(mSJoinWI) << std::endl;
+   //  std::cout << "Hash Join" << std::endl;
+   //  std::cout << "Tempo = " << computeTime(hsJoinWI) << std::endl;
+
+   //  //----creating index
+
+   //  std::cout << "***************************************************" << std::endl;
+   //  std::cout << " Criando indices." << std::endl;
+   //  std::cout << "***************************************************" << std::endl;
+
+   //  DenseIndex *dRightRelation = new DenseIndex(Cidade.getBinFilename(),
+   //                                             Cidade.getNumTuples(), 
+   //                                             0, 
+   //                                             Cidade.getTupleSize());
+   //  DenseIndex *dLeftRelation = new DenseIndex(Nome.getBinFilename(),
+   //                                            Nome.getNumTuples(), 
+   //                                            0, 
+   //                                            Nome.getTupleSize());
+
+   //  auto rPair = dRightRelation->build();
+   //  auto lPair = dLeftRelation->build();
+
+   //  unsigned indexTime = + computeTime(rPair.second) + computeTime(lPair.second);
+
+   //  std::cout << "Forca bruta " << std::endl;
+   //  std::cout << "Tempo = " << computeTime(bFJoinWI) + indexTime << std::endl; 
+   //  std::cout << "Merge Sort Join" << std::endl;
+   //  std::cout << "Tempo = " << computeTime(mSJoinWI) + indexTime << std::endl;
+   //  std::cout << "Hash Join" << std::endl;
+   //  std::cout << "Tempo = " << computeTime(hsJoinWI) + indexTime << std::endl;
+
+   //  //----using bin file
+
+   //  std::cout << "***************************************************" << std::endl;
+   //  std::cout << " Usando arquivo binario." << std::endl;
+   //  std::cout << "***************************************************" << std::endl;
+
+   //  std::pair<unsigned, unsigned> bFJoinWOI = bruteForceJoin(Cidade, Nome, 0, 0, false);
+   //  std::pair<unsigned, unsigned> mSJoinWOI = mergeSortJoin(Cidade, Nome, 0, 0, false);
+   //  std::pair<unsigned, unsigned> hsJoinWOI = hashJoin(Cidade, Nome, 0, 0, false);
+
+
+   //  std::cout << "Forca bruta " << std::endl;
+   //  std::cout << "Tempo = " << computeTime(bFJoinWOI) << std::endl; 
+   //  std::cout << "Merge Sort Join" << std::endl;
+   //  std::cout << "Tempo = " << computeTime(mSJoinWOI) << std::endl;
+   //  std::cout << "Hash Join" << std::endl;
+   //  std::cout << "Tempo = " << computeTime(hsJoinWOI) << std::endl;
 
     return 0;
 }

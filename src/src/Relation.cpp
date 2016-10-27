@@ -68,6 +68,7 @@ bool Relation::load (const std::string& csvFilename, char delimiter) {
    setNumTuples(lineCounter);
    delete binIn;
    binIn = new BinFileHandler(binFilename, true);
+   return true;
 }
 
 bool Relation::open(){
@@ -247,8 +248,6 @@ void Relation::writeTuple (std::vector<std::string> buffer) {
     binOut->writeHeader(tHeader);
     for (unsigned i = 0; i < tupleFormat.size(); ++i) {
         binOut->writeStrongType(buffer[i], tupleFormat[i]);
-        //std::cout << buffer[i] << binFilename << std::endl;
-
     }
     binOut->output.flush();
 }
@@ -274,7 +273,7 @@ unsigned Relation::getAttSize(unsigned position) {
 }
 
 void Relation::resetStream() {
-    binIn->input.clear();
+//    binIn->input.clear();
     binIn->input.seekg(0, binIn->output.beg);
     binOut->output.flush();
     binOut->output.seekp(0, binIn->output.beg);
