@@ -260,9 +260,6 @@ hashJoin (Relation& lRelation, Relation& rRelation,
                 // merge tuples for join
                 lTuple.insert(lTuple.end(), rTuple.begin(), rTuple.end());
                 outRelation.writeTuple(lTuple);
-                for (const auto &i : lTuple) {
-                    std::cout << i << " " << std::endl;
-                }
                 blocks += oSize;
                 ++seek;
             }
@@ -305,9 +302,6 @@ hashJoin (Relation& lRelation, Relation& rRelation,
 
                 // merge tuples for join
                 outRelation.writeTuple(oTuple);
-                for (const auto &i : oTuple) {
-                    std::cout << i << " " << std::endl;
-                }
                 blocks += oSize;
                 ++seek;
             }
