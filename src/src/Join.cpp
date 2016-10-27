@@ -277,7 +277,7 @@ hashJoin (Relation& lRelation, Relation& rRelation,
         // partioning phase
         while (lRelation.binIn->input.peek() != EOF) {
             const std::vector<std::string> lTuple (lRelation.readTuple());
-            table.insert(std::make_pair(std::stoi(lTuple[lPosition], nullptr, 2),
+            table.insert(std::make_pair(std::stoi(lTuple[lPosition]),
                                         lTuple));
             blocks += lSize;
             ++seek;
