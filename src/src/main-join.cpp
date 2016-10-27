@@ -49,7 +49,7 @@ int main()
     // pair<unsigned, unsigned> mSJoin = mergeSortJoin(Cidade, Nome, 0, 0, true);
     
     std::cout << std::endl << "hashJoin" << std::endl;
-    pair<unsigned, unsigned> hsJoin = hashJoin(Cidade, Nome, 0, 0, true);
+    pair<unsigned, unsigned> hsJoin = hashJoin(Cidade, Nome, 0, 0, false);
 
     // std::cout << computeTime(bFJoin) << std::endl;
     // std::cout << computeTime(mSJoin) << std::endl;

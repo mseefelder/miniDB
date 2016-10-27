@@ -12,14 +12,15 @@ bruteForceJoin (Relation& lRelation, Relation& rRelation,
 
 	unsigned seek = 0, blocks = 0;
 
-	const unsigned bytes = lRelation.getTupleSize() +
-		rRelation.getTupleSize() - rRelation.getAttSize(rPosition);
-
   std::string outName = generateJoinedSchemaName (lRelation.getName(),
                                                   rRelation.getName(), "BF");
 
 	Relation outRelation (outName, lRelation.getTupleFormat(),
                         rRelation.getTupleFormat(), rPosition);
+
+  const unsigned rSize = rRelation.getTupleSize();
+  const unsigned lSize = lRelation.getTupleSize();
+  const unsigned oSize = outRelation.getTupleSize();
 
   if (useIndex) {
       if (!(rRelation.hasIndex(rPosition + 1) && lRelation.hasIndex(lPosition + 1))) {
@@ -31,21 +32,22 @@ bruteForceJoin (Relation& lRelation, Relation& rRelation,
           for (const auto & rElement: rRelation.getIndex()->index) {
               if (lElement.first == rElement.first) {
 
-                  // move binfile stream to element
+                  // handle binary files
                   lRelation.binIn->input.seekg(lElement.second,
-                                              lRelation.binIn->input.beg);
+                                               lRelation.binIn->input.beg);
                   rRelation.binIn->input.seekg(rElement.second,
                                               rRelation.binIn->input.beg);
-                  seek += 2;
 
-                  // read tuples from binary file
                   std::vector<std::string> lTuple (lRelation.readTuple());
                   const std::vector<std::string> rTuple (rRelation.readTuple(true, rPosition));
+
+                  blocks += lSize + rSize;
+                  seek += 2;
 
                   // merge tuples for join
                   lTuple.insert(lTuple.end(), rTuple.begin(), rTuple.end());
                   outRelation.writeTuple(lTuple);
-                  blocks += bytes;
+                  blocks += oSize;
               }
           }
       }
@@ -94,9 +96,6 @@ mergeSortJoin (Relation& lRelation, Relation& rRelation,
 
     unsigned seek = 0, blocks = 0;
 
-    const unsigned bytes = lRelation.getTupleSize() +
-        rRelation.getTupleSize() - rRelation.getAttSize(rPosition);
-
     std::string outName = generateJoinedSchemaName (lRelation.getName(),
                                                     rRelation.getName(), "MS");
 
@@ -139,12 +138,13 @@ mergeSortJoin (Relation& lRelation, Relation& rRelation,
                 // read tuples from binary file
                 std::vector<std::string> lTuple (lRelation.readTuple());
                 const std::vector<std::string> rTuple (rRelation.readTuple(true, rPosition));
+                blocks += lSize + rSize;
 
                 // merge tuples for join
                 lTuple.insert(lTuple.end(), rTuple.begin(), rTuple.end());
                 outRelation.writeTuple(lTuple);
-                blocks += bytes;
-
+                blocks += oSize;
+                ++seek;
                 ++j;
             }
         }
@@ -207,7 +207,7 @@ hashJoin (Relation& lRelation, Relation& rRelation,
           unsigned lPosition, unsigned rPosition,
           bool useIndex) {
 
-        unsigned seek = 0, blocks = 0;
+    unsigned seek = 0, blocks = 0;
 
     std::string outName = generateJoinedSchemaName (lRelation.getName(),
                                                     rRelation.getName(), "H");
@@ -219,13 +219,14 @@ hashJoin (Relation& lRelation, Relation& rRelation,
     const unsigned lSize = lRelation.getTupleSize();
     const unsigned oSize = outRelation.getTupleSize();
 
-    std::unordered_multimap<int, unsigned> table;
-
     if (useIndex) {
         if (!(rRelation.hasIndex(rPosition + 1) && lRelation.hasIndex(lPosition + 1))) {
             std::cout << "No index strutcture for the desired attributes!" << std::endl;
             return std::make_pair (0,0);
         }
+
+        // hash with index
+        std::unordered_multimap<int, unsigned> table;
 
         const auto lIndex = lRelation.getIndex()->index;
         const auto rIndex = rRelation.getIndex()->index;
@@ -263,53 +264,50 @@ hashJoin (Relation& lRelation, Relation& rRelation,
                     std::cout << i << " " << std::endl;
                 }
                 blocks += oSize;
+                ++seek;
             }
         }
     }
 
-    //     else {
+    else {
 
-    //     // read tuples from binary file
-    //     std::vector<std::string> lTuple (lRelation.readTuple());
-    //     std::vector<std::string> rTuple (rRelation.readTuple());
-    //     blocks += rSize + lSize;
+        // hash with tuple
+        std::unordered_multimap<int, std::vector<std::string> > table;
 
-    //     while (lRelation.binIn->input.peek() != EOF &&
-    //            rRelation.binIn->input.peek() != EOF) {
+        // partioning phase
+        while (lRelation.binIn->input.peek() != EOF) {
+            const std::vector<std::string> lTuple (lRelation.readTuple());
+            table.insert(std::make_pair(std::stoi(lTuple[lPosition], nullptr, 2),
+                                        lTuple));
+            blocks += lSize;
+            ++seek;
+        }
 
-    //         if (lTuple[lPosition].compare(rTuple[rPosition]) < 0) {
-    //             lTuple = lRelation.readTuple();
-    //             ++seek;
-    //             blocks += lSize;
-    //         }
+        // probing phase
+        while (rRelation.binIn->input.peek() != EOF) {
 
-    //         else if (lTuple[lPosition].compare(rTuple[rPosition]) > 0) {
-    //             rTuple = rRelation.readTuple();
-    //             ++seek;
-    //             blocks += rSize;
-    //         }
+            // find element position in table
+            const std::vector<std::string> rTuple (rRelation.readTuple());
+            blocks += rSize;
+            ++seek;
+            const size_t bucketIndex = std::hash<int>{} (std::stoi(rTuple[rPosition]));
 
-    //         // find all matching tuples
-    //         while (lRelation.binIn->input.peek() != EOF &&
-    //                rRelation.binIn->input.peek() != EOF &&
-    //                !lTuple[lPosition].compare(rTuple[rPosition])) {
+            // iterate over all matching tuples
+            for (auto localIt = table.begin(bucketIndex);
+                 localIt != table.end(bucketIndex); ++localIt) {
+                std::vector<std::string> oTuple ((*localIt).second);
 
-    //             // merge tuples for join
-    //             std::vector<std::string> oTuple (lTuple);
-    //             for (unsigned i = 0; i < rTuple.size(); ++i) {
-    //                 if (i != rPosition) {
-    //                     oTuple.push_back(rTuple[i]);
-    //                 }
-    //             }
-
-    //             // write output tuple and proceed algorithm
-    //             outRelation.writeTuple(oTuple);
-    //             rTuple = rRelation.readTuple();
-    //             blocks += oSize + rSize;
-    //             ++seek;
-    //         }
-    //     }
-    // }
+                // merge tuples for join
+                oTuple.insert(oTuple.end(), rTuple.begin(), rTuple.end());
+                outRelation.writeTuple(oTuple);
+                for (const auto &i : oTuple) {
+                    std::cout << i << " " << std::endl;
+                }
+                blocks += oSize;
+                ++seek;
+            }
+        }
+    }
 	return std::make_pair(seek, blocks / BLOCK_SIZE);
 }
 
