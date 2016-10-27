@@ -21,10 +21,9 @@ mergeSortJoin (Relation& lRelation, Relation& rRelation,
                bool useIndex);
 
 std::pair<unsigned, unsigned>
-hashJoin (DenseIndex *leftEntity, DenseIndex *rightEntity,
-               BinFileHandler& leftHandler, BinFileHandler& rightHandler,
-               BinFileHandler& outHandler, const Relation& lRelation,
-               Relation& rRelation, unsigned rPosition);
+    hashJoin (Relation& lRelation, Relation& rRelation,
+              unsigned lPosition, unsigned rPosition,
+              bool useIndex);
 
 unsigned computeTime(const std::pair<unsigned, unsigned> values);
 

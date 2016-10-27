@@ -239,8 +239,11 @@ void Relation::writeTuple (std::vector<std::string> buffer) {
     tHeader.nTuple = ++numTuples;
     tHeader.timeStamp = time(nullptr);
     binOut->writeHeader(tHeader);
-    for (unsigned i = 0; i < tupleFormat.size(); ++i)
+    for (unsigned i = 0; i < tupleFormat.size(); ++i) {
         binOut->writeStrongType(buffer[i], tupleFormat[i]);
+        std::cout << buffer[i] << binFilename << std::endl;
+
+    }
     binOut->output.flush();
 }
 
