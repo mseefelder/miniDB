@@ -272,13 +272,12 @@ hashJoin (Relation& lRelation, Relation& rRelation,
     else {
 
         // hash with tuple
-        std::unordered_multimap<int, std::vector<std::string> > table;
+        std::unordered_multimap<std::string, std::vector<std::string> > table;
 
         // partioning phase
         while (lRelation.binIn->input.peek() != EOF) {
             const std::vector<std::string> lTuple (lRelation.readTuple());
-            table.insert(std::make_pair(std::stoi(lTuple[lPosition], nullptr, 2),
-                                        lTuple));
+            table.insert(std::make_pair(lTuple[lPosition], lTuple));
             blocks += lSize;
             ++seek;
         }
@@ -290,7 +289,7 @@ hashJoin (Relation& lRelation, Relation& rRelation,
             const std::vector<std::string> rTuple (rRelation.readTuple());
             blocks += rSize;
             ++seek;
-            const size_t bucketIndex = std::hash<int>{} (std::stoi(rTuple[rPosition]));
+            const size_t bucketIndex = std::hash<string>{} (rTuple[rPosition]);
 
             // iterate over all matching tuples
             for (auto localIt = table.begin(bucketIndex);
