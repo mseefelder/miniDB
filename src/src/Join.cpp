@@ -272,12 +272,13 @@ hashJoin (Relation& lRelation, Relation& rRelation,
     else {
 
         // hash with tuple
-        std::unordered_multimap<std::string, std::vector<std::string> > table;
+        std::unordered_multimap<int, std::vector<std::string> > table;
 
         // partioning phase
         while (lRelation.binIn->input.peek() != EOF) {
             const std::vector<std::string> lTuple (lRelation.readTuple());
-            table.insert(std::make_pair(lTuple[lPosition], lTuple));
+            table.insert(std::make_pair(std::stoi(lTuple[lPosition]),
+                                        lTuple));
             blocks += lSize;
             ++seek;
         }
@@ -289,15 +290,20 @@ hashJoin (Relation& lRelation, Relation& rRelation,
             const std::vector<std::string> rTuple (rRelation.readTuple());
             blocks += rSize;
             ++seek;
-            const size_t bucketIndex = std::hash<string>{} (rTuple[rPosition]);
+            const size_t bucketIndex = std::hash<int>{} (std::stoi(rTuple[rPosition]));
 
             // iterate over all matching tuples
             for (auto localIt = table.begin(bucketIndex);
                  localIt != table.end(bucketIndex); ++localIt) {
                 std::vector<std::string> oTuple ((*localIt).second);
 
+                for (unsigned i = 0; i < rTuple.size(); ++i) {
+                    if (i != rPosition) {
+                        oTuple.push_back(rTuple[i]);
+                    }
+                }
+
                 // merge tuples for join
-                oTuple.insert(oTuple.end(), rTuple.begin(), rTuple.end());
                 outRelation.writeTuple(oTuple);
                 for (const auto &i : oTuple) {
                     std::cout << i << " " << std::endl;
