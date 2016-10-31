@@ -10,6 +10,8 @@
 
 using namespace std;
 
+/*This program executes all the requisited functionalities for ED3.*/
+
 int main()
 {
     vector<short> tF {INT4, CHAR32};
