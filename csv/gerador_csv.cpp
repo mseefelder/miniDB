@@ -168,15 +168,21 @@ fclose(arq_csv);
 
 int main()
 {
+int n1_2=0;
+int n3=0;
 
-int n = 10;
-int bigtableN = 100;
-int* cpfs = new int[n];
-int* ceps = new int[n];
+std::cout << "Entre com o numero de linhas das tabelas R1 e R2: " << std::endl;
+std::cin >> n1_2;
 
-r1(n, cpfs, ceps); // número de registros da relação1 gerados
-r2(n, cpfs); // número de registros da relação2 gerados
-r3(bigtableN, n, cpfs, ceps); // número de registros da relação3 gerados , número de registros gerados na r1
+std::cout << "Entre com o numero de linhas da tabela R3: " << std::endl;
+std::cin >> n3;
+
+int* cpfs = new int[n1_2];
+int* ceps = new int[n1_2];
+
+r1(n1_2, cpfs, ceps); // número de registros da relação1 gerados
+r2(n1_2, cpfs); // número de registros da relação2 gerados
+r3(n3, n1_2, cpfs, ceps); // número de registros da relação3 gerados , número de registros gerados na r1
 
 delete [] cpfs;
 delete [] ceps;
