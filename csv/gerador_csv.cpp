@@ -9,7 +9,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<time.h>
-#include <math.h> 
+#include <math.h>
 
 #include <tr1/functional>
 
@@ -30,7 +30,7 @@ return a;
 int digitos(int n){
 
 int contaDigitos = 0;
-  
+
        if (n == 0) contaDigitos = 1;
        else
            while (n != 0)
@@ -38,8 +38,8 @@ int contaDigitos = 0;
                contaDigitos = contaDigitos + 1;
                n = n/ 10;
            }
-       
-	 
+
+
        return contaDigitos;
 
 }
@@ -68,17 +68,17 @@ for ( int i = 0; i < str_len; i++ ) {
     novastr[i + 1] = 0x0;
 }
 
- return novastr; 
+ return novastr;
 }
 
 
 
 
-void r1(int n){
+void r1(int n, int* cpfs, int* ceps){
 //CPF - CEP
-
-int cpf=0;
-int randNumber;	
+int cpf = 0;
+int cep_int = 0;
+int randNumber;
 
 char arquivo_csv[n];
 sprintf(arquivo_csv,"r1.csv");
@@ -89,19 +89,21 @@ srand(time(NULL));
 
 	for (int i=0; i<n; i++){
 		randNumber = (rand()% 89)+10;// vai variar entre 10 e 99
-		cpf= (randNumber*n)+i;
-		
-		fprintf(arq_csv,"%d,%d\r\n", cpf, cep(cpf));
-	
-  		//std::cout << cpf <<","<< cep(cpf)<< std::endl; 
+		cpf = (randNumber*n)+i;
+		cep_int = cep(cpf);
+		fprintf(arq_csv,"%d,%d\r\n", cpf, cep_int);
+		cpfs[i] = cpf;
+		ceps[i] = cep_int;
+
+  		//std::cout << cpf <<","<< cep(cpf)<< std::endl;
 	}
 
 fclose(arq_csv);
 }
 
 
-void r2(int n){
-// CPF - Nome - Sobrenome 
+void r2(int n, int* cpfs){
+// CPF - Nome - Sobrenome
 
 int cpf=0;
 int number[10];
@@ -110,25 +112,25 @@ int randNumber;
 char arquivo_csv[n];
 sprintf(arquivo_csv,"r2.csv");
 FILE *arq_csv=fopen(arquivo_csv,"w");
-    				
+
  //std::size_t int_hash;
  //std::tr1::hash<int> hash_fn;
 
 srand(time(NULL));
 
-	
+
 	for (int i=0; i<n; i++){
 		randNumber = (rand()% 89)+10; // vai variar entre 10 e 99
-		cpf= (randNumber*n)+i;
+		cpf= cpfs[i];//(randNumber*n)+i;
 
 		fprintf(arq_csv,"%d, %s,%s\r\n", cpf,gerar_palavra(), gerar_palavra());
-   		
-  		//std::cout << cpf <<","<< gerar_palavra() << "," << gerar_palavra()<< std::endl; 
+
+  		//std::cout << cpf <<","<< gerar_palavra() << "," << gerar_palavra()<< std::endl;
 	}
 fclose(arq_csv);
 }
 
-void r3(int n, int n_cpf){
+void r3(int n, int n_cpf, int* cpfs, int* ceps){
 // id - CPF - Preço - CEP
 
 char arquivo_csv[n];
@@ -139,26 +141,24 @@ int id=0;
 double preco=0;
 int cpf=0; // tem que ler no arquivo
 
+
 int number[10];
 int randNumber;
 int digitos_cpf= digitos(n_cpf)+1;
- 
-				
-
 
 srand(time(NULL));
 
 
 	for (int i=0; i<n; i++){
-		randNumber = (rand()% 89)+10;// vai variar entre 10 e 99
-		id= (randNumber*n)+i;
+		randNumber = rand()%n_cpf;//(rand()% 89)+10;// vai variar entre 10 e 99
+		id= i;//(randNumber*n)+i;
 		preco = (rand()% 250);
 
-		
-		cpf= fmod(rand(),(pow(10, digitos_cpf) - pow(10,(digitos_cpf-1))-1)) + pow(10,(digitos_cpf-1)) ;
-				
-		fprintf(arq_csv,"%d,%d,%f,%d\r\n", id, cpf,preco, cep(cpf));
-		//std::cout << id << "," << cpf << ","<< preco << ","<< cep(cpf) << std::endl; 
+
+		//cpf= cpf[randNumber];//fmod(rand(),(pow(10, digitos_cpf) - pow(10,(digitos_cpf-1))-1)) + pow(10,(digitos_cpf-1)) ;
+
+		fprintf(arq_csv,"%d,%d,%.0f,%d\r\n", id, cpfs[randNumber], preco, ceps[randNumber]);
+		//std::cout << id << "," << cpf << ","<< preco << ","<< cep(cpf) << std::endl;
 	}
 fclose(arq_csv);
 
@@ -169,11 +169,17 @@ fclose(arq_csv);
 int main()
 {
 
+int n = 10;
+int bigtableN = 100;
+int* cpfs = new int[n];
+int* ceps = new int[n];
 
-r1(10); // número de registros da relação1 gerados
-r2(10); // número de registros da relação2 gerados
-r3(1000,10); // número de registros da relação3 gerados , número de registros gerados na r1
+r1(n, cpfs, ceps); // número de registros da relação1 gerados
+r2(n, cpfs); // número de registros da relação2 gerados
+r3(bigtableN, n, cpfs, ceps); // número de registros da relação3 gerados , número de registros gerados na r1
 
+delete [] cpfs;
+delete [] ceps;
 
 return 0;
 
