@@ -313,3 +313,19 @@ bool Relation::hasIndex(unsigned attrPos){
 DenseIndex* Relation::getIndex(){
     return index;
 }
+
+void Relation::writeCSV(std::string fileName) {
+    std::ofstream outStream (fileName);
+    resetStream();
+
+    while (binIn->input.good() && binIn->input.peek() != EOF) {
+        const auto tuple = readTuple();
+        for (int i = 0; i < tupleSize - 1; i++) {
+            outStream << tuple[i] << ",";
+        }
+        outStream << tuple[tuple.size()] << std::endl;
+    }
+
+    outStream.close();
+    resetStream();
+}

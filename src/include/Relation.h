@@ -214,6 +214,9 @@ private: // methods
   void setBinFilename(const std::string& new_var) { 
     binFilename = new_var + ".bin";
   }
+
+  void writeCSV(std::string fileName);
 };
+
 
 #endif // RELATION_H
