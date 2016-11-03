@@ -12,8 +12,11 @@ bruteForceJoin (Relation& lRelation, Relation& rRelation,
 
 	unsigned seek = 0, blocks = 0;
 
-  std::string outName = generateJoinedSchemaName (lRelation.getName(),
-                                                  rRelation.getName(), "BF", useIndex);
+  std::string joinName1 = lRelation.getName() + lPosition;
+  std::string joinName2 = rRelation.getName() + rPosition;
+  std::string outName = generateJoinedSchemaName (joinName1,
+                                                  joinName2, "BF", useIndex);
+
 
 	Relation outRelation (outName, lRelation.getTupleFormat(),
                         rRelation.getTupleFormat(), rPosition);
@@ -29,20 +32,24 @@ bruteForceJoin (Relation& lRelation, Relation& rRelation,
           }
 
       for (const auto & lElement: lRelation.getIndex()->index) {
+
+          lRelation.binIn->input.seekg(lElement.second,
+                                       lRelation.binIn->input.beg);
+          std::vector<std::string> lTuple (lRelation.readTuple());
+          blocks += lSize;
+          ++seek;
+
           for (const auto & rElement: rRelation.getIndex()->index) {
               if (lElement.first == rElement.first) {
 
                   // handle binary files
-                  lRelation.binIn->input.seekg(lElement.second,
-                                               lRelation.binIn->input.beg);
                   rRelation.binIn->input.seekg(rElement.second,
                                               rRelation.binIn->input.beg);
 
-                  std::vector<std::string> lTuple (lRelation.readTuple());
                   const std::vector<std::string> rTuple (rRelation.readTuple(true, rPosition));
 
-                  blocks += lSize + rSize;
-                  seek += 2;
+                  blocks += rSize;
+                  ++seek;
 
                   // merge tuples for join
                   lTuple.insert(lTuple.end(), rTuple.begin(), rTuple.end());
@@ -59,12 +66,16 @@ bruteForceJoin (Relation& lRelation, Relation& rRelation,
 
           // read outer tuple
           const std::vector<std::string> lTuple (lRelation.readTuple());
+          blocks += lSize;
+          ++seek;
 
           while (rRelation.binIn->input.good() &&
                  rRelation.binIn->input.peek() != EOF ) {
 
               // read inner tuple
               const std::vector<std::string> rTuple (rRelation.readTuple());
+              blocks += rSize;
+              ++seek;
 
               if (!lTuple[lPosition].compare(rTuple[rPosition])) {
 
@@ -76,6 +87,7 @@ bruteForceJoin (Relation& lRelation, Relation& rRelation,
                       }
                   }
                   outRelation.writeTuple(oTuple);
+                  blocks += oSize;
               }
           }
           rRelation.resetStream();
@@ -96,8 +108,10 @@ mergeSortJoin (Relation& lRelation, Relation& rRelation,
 
     unsigned seek = 0, blocks = 0;
 
-    std::string outName = generateJoinedSchemaName (lRelation.getName(),
-                                                    rRelation.getName(), "MS", useIndex);
+    std::string joinName1 = lRelation.getName() + lPosition;
+    std::string joinName2 = rRelation.getName() + rPosition;
+    std::string outName = generateJoinedSchemaName (joinName1,
+                                                    joinName2, "MS", useIndex);
 
     Relation outRelation (outName, lRelation.getTupleFormat(),
                           rRelation.getTupleFormat(), rPosition);
@@ -144,7 +158,6 @@ mergeSortJoin (Relation& lRelation, Relation& rRelation,
                 lTuple.insert(lTuple.end(), rTuple.begin(), rTuple.end());
                 outRelation.writeTuple(lTuple);
                 blocks += oSize;
-                ++seek;
                 ++j;
             }
         }
@@ -156,6 +169,7 @@ mergeSortJoin (Relation& lRelation, Relation& rRelation,
         std::vector<std::string> lTuple (lRelation.readTuple());
         std::vector<std::string> rTuple (rRelation.readTuple());
         blocks += rSize + lSize;
+        ++seek;
 
         while (lRelation.binIn->input.peek() != EOF &&
                rRelation.binIn->input.peek() != EOF) {
@@ -209,8 +223,11 @@ hashJoin (Relation& lRelation, Relation& rRelation,
 
     unsigned seek = 0, blocks = 0;
 
-    std::string outName = generateJoinedSchemaName (lRelation.getName(),
-                                                    rRelation.getName(), "H", useIndex);
+    std::string joinName1 = lRelation.getName() + lPosition;
+    std::string joinName2 = rRelation.getName() + rPosition;
+    std::string outName = generateJoinedSchemaName (joinName1,
+                                                    joinName2, "Hs", useIndex);
+
 
     Relation outRelation (outName, lRelation.getTupleFormat(),
                           rRelation.getTupleFormat(), rPosition);
@@ -261,7 +278,6 @@ hashJoin (Relation& lRelation, Relation& rRelation,
                 lTuple.insert(lTuple.end(), rTuple.begin(), rTuple.end());
                 outRelation.writeTuple(lTuple);
                 blocks += oSize;
-                ++seek;
             }
         }
     }
@@ -303,10 +319,12 @@ hashJoin (Relation& lRelation, Relation& rRelation,
                 // merge tuples for join
                 outRelation.writeTuple(oTuple);
                 blocks += oSize;
-                ++seek;
             }
         }
     }
+  lRelation.resetStream();
+  rRelation.resetStream();
+
 	return std::make_pair(seek, blocks / BLOCK_SIZE);
 }
 
@@ -318,8 +336,8 @@ std::string
 generateJoinedSchemaName(const std::string &rName, const std::string &lName, 
 						 const std::string& joinType, bool &useIndex) {
 	string name = rName + joinType;
-	if (useIndex) name += "_INDEX";
-	else name += "_RAW"; 
+	if (useIndex) name += "_INDEX_";
+	else name += "_RAW_"; 
 	name += lName;
 	return name;
 }
