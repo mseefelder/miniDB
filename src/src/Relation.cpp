@@ -287,15 +287,21 @@ bool Relation::loadOrBuildIndex(unsigned attrPos){
     bool loaded = false;
     index = new DenseIndex(binFilename, numTuples, attrPos, tupleSize); //for while, DenseIndex works only for the 1st attribute, considering it as a INT4
     if (!index->load()) {
-      cout << "Construindo DenseIndex" << endl;
-      if(index->build().first) cout << "DenseIndex construido e gravado em disco com sucesso";
-      else cout << "Falha na construcao ou gravacao do DenseIndex";
+      cout << "Construindo DenseIndex da relacao " << nameStr << endl;
+      if(index->build().first) {
+        std::cout << "DenseIndex construido e gravado em disco com sucesso" << std::endl;
+        indexExists = true;
+    }
+      else {
+        std::cout << "Falha na construcao ou gravacao do DenseIndex" << std::endl;
+        indexExists = false;
+      }
     }
     else {
         loaded = true;
+        indexExists = true;
         cout << "DenseIndex pre-existente no disco foi encontrado e carregado em memoria." << endl; // index.printIndex();
     }
-    indexExists = true;
     return loaded;
 }
 

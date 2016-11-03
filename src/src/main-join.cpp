@@ -52,7 +52,7 @@ int main()
 
     // keys with keys ---------------------------------------------------------
     
-    std::cout << "---------------------------------------------------" << std::endl;
+    std::cout << std::endl << "---------------------------------------------------" << std::endl;
     std::cout << " Chaves primarias com chaves estrangeiras." << std::endl;
     std::cout << "---------------------------------------------------" << std::endl << std::endl;
 
@@ -72,7 +72,7 @@ int main()
 
     //----using index
 
-    std::cout << "***************************************************" << std::endl;
+    std::cout << std::endl << "***************************************************" << std::endl;
     std::cout << " Usando indices existentes." << std::endl;
     std::cout << "***************************************************" << std::endl;
     std::pair<unsigned, unsigned> bFJoinWI = bruteForceJoin(Relacao1, Relacao2, 0, 0, true);
@@ -88,7 +88,7 @@ int main()
 
     //----creating index
 
-    std::cout << "***************************************************" << std::endl;
+    std::cout << std::endl << "***************************************************" << std::endl;
     std::cout << " Criando indices." << std::endl;
     std::cout << "***************************************************" << std::endl;
 
@@ -101,7 +101,7 @@ int main()
 
     //----using bin file
 
-    std::cout << "***************************************************" << std::endl;
+    std::cout << std::endl << "***************************************************" << std::endl;
     std::cout << " Usando arquivo binario." << std::endl;
     std::cout << "***************************************************" << std::endl;
 
@@ -119,7 +119,7 @@ int main()
 
     // keys with non-keys -----------------------------------------------------
 
-    std::cout << "---------------------------------------------------" << std::endl;
+    std::cout<< std::endl  << "---------------------------------------------------" << std::endl;
     std::cout << " Chaves primarias com atributos nao-chave." << std::endl;
     std::cout << "---------------------------------------------------" << std::endl << std::endl;
 
@@ -137,115 +137,130 @@ int main()
 
     indexTime = + computeTime(rPair.second) + computeTime(lPair.second);
 
+    Relacao1.loadOrBuildIndex(1);
+    Relacao3.loadOrBuildIndex(2);
+
     //----using index
 
-    std::cout << "***************************************************" << std::endl;
+    std::cout << std::endl << "***************************************************" << std::endl;
     std::cout << " Usando indices existentes." << std::endl;
     std::cout << "***************************************************" << std::endl;
     bFJoinWI = bruteForceJoin(Relacao1, Relacao3, 0, 1, true);
-    mSJoinWI = mergeSortJoin(Relacao1, Relacao3, 0, 1, true);
+    // mSJoinWI = mergeSortJoin(Relacao1, Relacao3, 0, 1, true);
     //hsJoinWI = hashJoin(Relacao1, Relacao3, 0, 1, true);
 
     std::cout << "Forca bruta " << std::endl;
     std::cout << "Tempo = " << computeTime(bFJoinWI) << std::endl; 
-    std::cout << "Merge Sort Join" << std::endl;
-    std::cout << "Tempo = " << computeTime(mSJoinWI) << std::endl;
+    // std::cout << "Merge Sort Join" << std::endl;
+    // std::cout << "Tempo = " << computeTime(mSJoinWI) << std::endl;
     std::cout << "Hash Join" << std::endl;
     //std::cout << "Tempo = " << computeTime(hsJoinWI) << std::endl;
 
     //----creating index
 
-    std::cout << "***************************************************" << std::endl;
+    std::cout << std::endl << "***************************************************" << std::endl;
     std::cout << " Criando indices." << std::endl;
     std::cout << "***************************************************" << std::endl;
 
     std::cout << "Forca bruta " << std::endl;
     std::cout << "Tempo = " << computeTime(bFJoinWI) + indexTime << std::endl; 
-    std::cout << "Merge Sort Join" << std::endl;
-    std::cout << "Tempo = " << computeTime(mSJoinWI) + indexTime << std::endl;
+    // std::cout << "Merge Sort Join" << std::endl;
+    // std::cout << "Tempo = " << computeTime(mSJoinWI) + indexTime << std::endl;
     std::cout << "Hash Join" << std::endl;
     //std::cout << "Tempo = " << computeTime(hsJoinWI) + indexTime << std::endl;
 
     //----using bin file
 
-    std::cout << "***************************************************" << std::endl;
+    std::cout << std::endl << "***************************************************" << std::endl;
     std::cout << " Usando arquivo binario." << std::endl;
     std::cout << "***************************************************" << std::endl;
 
     bFJoinWOI = bruteForceJoin(Relacao1, Relacao3, 0, 1, false);
-    mSJoinWOI = mergeSortJoin(Relacao1, Relacao3, 0, 1, false);
+    // mSJoinWOI = mergeSortJoin(Relacao1, Relacao3, 0, 1, false);
     //hsJoinWOI = hashJoin(Relacao1, Relacao3, 0, 1, false);
 
 
     std::cout << "Forca bruta " << std::endl;
     std::cout << "Tempo = " << computeTime(bFJoinWOI) << std::endl; 
-    std::cout << "Merge Sort Join" << std::endl;
-    std::cout << "Tempo = " << computeTime(mSJoinWOI) << std::endl;
+    // std::cout << "Merge Sort Join" << std::endl;
+    // std::cout << "Tempo = " << computeTime(mSJoinWOI) << std::endl;
     std::cout << "Hash Join" << std::endl;
     //std::cout << "Tempo = " << computeTime(hsJoinWOI) << std::endl;
 
-    std::cout << "---------------------------------------------------" << std::endl;
+    std::cout << std::endl << "---------------------------------------------------" << std::endl;
     std::cout << " Atributos nao-chave com atributos nao-chave." << std::endl;
     std::cout << "---------------------------------------------------" << std::endl << std::endl;
 
-    dRightRelation = new DenseIndex(Relacao1.getBinFilename(),
-                                               Relacao1.getNumTuples(), 
-                                               1, 
-                                               Relacao1.getTupleSize());
-    dLeftRelation = new DenseIndex(Relacao3.getBinFilename(),
-                                              Relacao3.getNumTuples(), 
-                                              3, 
-                                              Relacao3.getTupleSize());
 
-    rPair = dRightRelation->build();
-    lPair = dLeftRelation->build();
+    Relacao1.loadOrBuildIndex(2);
+    Relacao3.loadOrBuildIndex(4);
 
+    // for (const auto & e : Relacao1.getIndex()->index) {
+    //     std::cout << e.first << " " << e.second << std::endl;
+    // }
+
+    // for (const auto & e : Relacao3.getIndex()->index) {
+    //     std::cout << e.first << " " << e.second << std::endl;
+    // }
    //----using index
 
-    std::cout << "***************************************************" << std::endl;
+    std::cout << std::endl << "***************************************************" << std::endl;
     std::cout << " Usando indices existentes." << std::endl;
     std::cout << "***************************************************" << std::endl;
+
     bFJoinWI = bruteForceJoin(Relacao1, Relacao3, 1, 3, true);
-    mSJoinWI = mergeSortJoin(Relacao1, Relacao3, 1, 3, true);
+    // mSJoinWI = mergeSortJoin(Relacao1, Relacao3, 1, 3, true);
     //hsJoinWI = hashJoin(Relacao1, Relacao3, 1, 3, true);
 
     std::cout << "Forca bruta " << std::endl;
     std::cout << "Tempo = " << computeTime(bFJoinWI) << std::endl; 
-    std::cout << "Merge Sort Join" << std::endl;
-    std::cout << "Tempo = " << computeTime(mSJoinWI) << std::endl;
+    // std::cout << "Merge Sort Join" << std::endl;
+    // std::cout << "Tempo = " << computeTime(mSJoinWI) << std::endl;
     std::cout << "Hash Join" << std::endl;
     //std::cout << "Tempo = " << computeTime(hsJoinWI) << std::endl;
 
     //----creating index
 
-    std::cout << "***************************************************" << std::endl;
+    std::cout << std::endl << "***************************************************" << std::endl;
     std::cout << " Criando indices." << std::endl;
     std::cout << "***************************************************" << std::endl;
+
+    dRightRelation = new DenseIndex(Relacao1.getBinFilename(),
+                                               Relacao1.getNumTuples(), 
+                                               2, 
+                                               Relacao1.getTupleSize());
+    dLeftRelation = new DenseIndex(Relacao3.getBinFilename(),
+                                              Relacao3.getNumTuples(), 
+                                              4, 
+                                              Relacao3.getTupleSize());
+
+    rPair = dRightRelation->build();
+    lPair = dLeftRelation->build();
 
     indexTime = + computeTime(rPair.second) + computeTime(lPair.second);
 
     std::cout << "Forca bruta " << std::endl;
     std::cout << "Tempo = " << computeTime(bFJoinWI) + indexTime << std::endl; 
-    std::cout << "Merge Sort Join" << std::endl;
-    std::cout << "Tempo = " << computeTime(mSJoinWI) + indexTime << std::endl;
+    // std::cout << "Merge Sort Join" << std::endl;
+    // std::cout << "Tempo = " << computeTime(mSJoinWI) + indexTime << std::endl;
     std::cout << "Hash Join" << std::endl;
     //std::cout << "Tempo = " << computeTime(hsJoinWI) + indexTime << std::endl;
 
     //----using bin file
 
-    std::cout << "***************************************************" << std::endl;
+    std::cout << std::endl << "***************************************************" << std::endl;
     std::cout << " Usando arquivo binario." << std::endl;
     std::cout << "***************************************************" << std::endl;
 
     bFJoinWOI = bruteForceJoin(Relacao1, Relacao3, 1, 3, false);
-    mSJoinWOI = mergeSortJoin(Relacao1, Relacao3, 1, 3, false);
+    // mSJoinWOI = mergeSortJoin(Relacao1, Relacao3, 1, 3, false);
     //hsJoinWOI = hashJoin(Relacao1, Relacao3, 1, 3, false);
 
 
     std::cout << "Forca bruta " << std::endl;
     std::cout << "Tempo = " << computeTime(bFJoinWOI) << std::endl; 
-    std::cout << "Merge Sort Join" << std::endl;
-    std::cout << "Tempo = " << computeTime(mSJoinWOI) << std::endl;
+    // std::cout << "Merge Sort Join" << std::endl;
+    // std::cout << "Tempo = " << computeTime(mSJoinWOI) << std::endl;
     std::cout << "Hash Join" << std::endl;
     //std::cout << "Tempo = " << computeTime(hsJoinWOI) << std::endl;
 

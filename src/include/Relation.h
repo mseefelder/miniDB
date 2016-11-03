@@ -22,7 +22,7 @@ using namespace std;
 class Relation {
 
 private: // properties
-  char name[28]; //cant be any size. look comment in header.h
+  char name[36]; //cant be any size. look comment in header.h
   string nameStr;
   unsigned short numAttr;
   unsigned int numTuples;
@@ -167,10 +167,10 @@ private: // methods
   void setName(const std::string& new_var) {
     memset(name, 0, sizeof(name));
     if (new_var != "")
-      strncpy(name, new_var.c_str(), 27);
+      strncpy(name, new_var.c_str(), 35);
     else
-      strncpy(name, string("UnknownData").c_str(), 27);
-    name[27] = '\0';
+      strncpy(name, string("UnknownData").c_str(), 35);
+    name[35] = '\0';
     setBinFilename(string(name));
     nameStr = string(name);
   }

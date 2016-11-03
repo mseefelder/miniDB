@@ -12,10 +12,9 @@ bruteForceJoin (Relation& lRelation, Relation& rRelation,
 
 	unsigned seek = 0, blocks = 0;
 
-  std::string joinName1 = lRelation.getName() + lPosition;
-  std::string joinName2 = rRelation.getName() + rPosition;
-  std::string outName = generateJoinedSchemaName (joinName1,
-                                                  joinName2, "BF", useIndex);
+  std::string outName = generateJoinedSchemaName (rRelation.getName(), rPosition,
+                                                  lRelation.getName(), lPosition,
+                                                  "BF", useIndex);
 
 
 	Relation outRelation (outName, lRelation.getTupleFormat(),
@@ -108,10 +107,9 @@ mergeSortJoin (Relation& lRelation, Relation& rRelation,
 
     unsigned seek = 0, blocks = 0;
 
-    std::string joinName1 = lRelation.getName() + lPosition;
-    std::string joinName2 = rRelation.getName() + rPosition;
-    std::string outName = generateJoinedSchemaName (joinName1,
-                                                    joinName2, "MS", useIndex);
+    std::string outName = generateJoinedSchemaName (rRelation.getName(), rPosition,
+                                                    lRelation.getName(), lPosition,
+                                                    "MS", useIndex);
 
     Relation outRelation (outName, lRelation.getTupleFormat(),
                           rRelation.getTupleFormat(), rPosition);
@@ -223,10 +221,9 @@ hashJoin (Relation& lRelation, Relation& rRelation,
 
     unsigned seek = 0, blocks = 0;
 
-    std::string joinName1 = lRelation.getName() + lPosition;
-    std::string joinName2 = rRelation.getName() + rPosition;
-    std::string outName = generateJoinedSchemaName (joinName1,
-                                                    joinName2, "Hs", useIndex);
+    std::string outName = generateJoinedSchemaName (rRelation.getName(), rPosition,
+                                                    lRelation.getName(), lPosition,
+                                                    "Hs", useIndex);
 
 
     Relation outRelation (outName, lRelation.getTupleFormat(),
@@ -333,11 +330,12 @@ unsigned computeTime(const std::pair<unsigned, unsigned> values) {
 }
 
 std::string
-generateJoinedSchemaName(const std::string &rName, const std::string &lName, 
-						 const std::string& joinType, bool &useIndex) {
-	string name = rName + joinType;
+generateJoinedSchemaName(const std::string &rName, const int rPosition,
+                         const std::string &lName, const int lPosition,
+						             const std::string& joinType, bool &useIndex) {
+	string name = lName + "_" + std::to_string(lPosition) + "_" + joinType;
 	if (useIndex) name += "_INDEX_";
 	else name += "_RAW_"; 
-	name += lName;
-	return name;
+	name += rName + "_" + std::to_string(rPosition);
+  return name;
 }

@@ -16,7 +16,7 @@
  */
 //TO AVOID PADDING EFFECT HEADER_SIZE NEEDS TO BE MULTIPLE OF 64 BITS (8 BYTES)
 struct header {
-  char relName[28];
+  char relName[36];
   unsigned int nTuple;
   time_t timeStamp; // epoch Time;
 };
