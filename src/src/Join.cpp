@@ -184,10 +184,6 @@ mergeSortJoin (Relation& lRelation, Relation& rRelation,
                     }
                 }
 
-                for (unsigned i = 0; i < oTuple.size(); ++i) {
-                    cout << oTuple[i] << endl;
-                }
-
                 // write output tuple and proceed algorithm
                 outRelation.writeTuple(oTuple);
                 rTuple = rRelation.readTuple();
@@ -322,8 +318,8 @@ std::string
 generateJoinedSchemaName(const std::string &rName, const std::string &lName, 
 						 const std::string& joinType, bool &useIndex) {
 	string name = rName + joinType;
-	if (useIndex) name += "_WI";
-	else name += "_WOI"; 
+	if (useIndex) name += "_INDEX";
+	else name += "_RAW"; 
 	name += lName;
 	return name;
 }
