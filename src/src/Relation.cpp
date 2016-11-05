@@ -314,18 +314,20 @@ DenseIndex* Relation::getIndex(){
     return index;
 }
 
-void Relation::writeCSV(std::string fileName) {
-    std::ofstream outStream (fileName);
-    resetStream();
+void Relation::writeCSV() {
 
-    while (binIn->input.good() && binIn->input.peek() != EOF) {
-        const auto tuple = readTuple();
-        for (int i = 0; i < tupleSize - 1; i++) {
-            outStream << tuple[i] << ",";
-        }
-        outStream << tuple[tuple.size()] << std::endl;
-    }
+    // std::string outName = nameStr + ".csv";
+    // std::ofstream outFile ();
+    // resetStream();
 
-    outStream.close();
-    resetStream();
+    // while (binIn->input.good() && binIn->input.peek() != EOF) {
+    //     const auto tuple = readTuple();
+    //     for (int i = 0; i < tupleSize - 1; i++) {
+    //         outFile << tuple[i] << ",";
+    //     }
+    //     outFile << tuple[tuple.size()] << std::endl;
+    // }
+
+    // outFile.close();
+    // resetStream();
 }

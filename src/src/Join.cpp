@@ -167,26 +167,29 @@ mergeSortJoin (Relation& lRelation, Relation& rRelation,
         std::vector<std::string> lTuple (lRelation.readTuple());
         std::vector<std::string> rTuple (rRelation.readTuple());
         blocks += rSize + lSize;
-        ++seek;
+        seek += 2;
+
+        int lAtt = std::stoi(lTuple[lPosition]);
+        int rAtt = std::stoi(rTuple[rPosition]);
 
         while (lRelation.binIn->input.peek() != EOF &&
                rRelation.binIn->input.peek() != EOF) {
 
-            if (lTuple[lPosition].compare(rTuple[rPosition]) < 0) {
+
+            if (lAtt < rAtt) {
                 lTuple = lRelation.readTuple();
                 ++seek;
                 blocks += lSize;
             }
 
-            else if (lTuple[lPosition].compare(rTuple[rPosition]) > 0) {
+            else if (lAtt > rAtt) {
                 rTuple = rRelation.readTuple();
                 ++seek;
                 blocks += rSize;
             }
 
             // find all matching tuples
-            while (rRelation.binIn->input.peek() != EOF &&
-                   !lTuple[lPosition].compare(rTuple[rPosition])) {
+            while (lAtt == rAtt) {
 
                 // merge tuples for join
                 std::vector<std::string> oTuple (lTuple);
@@ -198,12 +201,14 @@ mergeSortJoin (Relation& lRelation, Relation& rRelation,
 
                 // write output tuple and proceed algorithm
                 outRelation.writeTuple(oTuple);
+                blocks += oSize;
                 rTuple = rRelation.readTuple();
-                blocks += oSize + rSize;
-                ++seek;					
-			}
-			 
-		}
+                rAtt = std::stoi(rTuple[rPosition]);
+                blocks += rSize;
+                ++seek;
+            }
+        }
+
     }
 
   // clean file pointers
@@ -245,6 +250,7 @@ hashJoin (Relation& lRelation, Relation& rRelation,
         const auto lIndex = lRelation.getIndex()->index;
         const auto rIndex = rRelation.getIndex()->index;
 
+
         // partioning phase
         for (const auto &lElement : lIndex)
             table.insert(lElement);
@@ -254,10 +260,10 @@ hashJoin (Relation& lRelation, Relation& rRelation,
 
             // find element position in table
             const size_t bucketIndex = std::hash<int>{} (rElement.first);
+            
+            auto itRange = table.equal_range(bucketIndex);
 
-            // iterate over all matching tuples
-            for (auto localIt = table.begin(bucketIndex);
-                 localIt != table.end(bucketIndex); ++localIt) {
+            for(auto localIt = itRange.first; localIt != itRange.second; ++localIt) {
 
                 // move binfile stream to element
                 lRelation.binIn->input.seekg((*localIt).second,
@@ -300,11 +306,13 @@ hashJoin (Relation& lRelation, Relation& rRelation,
             const std::vector<std::string> rTuple (rRelation.readTuple());
             blocks += rSize;
             ++seek;
+
             const size_t bucketIndex = std::hash<int>{} (std::stoi(rTuple[rPosition]));
 
             // iterate over all matching tuples
-            for (auto localIt = table.begin(bucketIndex);
-                 localIt != table.end(bucketIndex); ++localIt) {
+            auto itRange = table.equal_range(bucketIndex);
+
+            for(auto localIt = itRange.first; localIt != itRange.second; ++localIt) {
                 std::vector<std::string> oTuple ((*localIt).second);
 
                 for (unsigned i = 0; i < rTuple.size(); ++i) {

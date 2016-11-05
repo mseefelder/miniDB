@@ -215,7 +215,8 @@ private: // methods
     binFilename = new_var + ".bin";
   }
 
-  void writeCSV(std::string fileName);
+  // method to auxiliate testing
+  void writeCSV();
 };
 
 
