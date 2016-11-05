@@ -18,3 +18,5 @@ To run all tests:
     cmake -DTEST=ON ..
     make
     make test
+
+Then run `./main-join`.
