@@ -114,10 +114,8 @@ int main()
     std::cout << "Tempo = " << computeTime(bFJoinWOI) << std::endl; 
     std::cout << "Merge Sort Join" << std::endl;
     std::cout << "Tempo = " << computeTime(mSJoinWOI) << std::endl;
-    std::cout << "seek = " << mSJoinWOI.first << "blocks = " << mSJoinWOI.second; 
     std::cout << "Hash Join" << std::endl;
     std::cout << "Tempo = " << computeTime(hsJoinWOI) << std::endl;
-    std::cout << "seek = " << hsJoinWOI.first << "blocks = " << hsJoinWOI.second;
 
     // keys with non-keys -----------------------------------------------------
 

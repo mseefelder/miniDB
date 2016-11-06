@@ -172,43 +172,44 @@ mergeSortJoin (Relation& lRelation, Relation& rRelation,
         int lAtt = std::stoi(lTuple[lPosition]);
         int rAtt = std::stoi(rTuple[rPosition]);
 
-        while (lRelation.binIn->input.peek() != EOF &&
+        while (lRelation.binIn->input.peek() != EOF ||
                rRelation.binIn->input.peek() != EOF) {
 
 
-            if (lAtt < rAtt) {
+	  if (lAtt < rAtt && lRelation.binIn->input.peek() != EOF) {
                 lTuple = lRelation.readTuple();
                 ++seek;
                 blocks += lSize;
             }
 
-            else if (lAtt > rAtt) {
+	  else if (lAtt > rAtt && rRelation.binIn->input.peek() != EOF) {
                 rTuple = rRelation.readTuple();
                 ++seek;
                 blocks += rSize;
             }
 
-            // find all matching tuples
-            while (lAtt == rAtt) {
+	  else {
 
-                // merge tuples for join
+	        // merge tuples for join
                 std::vector<std::string> oTuple (lTuple);
                 for (unsigned i = 0; i < rTuple.size(); ++i) {
                     if (i != rPosition) {
                         oTuple.push_back(rTuple[i]);
                     }
                 }
-
+		
                 // write output tuple and proceed algorithm
                 outRelation.writeTuple(oTuple);
-                blocks += oSize;
-                rTuple = rRelation.readTuple();
-                rAtt = std::stoi(rTuple[rPosition]);
-                blocks += rSize;
+                blocks += rSize + oSize;
                 ++seek;
-            }
-        }
 
+		// move cursor if possible
+		if (rRelation.binIn->input.peek() != EOF) {
+		  rTuple = rRelation.readTuple();
+		  rAtt = std::stoi(rTuple[rPosition]);
+		}		
+	  }
+        }
     }
 
   // clean file pointers
