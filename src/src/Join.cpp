@@ -180,13 +180,13 @@ mergeSortJoin (Relation& lRelation, Relation& rRelation,
                 lTuple = lRelation.readTuple();
                 ++seek;
                 blocks += lSize;
-            }
+           }
 
 	  else if (lAtt > rAtt && rRelation.binIn->input.peek() != EOF) {
                 rTuple = rRelation.readTuple();
                 ++seek;
                 blocks += rSize;
-            }
+           }
 
 	  else {
 
