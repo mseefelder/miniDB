@@ -50,14 +50,6 @@ int main()
 
     std::cout << "Testando metodos de join." << std::endl << std::endl;
 
-    for (const auto & e : Relacao1.getIndex()->index) {
-        std::cout << e.first << " " << e.second << std::endl;
-    }
-
-    for (const auto & e : Relacao3.getIndex()->index) {
-        std::cout << e.first << " " << e.second << std::endl;
-    }
-
     // keys with keys ---------------------------------------------------------
     
     std::cout << std::endl << "---------------------------------------------------" << std::endl;
@@ -148,14 +140,6 @@ int main()
     Relacao1.loadOrBuildIndex(1);
     Relacao3.loadOrBuildIndex(2);
 
-    for (const auto & e : Relacao1.getIndex()->index) {
-        std::cout << e.first << " " << e.second << std::endl;
-    }
-
-    for (const auto & e : Relacao3.getIndex()->index) {
-        std::cout << e.first << " " << e.second << std::endl;
-    }
-
     //----using index
 
     std::cout << std::endl << "***************************************************" << std::endl;
@@ -199,7 +183,7 @@ int main()
     std::cout << "Forca bruta " << std::endl;
     std::cout << "Tempo = " << computeTime(bFJoinWOI) << std::endl; 
     // std::cout << "Merge Sort Join" << std::endl;
-    // std::cout << "Tempo = " << computeTime(mSJoinWOI) << std::endl;
+    // std::cout << "Tempo = " << computeTime(metodosSJoinWOI) << std::endl;
     std::cout << "Hash Join" << std::endl;
     std::cout << "Tempo = " << computeTime(hsJoinWOI) << std::endl;
 
@@ -211,13 +195,13 @@ int main()
     Relacao1.loadOrBuildIndex(2);
     Relacao3.loadOrBuildIndex(4);
 
-    for (const auto & e : Relacao1.getIndex()->index) {
-        std::cout << e.first << " " << e.second << std::endl;
-    }
+    // for (const auto & e : Relacao1.getIndex()->index) {
+    //     std::cout << e.first << " " << e.second << std::endl;
+    // }
 
-    for (const auto & e : Relacao3.getIndex()->index) {
-        std::cout << e.first << " " << e.second << std::endl;
-    }
+    // for (const auto & e : Relacao3.getIndex()->index) {
+    //     std::cout << e.first << " " << e.second << std::endl;
+    // }
 
    //----using index
 

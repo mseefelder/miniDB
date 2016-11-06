@@ -287,28 +287,28 @@ bool Relation::loadOrBuildIndex(unsigned attrPos){
     unsigned short offset = 0;
     for (unsigned i = 0; i < absPosition; ++i)
         offset += getAttSize(i);
-    if (offset == 0) std::cout << "Primary index" << std::endl;
 
     if (indexExists) {
         delete index;
     }
     bool loaded = false;
-    index = new DenseIndex(binFilename, numTuples, absPosition, tupleSize); //for while, DenseIndex works only for the 1st attribute, considering it as a INT4
+    index = new DenseIndex(binFilename, numTuples, attrPos, tupleSize); //for while, DenseIndex works only for the 1st attribute, considering it as a INT4
     if (!index->load()) {
-      cout << "Construindo DenseIndex da relacao " << nameStr << endl;
-      if(index->build().first) {
-        std::cout << "DenseIndex construido e gravado em disco com sucesso" << std::endl;
+      cout << "Construindo DenseIndex da relacao " << nameStr << std::endl;
+      if(index->build(offset).first) {
+        std::cout << "DenseIndex da relacao " << nameStr << "construido e gravado em disco com sucesso" << std::endl;
         indexExists = true;
     }
       else {
-        std::cout << "Falha na construcao ou gravacao do DenseIndex" << std::endl;
+        std::cout << "Falha na construcao ou gravacao do DenseIndex da relacao " << nameStr << std::endl;
         indexExists = false;
       }
     }
     else {
         loaded = true;
         indexExists = true;
-        cout << "DenseIndex pre-existente no disco foi encontrado e carregado em memoria." << endl; // index.printIndex();
+        std::cout << "DenseIndex da relacao " << nameStr << " pre-existente" << std::endl;
+        std::cout << "no disco foi encontrado e carregado em memoria." << std::endl; // index.printIndex();
     }
     return loaded;
 }

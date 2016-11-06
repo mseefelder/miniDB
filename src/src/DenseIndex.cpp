@@ -64,7 +64,7 @@ DenseIndex::build(const unsigned &offset) {
 
     if (numTuples == 0)
         return std::make_pair(false, std::make_pair(0,0));
-
+    
     unsigned int i = 0;
     while (i < numTuples){
 
