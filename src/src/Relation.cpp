@@ -281,11 +281,19 @@ void Relation::resetStream() {
 }
 
 bool Relation::loadOrBuildIndex(unsigned attrPos){
+
+    const unsigned absPosition = attrPos - 1;
+
+    unsigned short offset = 0;
+    for (unsigned i = 0; i < absPosition; ++i)
+        offset += getAttSize(i);
+    if (offset == 0) std::cout << "Primary index" << std::endl;
+
     if (indexExists) {
         delete index;
     }
     bool loaded = false;
-    index = new DenseIndex(binFilename, numTuples, attrPos, tupleSize); //for while, DenseIndex works only for the 1st attribute, considering it as a INT4
+    index = new DenseIndex(binFilename, numTuples, absPosition, tupleSize); //for while, DenseIndex works only for the 1st attribute, considering it as a INT4
     if (!index->load()) {
       cout << "Construindo DenseIndex da relacao " << nameStr << endl;
       if(index->build().first) {

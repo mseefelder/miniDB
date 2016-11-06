@@ -22,7 +22,7 @@ public:
 
   virtual pair<vector<unsigned int>, bool> getRangeTuple(int a, int b);
 
-  virtual vector<pair<unsigned int, bool>> getBatchTuple(const std::vector<int>& Ks);
+  virtual vector<pair<unsigned int, bool> > getBatchTuple(const std::vector<int>& Ks);
 
   virtual pair<unsigned int, bool> getTuple(int K);
 
@@ -31,6 +31,8 @@ public:
   std::vector<std::pair<int, unsigned int>> getIndex() { return index; }
 
   void printIndex();
+
+  std::pair<bool, std::pair<unsigned, unsigned> > build(const unsigned &offset);
 
 private:
   void initAttributes();

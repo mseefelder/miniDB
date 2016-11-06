@@ -25,10 +25,53 @@ DenseIndex::build(){
 
     unsigned int i = 0;
     while (i < numTuples){
+
         //PT_BR: percorrendo a tabela, saltando registro
         //a registro direto para o 1° atributo
         //(considerado um inteiro que guarda chave primária K)
-        relFile.input.seekg(i*tupleSize + HEADER_SIZE, relFile.input.beg); 
+       relFile.input.seekg(i*tupleSize + HEADER_SIZE, relFile.input.beg); 
+        seek++;
+
+        int tKey;
+
+        //read [right parameter] chars from stream and stores
+        //in [left parameter]
+        relFile.input.read((char*)&tKey, sizeof(tKey));
+
+        blocks += sizeof(tKey);
+
+        unsigned int tupleBegByte = static_cast<unsigned int>(relFile.input.tellg()) - (INT4+HEADER_SIZE);
+        index.push_back(make_pair(tKey, tupleBegByte));
+        i++;
+    }
+
+    blocks /= BLOCK_SIZE;
+
+    relFile.close();
+    sort(index.begin(), index.end()); //sorting index, by the first element and then, by the second. This is the behavior of DenseIndex, diff address that refs same key are grouped in index;
+    isBuilt = true;
+
+    return std::make_pair(writeOnDisk(), std::make_pair(seek, blocks));
+}
+
+std::pair<bool, std::pair<unsigned, unsigned> >
+DenseIndex::build(const unsigned &offset) {
+
+    BinFileHandler relFile(relBinFilename, true);
+
+    unsigned seek = 0;
+    unsigned blocks = 0;
+
+    if (numTuples == 0)
+        return std::make_pair(false, std::make_pair(0,0));
+
+    unsigned int i = 0;
+    while (i < numTuples){
+
+        //PT_BR: percorrendo a tabela, saltando registro
+        //a registro direto para o 1° atributo
+        //(considerado um inteiro que guarda chave primária K)
+       relFile.input.seekg(i*tupleSize + HEADER_SIZE + offset, relFile.input.beg);
         seek++;
 
         int tKey;

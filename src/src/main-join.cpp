@@ -50,6 +50,14 @@ int main()
 
     std::cout << "Testando metodos de join." << std::endl << std::endl;
 
+    for (const auto & e : Relacao1.getIndex()->index) {
+        std::cout << e.first << " " << e.second << std::endl;
+    }
+
+    for (const auto & e : Relacao3.getIndex()->index) {
+        std::cout << e.first << " " << e.second << std::endl;
+    }
+
     // keys with keys ---------------------------------------------------------
     
     std::cout << std::endl << "---------------------------------------------------" << std::endl;
@@ -140,13 +148,13 @@ int main()
     Relacao1.loadOrBuildIndex(1);
     Relacao3.loadOrBuildIndex(2);
 
-    // for (const auto & e : Relacao1.getIndex()->index) {
-    //     std::cout << e.first << " " << e.second << std::endl;
-    // }
+    for (const auto & e : Relacao1.getIndex()->index) {
+        std::cout << e.first << " " << e.second << std::endl;
+    }
 
-    // for (const auto & e : Relacao3.getIndex()->index) {
-    //     std::cout << e.first << " " << e.second << std::endl;
-    // }
+    for (const auto & e : Relacao3.getIndex()->index) {
+        std::cout << e.first << " " << e.second << std::endl;
+    }
 
     //----using index
 
@@ -203,13 +211,13 @@ int main()
     Relacao1.loadOrBuildIndex(2);
     Relacao3.loadOrBuildIndex(4);
 
-    // for (const auto & e : Relacao1.getIndex()->index) {
-    //     std::cout << e.first << " " << e.second << std::endl;
-    // }
+    for (const auto & e : Relacao1.getIndex()->index) {
+        std::cout << e.first << " " << e.second << std::endl;
+    }
 
-    // for (const auto & e : Relacao3.getIndex()->index) {
-    //     std::cout << e.first << " " << e.second << std::endl;
-    // }
+    for (const auto & e : Relacao3.getIndex()->index) {
+        std::cout << e.first << " " << e.second << std::endl;
+    }
 
    //----using index
 
